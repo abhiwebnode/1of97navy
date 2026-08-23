@@ -1,0 +1,153 @@
+/********** 1/97 Batch - Indian Navy Custom CSS **********/
+:root {
+    --primary: #1B3A6B;       /* Navy blue */
+    --primary-light: #2952A3;
+    --gold: #C9A84C;           /* Naval gold */
+    --gold-light: #F0D080;
+    --secondary: #EAF0FB;
+    --light: #F5F7FA;
+    --dark: #0B1E3D;
+    --text: #2C3E60;
+    --anchor: #7B9ED9;
+}
+
+/* Override template orange with navy/gold */
+.btn-primary, .bg-primary { background-color: var(--primary) !important; border-color: var(--primary) !important; }
+.btn-outline-primary { color: var(--primary) !important; border-color: var(--primary) !important; }
+.btn-outline-primary:hover { background-color: var(--primary) !important; color: #fff !important; }
+.text-primary { color: var(--primary) !important; }
+.border-primary { border-color: var(--primary) !important; }
+.btn-primary:hover { background-color: var(--primary-light) !important; border-color: var(--primary-light) !important; }
+
+/* Gold accent throughout */
+.text-gold { color: var(--gold); }
+.bg-gold { background-color: var(--gold); }
+.border-gold { border-color: var(--gold) !important; }
+
+/*** Top Bar ***/
+.top-bar { background-color: var(--dark); }
+
+/*** Navbar ***/
+nav.navbar { background-color: var(--dark) !important; }
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link.active { color: var(--gold) !important; }
+.navbar-brand .batch-name { color: var(--gold); font-size: 1.1rem; letter-spacing: .05em; }
+.navbar-brand .batch-tagline { color: rgba(255,255,255,.55); font-size: 0.7rem; letter-spacing: .12em; text-transform: uppercase; }
+
+/*** Hero Carousel ***/
+.carousel-caption { background: linear-gradient(to top, rgba(11,30,61,.92) 0%, rgba(11,30,61,.6) 100%); }
+.carousel-caption h1 { font-family: 'Saira', sans-serif; letter-spacing: .03em; }
+.hero-badge { 
+    display: inline-block; 
+    border: 1px solid var(--gold); 
+    color: var(--gold); 
+    font-size: .75rem; 
+    letter-spacing: .18em; 
+    text-transform: uppercase; 
+    padding: .35rem 1rem; 
+    margin-bottom: 1rem; 
+    border-radius: 2px;
+}
+
+/*** Stat Strip ***/
+.stat-strip { background: var(--primary); }
+.stat-strip .stat-num { font-size: 2rem; font-weight: 700; color: var(--gold); font-family: 'Saira', sans-serif; }
+.stat-strip .stat-label { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.7); }
+
+/*** Section Heads ***/
+.section-eyebrow { 
+    font-size: .72rem; 
+    font-weight: 600; 
+    letter-spacing: .22em; 
+    text-transform: uppercase; 
+    color: var(--gold); 
+    display: block; 
+    margin-bottom: .4rem; 
+}
+.section-title { color: var(--dark); font-family: 'Saira', sans-serif; }
+.section-divider { width: 48px; height: 3px; background: var(--gold); margin: 1rem auto; }
+
+/*** Feature Cards (About section) ***/
+.feature-card { 
+    border: none; 
+    border-top: 3px solid var(--gold); 
+    border-radius: 0 0 8px 8px; 
+    box-shadow: 0 4px 24px rgba(27,58,107,.08); 
+    transition: .3s; 
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(27,58,107,.15); }
+.feature-icon { width: 56px; height: 56px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.feature-icon i { color: var(--primary); font-size: 1.4rem; }
+
+/*** Timeline Strip ***/
+.timeline-strip { background: var(--light); }
+.timeline-year { 
+    font-family: 'Saira', sans-serif; 
+    font-size: 1.4rem; 
+    font-weight: 700; 
+    color: var(--primary); 
+    border-bottom: 2px solid var(--gold); 
+    padding-bottom: .25rem; 
+    margin-bottom: .5rem; 
+}
+
+/*** Memory Cards ***/
+.memory-card { border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 16px rgba(27,58,107,.1); transition: .3s; }
+.memory-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(27,58,107,.18); }
+.memory-card .overlay { 
+    position: absolute; bottom: 0; left: 0; right: 0; 
+    background: linear-gradient(to top, rgba(11,30,61,.85) 0%, transparent 100%); 
+    padding: 1.5rem 1rem .75rem; 
+}
+.memory-card .badge-cat { background: var(--gold); color: var(--dark); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; }
+
+/*** Memorial Section ***/
+.memorial-section { background: var(--dark); }
+.memorial-card { 
+    border: 1px solid rgba(201,168,76,.25); 
+    border-radius: 6px; 
+    background: rgba(255,255,255,.04); 
+    text-align: center; 
+    padding: 1.5rem 1rem; 
+    transition: .3s; 
+}
+.memorial-card:hover { border-color: var(--gold); background: rgba(201,168,76,.06); }
+.memorial-card img { width: 72px; height: 72px; object-fit: cover; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: .75rem; }
+.memorial-card .mem-name { color: #fff; font-weight: 600; font-size: .95rem; }
+.memorial-card .mem-detail { color: rgba(255,255,255,.5); font-size: .78rem; }
+.eternal-flame { color: var(--gold); font-size: 1.5rem; }
+
+/*** CTA Join ***/
+.cta-join { background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%); }
+.cta-join .btn-gold { background: var(--gold); color: var(--dark); font-weight: 700; border: none; }
+.cta-join .btn-gold:hover { background: var(--gold-light); }
+
+/*** Footer ***/
+footer.footer { background: var(--dark); }
+footer .footer-brand { color: var(--gold); font-family: 'Saira', sans-serif; font-size: 1.2rem; font-weight: 700; }
+footer .footer-motto { color: rgba(255,255,255,.5); font-size: .82rem; font-style: italic; }
+
+/*** Nav Login Button ***/
+.btn-login { 
+    background: transparent; 
+    border: 1px solid var(--gold); 
+    color: var(--gold) !important; 
+    font-size: .82rem; 
+    padding: .35rem 1rem; 
+    border-radius: 3px; 
+    transition: .3s; 
+}
+.btn-login:hover { background: var(--gold); color: var(--dark) !important; }
+
+/*** Page Header ***/
+.page-header { 
+    background: linear-gradient(rgba(11,30,61,.88), rgba(11,30,61,.88)), url(img/carousel-1.jpg) center/cover no-repeat; 
+    padding-top: 10rem; 
+    padding-bottom: 4rem; 
+}
+
+/*** Responsive tweaks ***/
+@media (max-width: 768px) {
+    .stat-strip .stat-num { font-size: 1.5rem; }
+    .hero-badge { font-size: .65rem; }
+}
