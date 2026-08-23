@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Member Directory — Indian Navy 1/97 Batch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/navy.css" rel="stylesheet">
+    <style>
+        .filter-bar {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px rgba(27,58,107,.08);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .search-wrap { position: relative; }
+        .search-wrap i {
+            position: absolute;
+            left: .85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: .85rem;
+        }
+        .search-input {
+            width: 100%;
+            padding: .65rem .75rem .65rem 2.25rem;
+            border: 1.5px solid #dde3ef;
+            border-radius: 6px;
+            font-size: .88rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: .2s;
+        }
+        .search-input:focus { border-color: var(--primary); }
+        .filter-select {
+            width: 100%;
+            padding: .65rem .75rem;
+            border: 1.5px solid #dde3ef;
+            border-radius: 6px;
+            font-size: .85rem;
+            font-family: 'Inter', sans-serif;
+            color: #444;
+            outline: none;
+            background: #fff;
+            transition: .2s;
+        }
+        .filter-select:focus { border-color: var(--primary); }
+        .results-info {
+            font-size: .82rem;
+            color: #888;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .results-info strong { color: var(--primary); }
+        .member-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(27,58,107,.07);
+            transition: .3s;
+            border-top: 3px solid var(--gold);
+            height: 100%;
+        }
+        .member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(27,58,107,.14);
+        }
+        .card-top {
+            padding: 1.25rem 1.25rem .75rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .member-photo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+            background: var(--secondary);
+        }
+        .member-initials {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Saira', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .member-name {
+            font-weight: 700;
+            font-size: .97rem;
+            color: var(--dark);
+            margin-bottom: .2rem;
+            line-height: 1.3;
+        }
+        .member-rank {
+            font-size: .75rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .status-badge {
+            display: inline-block;
+            font-size: .62rem;
+            font-weight: 600;
+            padding: .15rem .5rem;
+            border-radius: 10px;
+            margin-top: .3rem;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+        .status-retired { background: #fef3cd; color: #856404; }
+        .status-serving { background: #d1f0e0; color: #155724; }
+        .card-details {
+            padding: .5rem 1.25rem 1rem;
+            border-top: 1px solid #f0f3fa;
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+        }
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .8rem;
+            color: #666;
+        }
+        .detail-row i {
+            width: 14px;
+            color: var(--gold);
+            font-size: .75rem;
+            flex-shrink: 0;
+        }
+        .trade-pill {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            font-size: .68rem;
+            font-weight: 600;
+            padding: .2rem .6rem;
+            border-radius: 10px;
+        }
+        .dir-spinner {
+            width: 36px; height: 36px;
+            border: 3px solid #eee;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: dspin .7s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes dspin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+
+<!-- Navbar -->
+<div class="container-fluid fixed-top px-0">
+    <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5">
+        <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+            <div class="batch-name"><i class="fa fa-anchor me-2"></i>1/97 BATCH</div>
+            <div class="batch-tagline">Indian Navy Veterans</div>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link">Home</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">About</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="about.html" class="dropdown-item">About 1/97 Batch</a>
+                        <a href="history.html" class="dropdown-item">Batch History</a>
+                        <a href="timeline.html" class="dropdown-item">Our Journey / Timeline</a>
+                        <a href="ships.html" class="dropdown-item">Ships &amp; Units</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Members</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="directory.html" class="dropdown-item active">Member Directory</a>
+                        <a href="directory.html" class="dropdown-item">Find a Shipmate</a>
+                        <a href="profile.html" class="dropdown-item">My Profile</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Memories</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="gallery.html" class="dropdown-item">Photo Gallery</a>
+                        <a href="gallery.html" class="dropdown-item">Training Days</a>
+                        <a href="gallery.html" class="dropdown-item">Ships &amp; Deployments</a>
+                        <a href="reunions.html" class="dropdown-item">Reunions</a>
+                        <a href="gallery.html" class="dropdown-item">Personal Memories</a>
+                    </div>
+                </div>
+                <a href="achievements.html" class="nav-item nav-link">Achievements</a>
+                <a href="reunions.html" class="nav-item nav-link">Reunions</a>
+                <a href="discussion.html" class="nav-item nav-link">Discussion</a>
+                <a href="memorial.html" class="nav-item nav-link">Memorial</a>
+            </div>
+            <div class="d-flex align-items-center ms-2 p-4 p-lg-0">
+                <a href="login.html" class="btn-login">Member Login</a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Page Header -->
+<div class="page-header text-center text-white">
+    <div class="container">
+        <span class="hero-badge">Indian Navy · 1/97 Batch</span>
+        <h1 class="display-5 mt-2 mb-3">Member Directory</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="index.html" class="text-white-50">Home</a></li>
+                <li class="breadcrumb-item active text-white">Member Directory</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Directory Section -->
+<div class="container py-5">
+
+    <!-- Count + Add yourself CTA -->
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-4 gap-3">
+        <div>
+            <span class="hero-badge" id="total-badge" style="border-color:var(--primary);color:var(--primary);">
+                Loading members...
+            </span>
+        </div>
+        <a href="https://forms.google.com" target="_blank" class="btn btn-primary py-2 px-4">
+            <i class="fa fa-user-plus me-2"></i>Add Yourself to Directory
+        </a>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="filter-bar">
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-5">
+                <label class="form-label small fw-semibold text-muted mb-1">Search Shipmates</label>
+                <div class="search-wrap">
+                    <i class="fa fa-search"></i>
+                    <input type="text" class="search-input" id="search-input"
+                           placeholder="Name, ship, city, trade...">
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <label class="form-label small fw-semibold text-muted mb-1">Filter by Trade</label>
+                <select class="filter-select" id="filter-trade">
+                    <option value="">All Trades</option>
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small fw-semibold text-muted mb-1">Status</label>
+                <select class="filter-select" id="filter-status">
+                    <option value="">All</option>
+                    <option value="Retired">Retired</option>
+                    <option value="Serving">Serving</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-2">
+                <button class="btn btn-outline-primary w-100" id="clear-btn">
+                    <i class="fa fa-times me-1"></i> Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results info -->
+    <div class="results-info">
+        <span id="results-count">Loading...</span>
+        <span class="d-none d-md-inline" style="font-size:.75rem;color:#bbb;">
+            Data self-reported by members · Updates automatically
+        </span>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="row g-4" id="directory-grid">
+        <div class="col-12 text-center py-5">
+            <div class="dir-spinner"></div>
+            <div class="text-muted small">Loading shipmates...</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<div class="container-fluid footer py-5">
+    <div class="container py-4">
+        <div class="row g-5">
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-brand mb-2"><i class="fa fa-anchor me-2"></i>1/97 Batch</div>
+                <p class="footer-motto mb-3">"Together in Service. Together for Life."</p>
+                <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans.</p>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-white mb-3">Quick Links</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="index.html">Home</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="directory.html">Member Directory</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="gallery.html">Photo Gallery</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="memorial.html">Memorial Wall</a>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-white mb-3">About</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="about.html">About the Batch</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="history.html">Batch History</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="timeline.html">Our Timeline</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="ships.html">Ships &amp; Units</a>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <h5 class="text-white mb-3">Members</h5>
+                <p class="text-white-50 small mb-3">Verified 1/97 Batch members can log in to access the full community.</p>
+                <a href="login.html" class="btn py-2 px-4 fw-bold" style="background:var(--gold);color:var(--dark);">Member Login</a>
+            </div>
+        </div>
+        <div class="copyright mt-5 pt-3 text-center text-white-50 small">
+            <p class="mb-0">© 2025 Indian Navy 1/97 Batch. All rights reserved. | Built by
+                <a href="https://abhishekindia.com" target="_blank" class="text-white-50">Abhishek</a>
+                for the 1/97 Batch.</p>
+        </div>
+    </div>
+</div>
+
+<a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+// ── Google Sheet CSV URL (your published sheet) ───────────────────────
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgm8qf3z4IfAvRooC7-8oZOTvIZPYE_obWpclZBFNG0MT-G12TD_MNsiiHrBwthhWBSamtLDPVxuKO/pub?gid=1739394485&single=true&output=csv';
+
+// Column indexes (0-based) matching your sheet exactly:
+// 0=Timestamp, 1=Full Name, 2=Last Rank, 3=Trade/Branch,
+// 4=Last Ship, 5=City, 6=State, 7=Status, 8=Photo, 9=Note
+const COL = {
+    name:  1,
+    rank:  2,
+    trade: 3,
+    ship:  4,
+    city:  5,
+    state: 6,
+    status:7,
+    photo: 8,
+    note:  9
+};
+
+// ── State ─────────────────────────────────────────────────────────────
+let allMembers = [];
+
+// ── Parse CSV (handles quoted fields with commas inside) ──────────────
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    return lines.slice(1) // skip header row
+        .filter(line => line.trim())
+        .map((line, i) => {
+            const cols = parseCSVLine(line);
+            return {
+                id:     i + 1,
+                name:   (cols[COL.name]  || '').trim(),
+                rank:   (cols[COL.rank]  || '').trim(),
+                trade:  (cols[COL.trade] || '').trim(),
+                ship:   (cols[COL.ship]  || '').trim(),
+                city:   (cols[COL.city]  || '').trim(),
+                state:  (cols[COL.state] || '').trim(),
+                status: (cols[COL.status]|| 'Retired').trim(),
+                photo:  convertDriveUrl((cols[COL.photo] || '').trim()),
+                note:   (cols[COL.note]  || '').trim()
+            };
+        })
+        .filter(m => m.name); // skip blank rows
+}
+
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+            inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+            result.push(current);
+            current = '';
+        } else {
+            current += ch;
+        }
+    }
+    result.push(current);
+    return result;
+}
+
+// ── Convert Google Drive share URL → direct image URL ─────────────────
+function convertDriveUrl(url) {
+    if (!url) return '';
+    // Handle: https://drive.google.com/open?id=FILE_ID
+    let match = url.match(/[?&]id=([^&]+)/);
+    if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    // Handle: https://drive.google.com/file/d/FILE_ID/view
+    match = url.match(/\/d\/([^/]+)/);
+    if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    return url;
+}
+
+// ── Populate Trade filter dynamically from actual data ─────────────────
+function populateTradeFilter(members) {
+    const trades = [...new Set(members.map(m => m.trade).filter(Boolean))].sort();
+    const sel = document.getElementById('filter-trade');
+    trades.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        sel.appendChild(opt);
+    });
+}
+
+// ── Render Cards ──────────────────────────────────────────────────────
+function renderCards(members) {
+    const grid  = document.getElementById('directory-grid');
+    const count = document.getElementById('results-count');
+
+    if (members.length === 0) {
+        grid.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fa fa-search fa-3x mb-3 d-block" style="color:#dde3ef;"></i>
+                <h5 class="text-muted">No shipmates found</h5>
+                <p class="small text-muted">Try a different search or clear the filters.</p>
+            </div>`;
+        count.innerHTML = '<strong>0</strong> members found';
+        return;
+    }
+
+    count.innerHTML = `Showing <strong>${members.length}</strong> of <strong>${allMembers.length}</strong> members`;
+
+    grid.innerHTML = members.map(m => {
+        const initials = m.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+        const statusClass = m.status === 'Serving' ? 'status-serving' : 'status-retired';
+
+        const photoEl = m.photo
+            ? `<img class="member-photo" src="${m.photo}" alt="${m.name}"
+                    onerror="this.outerHTML='<div class=member-initials>${initials}</div>'">`
+            : `<div class="member-initials">${initials}</div>`;
+
+        const noteEl = m.note
+            ? `<div class="detail-row mt-1">
+                   <i class="fa fa-quote-left"></i>
+                   <span class="fst-italic" style="font-size:.75rem;color:#888;">${m.note}</span>
+               </div>`
+            : '';
+
+        return `
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <div class="member-card">
+                <div class="card-top">
+                    ${photoEl}
+                    <div class="member-info" style="flex:1;min-width:0;">
+                        <div class="member-name">${m.name}</div>
+                        <div class="member-rank">${m.rank}</div>
+                        <span class="status-badge ${statusClass}">${m.status}</span>
+                    </div>
+                </div>
+                <div class="card-details">
+                    <div class="detail-row">
+                        <i class="fa fa-ship"></i>
+                        <span>${m.ship}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa fa-map-marker-alt"></i>
+                        <span>${m.city}, ${m.state}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa fa-tools"></i>
+                        <span class="trade-pill">${m.trade}</span>
+                    </div>
+                    ${noteEl}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ── Filter ────────────────────────────────────────────────────────────
+function applyFilters() {
+    const query  = document.getElementById('search-input').value.toLowerCase().trim();
+    const trade  = document.getElementById('filter-trade').value;
+    const status = document.getElementById('filter-status').value;
+
+    const filtered = allMembers.filter(m => {
+        const matchSearch = !query ||
+            [m.name, m.ship, m.city, m.state, m.trade, m.rank]
+            .some(f => f && f.toLowerCase().includes(query));
+        const matchTrade  = !trade  || m.trade === trade;
+        const matchStatus = !status || m.status === status;
+        return matchSearch && matchTrade && matchStatus;
+    });
+
+    renderCards(filtered);
+}
+
+// ── Fetch & Init ──────────────────────────────────────────────────────
+async function loadMembers() {
+    try {
+        const res  = await fetch(CSV_URL);
+        const text = await res.text();
+        allMembers = parseCSV(text);
+
+        document.getElementById('total-badge').textContent =
+            `${allMembers.length} member${allMembers.length !== 1 ? 's' : ''} in directory`;
+
+        populateTradeFilter(allMembers);
+        applyFilters();
+
+    } catch(e) {
+        document.getElementById('directory-grid').innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fa fa-exclamation-circle fa-3x mb-3 d-block" style="color:#dde3ef;"></i>
+                <h5 class="text-muted">Could not load member data</h5>
+                <p class="small text-muted">Please try refreshing the page.</p>
+            </div>`;
+        document.getElementById('total-badge').textContent = 'Error loading data';
+    }
+}
+
+// ── Event Listeners ───────────────────────────────────────────────────
+document.getElementById('clear-btn').addEventListener('click', () => {
+    document.getElementById('search-input').value  = '';
+    document.getElementById('filter-trade').value  = '';
+    document.getElementById('filter-status').value = '';
+    applyFilters();
+});
+document.getElementById('search-input').addEventListener('input',  applyFilters);
+document.getElementById('filter-trade').addEventListener('change', applyFilters);
+document.getElementById('filter-status').addEventListener('change', applyFilters);
+
+loadMembers();
+</script>
+</body>
+</html>
