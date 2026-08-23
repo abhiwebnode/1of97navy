@@ -151,3 +151,14 @@ footer .footer-motto { color: rgba(255,255,255,.5); font-size: .82rem; font-styl
     .stat-strip .stat-num { font-size: 1.5rem; }
     .hero-badge { font-size: .65rem; }
 }
+
+/*** Mobile carousel navbar overlap fix ***/
+@media (max-width: 991.98px) {
+    #header-carousel .carousel-item img {
+        height: calc(100vh - 56px) !important;
+        margin-top: 56px;
+    }
+    #header-carousel .carousel-caption {
+        top: 56px;
+    }
+}
