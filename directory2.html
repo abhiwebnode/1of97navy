@@ -355,12 +355,12 @@
 <script src="js/main.js"></script>
 
 <script>
-// ── Google Sheet CSV URL ──────────────────────────────────────────────
+// ── Google Sheet CSV URL (your published sheet) ───────────────────────
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgm8qf3z4IfAvRooC7-8oZOTvIZPYE_obWpclZBFNG0MT-G12TD_MNsiiHrBwthhWBSamtLDPVxuKO/pub?gid=1739394485&single=true&output=csv';
 
-// Column indexes (0-based):
-// 0=Timestamp, 1=Full Name, 2=Last Rank, 3=Trade, 4=Last Ship,
-// 5=City, 6=State, 7=Status, 8=Photo, 9=Note, 10=Phone, 11=Email
+// Column indexes (0-based) matching your sheet exactly:
+// 0=Timestamp, 1=Full Name, 2=Last Rank, 3=Trade/Branch,
+// 4=Last Ship, 5=City, 6=State, 7=Status, 8=Photo, 9=Note
 const COL = {
     name:  1,
     rank:  2,
@@ -370,9 +370,7 @@ const COL = {
     state: 6,
     status:7,
     photo: 8,
-    note:  9,
-    phone: 10,
-    email: 11
+    note:  9
 };
 
 // ── State ─────────────────────────────────────────────────────────────
@@ -381,7 +379,7 @@ let allMembers = [];
 // ── Parse CSV (handles quoted fields with commas inside) ──────────────
 function parseCSV(text) {
     const lines = text.trim().split('\n');
-    return lines.slice(1)
+    return lines.slice(1) // skip header row
         .filter(line => line.trim())
         .map((line, i) => {
             const cols = parseCSVLine(line);
@@ -395,12 +393,10 @@ function parseCSV(text) {
                 state:  (cols[COL.state] || '').trim(),
                 status: (cols[COL.status]|| 'Retired').trim(),
                 photo:  convertDriveUrl((cols[COL.photo] || '').trim()),
-                note:   (cols[COL.note]  || '').trim(),
-                phone:  (cols[COL.phone] || '').trim(),
-                email:  (cols[COL.email] || '').trim()
+                note:   (cols[COL.note]  || '').trim()
             };
         })
-        .filter(m => m.name);
+        .filter(m => m.name); // skip blank rows
 }
 
 function parseCSVLine(line) {
@@ -478,24 +474,6 @@ function renderCards(members) {
                </div>`
             : '';
 
-        const phoneEl = m.phone
-            ? `<div class="detail-row">
-                   <i class="fa fa-phone"></i>
-                   <a href="tel:${m.phone}" style="color:#666;text-decoration:none;">${m.phone}</a>
-               </div>`
-            : '';
-
-        const emailEl = m.email
-            ? `<div class="detail-row">
-                   <i class="fa fa-envelope"></i>
-                   <a href="mailto:${m.email}" style="color:#666;text-decoration:none;font-size:.75rem;word-break:break-all;">${m.email}</a>
-               </div>`
-            : '';
-
-        const contactDivider = (m.phone || m.email)
-            ? `<div style="border-top:1px dashed #f0f3fa;margin:.4rem 0;"></div>`
-            : '';
-
         return `
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <div class="member-card">
@@ -521,9 +499,6 @@ function renderCards(members) {
                         <span class="trade-pill">${m.trade}</span>
                     </div>
                     ${noteEl}
-                    ${contactDivider}
-                    ${phoneEl}
-                    ${emailEl}
                 </div>
             </div>
         </div>`;
