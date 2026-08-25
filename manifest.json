@@ -33,7 +33,7 @@
   ],
   "shortcuts": [
     {
-      "name": "Shipmate Directory",
+      "name": "Batchmates Directory",
       "short_name": "Directory",
       "description": "Find and connect with batchmates",
       "url": "/directory.html?utm_source=pwa_shortcut",
