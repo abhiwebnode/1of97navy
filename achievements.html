@@ -13,12 +13,40 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/navy.css" rel="stylesheet">
+    <style>
+        .achieve-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(27,58,107,.09);
+            transition: .3s;
+            text-decoration: none;
+            display: block;
+            height: 100%;
+        }
+        .achieve-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(27,58,107,.16); }
+        .achieve-card-img {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+        }
+        .achieve-card-body { padding: 1.5rem; background: #fff; }
+        .achieve-card-title { font-family: 'Saira', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: .5rem; }
+        .achieve-card-text { font-size: .85rem; color: #666; line-height: 1.6; margin-bottom: 1rem; }
+        .achieve-card-link { font-size: .82rem; font-weight: 600; color: var(--primary); }
+        .achieve-card:hover .achieve-card-link { color: var(--gold); }
+    </style>
 </head>
 <body>
+
 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" role="status"></div>
 </div>
-<div class="container-fluid fixed-top px-0">
+
+<!-- Navbar -->
+<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
     <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5">
         <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
             <div class="batch-name"><i class="fa fa-anchor me-2"></i>1/97 BATCH</div>
@@ -57,7 +85,16 @@
                         <a href="gallery.html" class="dropdown-item">Personal Memories</a>
                     </div>
                 </div>
-                <a href="achievements.html" class="nav-item nav-link">Achievements</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Achievements</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="achievements.html" class="dropdown-item active">Achievements Home</a>
+                        <a href="service-awards.html" class="dropdown-item">Service Awards</a>
+                        <a href="spotlight.html" class="dropdown-item">Veteran Spotlight</a>
+                        <a href="postservice.html" class="dropdown-item">Post-Service Achievements</a>
+                        <a href="socialwork.html" class="dropdown-item">Social Work</a>
+                    </div>
+                </div>
                 <a href="reunions.html" class="nav-item nav-link">Reunions</a>
                 <a href="discussion.html" class="nav-item nav-link">Discussion</a>
                 <a href="memorial.html" class="nav-item nav-link">Memorial</a>
@@ -68,10 +105,13 @@
         </div>
     </nav>
 </div>
-<div class="page-header text-center text-white">
+
+<!-- Page Header -->
+<div class="page-header text-center text-white wow fadeIn">
     <div class="container">
-        <span class="hero-badge">Indian Navy · 1/97 Batch</span>
+        <span class="hero-badge">1/97 Batch · Pride &amp; Honour</span>
         <h1 class="display-5 mt-2 mb-3">Achievements</h1>
+        <p class="text-white-50 mb-3">Celebrating what the 1/97 Batch has given to the Navy, the nation, and the community.</p>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item"><a href="index.html" class="text-white-50">Home</a></li>
@@ -80,25 +120,136 @@
         </nav>
     </div>
 </div>
-<div class="container py-5 my-3 text-center">
-    <i class="fa fa-medal fa-4x mb-4" style="color: var(--primary);"></i>
-    <h2 class="mb-3" style="color: var(--dark);">Achievements</h2>
-    <p class="text-muted mb-4" style="max-width:520px;margin:0 auto;">Service awards, commendations, and the remarkable post-service achievements of 1/97 Batch members.</p>
-    <span class="badge px-3 py-2" style="background: var(--gold); color: var(--dark); font-size:.85rem;">Content coming soon — this page is under construction</span>
-    <div class="mt-4">
-        <a href="index.html" class="btn btn-outline-primary py-2 px-4">← Back to Home</a>
+
+<!-- Intro -->
+<div class="container-fluid py-5" style="background:var(--light);">
+    <div class="container py-2 text-center" style="max-width:700px;">
+        <span class="section-eyebrow">Our Legacy</span>
+        <h2 class="section-title display-6 mb-3">A Batch That Served with Distinction</h2>
+        <div class="section-divider mb-4"></div>
+        <p class="text-muted">From gallantry awards earned at sea to District Magistrates serving the nation on land — the 1/97 Batch continues to make India proud. This section is a living record of what our batchmates have achieved, in uniform and beyond.</p>
     </div>
 </div>
-<div class="container-fluid footer py-4">
-    <div class="container text-center">
-        <div class="footer-brand mb-1"><i class="fa fa-anchor me-2"></i>1/97 Batch</div>
-        <p class="footer-motto small mb-2">"Together in Service. Together for Life."</p>
-        <p class="text-white-50 small mb-0">© 2025 Indian Navy 1/97 Batch. All rights reserved.</p>
+
+<!-- Four Category Cards -->
+<div class="container py-5">
+    <div class="row g-4">
+
+        <!-- 1. Service Awards -->
+        <div class="col-12 col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
+            <a href="service-awards.html" class="achieve-card">
+                <div class="achieve-card-img" style="background: linear-gradient(135deg, var(--primary), #2952A3);">
+                    <i class="fa fa-medal" style="color:var(--gold);"></i>
+                </div>
+                <div class="achieve-card-body">
+                    <div class="achieve-card-title">Service Awards</div>
+                    <p class="achieve-card-text">Gallantry medals, commendations and formal recognitions received by 1/97 Batch sailors during their years of service in the Indian Navy.</p>
+                    <span class="achieve-card-link">View Awards <i class="fa fa-arrow-right ms-1" style="font-size:.7rem;"></i></span>
+                </div>
+            </a>
+        </div>
+
+        <!-- 2. Veteran Spotlight -->
+        <div class="col-12 col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="0.15s">
+            <a href="spotlight.html" class="achieve-card">
+                <div class="achieve-card-img" style="background: linear-gradient(135deg, #856404, #C9A84C);">
+                    <i class="fa fa-star" style="color:#fff;"></i>
+                </div>
+                <div class="achieve-card-body">
+                    <div class="achieve-card-title">Veteran Spotlight</div>
+                    <p class="achieve-card-text">In-depth profiles of batchmates whose stories inspire — from the parade ground at INS Chilka to positions of leadership and distinction across India.</p>
+                    <span class="achieve-card-link">Read Spotlights <i class="fa fa-arrow-right ms-1" style="font-size:.7rem;"></i></span>
+                </div>
+            </a>
+        </div>
+
+        <!-- 3. Post-Service Achievements -->
+        <div class="col-12 col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="0.2s">
+            <a href="postservice.html" class="achieve-card">
+                <div class="achieve-card-img" style="background: linear-gradient(135deg, #155724, #28a745);">
+                    <i class="fa fa-rocket" style="color:#fff;"></i>
+                </div>
+                <div class="achieve-card-body">
+                    <div class="achieve-card-title">Post-Service Achievements</div>
+                    <p class="achieve-card-text">The inspiring second innings of our veterans — entrepreneurs, civil servants, educators, farmers and leaders building a new chapter after the Navy.</p>
+                    <span class="achieve-card-link">Inspirational Journeys <i class="fa fa-arrow-right ms-1" style="font-size:.7rem;"></i></span>
+                </div>
+            </a>
+        </div>
+
+        <!-- 4. Social Work -->
+        <div class="col-12 col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="0.25s">
+            <a href="socialwork.html" class="achieve-card">
+                <div class="achieve-card-img" style="background: linear-gradient(135deg, #6f1c1c, #c0392b);">
+                    <i class="fa fa-hands-helping" style="color:#fff;"></i>
+                </div>
+                <div class="achieve-card-body">
+                    <div class="achieve-card-title">Social Work</div>
+                    <p class="achieve-card-text">Regional veteran groups giving back to their communities — from Delhi to Kerala, Rajasthan to Odisha. The 1/97 Batch continues to serve.</p>
+                    <span class="achieve-card-link">View Group Activities <i class="fa fa-arrow-right ms-1" style="font-size:.7rem;"></i></span>
+                </div>
+            </a>
+        </div>
+
     </div>
 </div>
+
+<!-- Footer -->
+<div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-4">
+        <div class="row g-5">
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-brand mb-2"><i class="fa fa-anchor me-2"></i>1/97 Batch</div>
+                <p class="footer-motto mb-3">"Together in Service. Together for Life."</p>
+                <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans. Maintained by the batch, for the batch.</p>
+                <div class="d-flex gap-2 mt-3">
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-white mb-3">Quick Links</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="about.html">About the Batch</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="timeline.html">Our Timeline</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="ships.html">Ships &amp; Units</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="directory.html">Member Directory</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="memorial.html">Memorial Wall</a>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-white mb-3">Memories</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="gallery.html">Photo Gallery</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="achievements.html">Achievements</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="spotlight.html">Veteran Spotlight</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="reunions.html">Reunions</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="discussion.html">Discussion</a>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <h5 class="text-white mb-3">Get in Touch</h5>
+                <p class="text-white-50 small mb-3">For membership enquiries, content submissions, or corrections, reach out to the batch webmaster.</p>
+                <div class="d-flex mb-2">
+                    <i class="fa fa-envelope text-gold me-3 mt-1"></i>
+                    <span class="text-white-50 small">contact@navy197batch.in</span>
+                </div>
+                <div class="d-flex mb-4">
+                    <i class="fab fa-whatsapp text-gold me-3 mt-1"></i>
+                    <span class="text-white-50 small">Batch WhatsApp Group</span>
+                </div>
+                <a href="login.html" class="btn btn-gold py-2 px-4 fw-bold">Member Login</a>
+            </div>
+        </div>
+        <div class="copyright mt-5 pt-3 text-center text-white-50 small">
+            <p class="mb-0">© 2025 Indian Navy 1/97 Batch. All rights reserved. | Built by <a href="https://www.abhishekindia.com" target="_blank" class="text-white-50">Abhishek Kumar</a> for the 1/97 Batch.</p>
+        </div>
+    </div>
+</div>
+
 <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

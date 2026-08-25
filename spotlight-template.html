@@ -13,6 +13,13 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/navy.css" rel="stylesheet">
+    <style>
+        .spotlight-hero { background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%); padding: 8rem 0 4rem; }
+        .spotlight-photo { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 4px solid var(--gold); }
+        .pull-quote { border-left: 4px solid var(--gold); padding: 1rem 1.5rem; background: var(--secondary); border-radius: 0 8px 8px 0; font-style: italic; color: var(--dark); font-size: 1.05rem; }
+        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 4px; }
+        .timeline-line { width: 2px; background: #dde3ef; margin: 4px auto; flex: 1; }
+    </style>
 </head>
 <body>
 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -77,51 +84,86 @@
         </div>
     </nav>
 </div>
-<div class="page-header text-center text-white wow fadeIn">
+<!-- Spotlight Hero -->
+<div class="spotlight-hero text-white text-center">
     <div class="container">
-        <span class="hero-badge">1/97 Batch · Inspiring Stories</span>
-        <h1 class="display-5 mt-2 mb-3">Veteran Spotlight</h1>
-        <p class="text-white-50 mb-3">In-depth profiles of 1/97 Batch veterans who have gone on to do extraordinary things.</p>
-        <nav aria-label="breadcrumb">
+        <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item"><a href="index.html" class="text-white-50">Home</a></li>
                 <li class="breadcrumb-item"><a href="achievements.html" class="text-white-50">Achievements</a></li>
-                <li class="breadcrumb-item active text-white">Veteran Spotlight</li>
+                <li class="breadcrumb-item"><a href="spotlight.html" class="text-white-50">Veteran Spotlight</a></li>
+                <li class="breadcrumb-item active text-white">Name Here</li>
             </ol>
         </nav>
+        <!-- Replace src with actual photo -->
+        <img src="img/testimonial-1.jpg" alt="Name Here" class="spotlight-photo mb-4">
+        <span class="hero-badge">Veteran Spotlight</span>
+        <h1 class="display-5 mt-2 mb-1">Full Name Here</h1>
+        <p style="color:var(--gold);font-weight:600;font-size:1.1rem;">Current Role · Organisation / District · State</p>
+        <p class="text-white-50 mt-2">Trade · Last Ship · 1/97 Batch</p>
     </div>
 </div>
-<div class="container py-5">
-<div class="text-center mb-5">
-    <span class="section-eyebrow">Featured Profiles</span>
-    <h2 class="section-title h4 mb-0">From INS Chilka to the World</h2>
-    <div class="section-divider mt-3"></div>
-    <p class="text-muted mt-3" style="max-width:600px;margin:0 auto;">Each spotlight is the story of a batchmate who carried the Navy's values into civilian life — and built something remarkable.</p>
-</div>
-<!-- ── Spotlight Cards Index ── -->
-<!-- To add a new spotlight: copy one card block, update name/role/teaser/link -->
-<div class="row g-4">
 
-    <!-- Placeholder card — replace with real entry when ready -->
-    <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="card border-0 h-100" style="border-top:3px solid var(--gold) !important;box-shadow:0 4px 20px rgba(27,58,107,.08);border-radius:10px;overflow:hidden;">
-            <div style="height:200px;background:linear-gradient(135deg,var(--primary),#2952A3);display:flex;align-items:center;justify-content:center;">
-                <i class="fa fa-user fa-4x" style="color:rgba(255,255,255,.3);"></i>
-            </div>
-            <div class="card-body p-4">
-                <p class="small mb-1" style="color:var(--gold);font-weight:600;letter-spacing:.05em;text-transform:uppercase;">District Magistrate</p>
-                <h5 class="fw-bold mb-1" style="color:var(--dark);">Name · State</h5>
-                <p class="small text-muted mb-3">A brief teaser of their inspiring journey — from the parade ground at INS Chilka to one of the most prestigious positions in the Indian civil services.</p>
-                <a href="spotlight-template.html" class="btn btn-outline-primary btn-sm py-1 px-3">Read Full Story →</a>
-            </div>
+<!-- Spotlight Content -->
+<div class="container py-5" style="max-width:820px;">
+
+    <!-- Pull Quote -->
+    <div class="pull-quote mb-5 wow fadeIn">
+        "Write an inspiring quote from this person here — something that captures their philosophy or their journey."
+        <div class="mt-2 small fw-semibold" style="color:var(--primary);">— Full Name</div>
+    </div>
+
+    <!-- Their Story -->
+    <div class="row g-5">
+        <div class="col-12">
+            <span class="section-eyebrow">Their Journey</span>
+            <h3 class="section-title h5 mb-4">From INS Chilka to [Current Role]</h3>
+
+            <p class="text-muted mb-4">
+                Write the opening paragraph here — who they are, where they are from, and what makes their story remarkable. Keep it personal and engaging.
+            </p>
+
+            <p class="text-muted mb-4">
+                Second paragraph — their Navy journey. What trade were they in, which ships did they serve on, what do they remember most about service.
+            </p>
+
+            <p class="text-muted mb-4">
+                Third paragraph — the transition. How did they move from Navy life to their current role. What challenges did they face, what drove them.
+            </p>
+
+            <p class="text-muted mb-4">
+                Fourth paragraph — what they are doing today and the impact they are making. Be specific — district, state, initiative, numbers if available.
+            </p>
+
+            <p class="text-muted">
+                Closing paragraph — their message to the batch, or a reflection on what the Navy gave them that prepared them for this.
+            </p>
         </div>
     </div>
 
-</div>
-<div class="text-center mt-5">
-    <p class="text-muted small">Know a batchmate with an inspiring story? <a href="mailto:contact@navy197batch.in" style="color:var(--primary);">Write to us.</a></p>
-    <a href="achievements.html" class="btn btn-outline-primary py-2 px-4 mt-2">← Back to Achievements</a>
-</div>
+    <!-- Quick Facts -->
+    <div class="row g-3 my-4 p-4 rounded" style="background:var(--light);">
+        <div class="col-6 col-md-3 text-center">
+            <div class="fw-bold" style="color:var(--primary);font-family:'Saira',sans-serif;font-size:1.3rem;">1997</div>
+            <div class="small text-muted">Year Enrolled</div>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+            <div class="fw-bold" style="color:var(--primary);font-family:'Saira',sans-serif;font-size:1.3rem;">Trade</div>
+            <div class="small text-muted">Branch</div>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+            <div class="fw-bold" style="color:var(--primary);font-family:'Saira',sans-serif;font-size:1.3rem;">20XX</div>
+            <div class="small text-muted">Year Retired</div>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+            <div class="fw-bold" style="color:var(--primary);font-family:'Saira',sans-serif;font-size:1.3rem;">Role</div>
+            <div class="small text-muted">Current Position</div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="spotlight.html" class="btn btn-outline-primary py-2 px-4">← All Spotlights</a>
+    </div>
 </div>
 <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-4">
