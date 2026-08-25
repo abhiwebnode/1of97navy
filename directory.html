@@ -4,15 +4,139 @@
     <meta charset="utf-8">
     <title>Member Directory — Indian Navy 1/97 Batch</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+	<link rel="icon" href="favicon.ico" sizes="any">
+
+    <!-- Libraries -->
     <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Bootstrap + Template + Custom -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/navy.css" rel="stylesheet">
+	
+	
+	<!-- PWA & Mobile Meta Tags -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0B1D3A">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Apple / iOS Support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Navy 1/97">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+<!-- CSS for Centered Install Modal & Overlay -->
+<style>
+  /* 1. Dark Backdrop Overlay */
+  #pwa-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+  }
+
+  /* 2. Centered Modal Box */
+  #pwa-install-banner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 380px;
+    background: #0B1D3A;
+    color: #FFFFFF;
+    border: 2px solid #D4AF37;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+  }
+
+  #pwa-install-banner img {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    border: 1px solid #D4AF37;
+    flex-shrink: 0;
+  }
+
+  .pwa-info {
+    width: 100%;
+  }
+
+  .pwa-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #D4AF37;
+    margin: 0 0 6px 0;
+  }
+
+  .pwa-desc {
+    font-size: 14px;
+    color: #E2E8F0;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .pwa-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .pwa-btn-install {
+    background: #D4AF37;
+    color: #0B1D3A;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s ease;
+  }
+
+  .pwa-btn-install:active {
+    opacity: 0.85;
+  }
+
+  .pwa-btn-dismiss {
+    background: transparent;
+    color: #94A3B8;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+</style>
     <style>
         .filter-bar {
             background: #fff;
@@ -177,11 +301,12 @@
 </div>
 
 <!-- Navbar -->
-<div class="container-fluid fixed-top px-0">
+<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
     <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5">
         <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-            <div class="batch-name"><i class="fa fa-anchor me-2"></i>1/97 BATCH</div>
-            <div class="batch-tagline">Indian Navy Veterans</div>
+            <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+        <img src="icons/logo.png" alt="Indian Navy 1/97 Batch Veterans" class="img-fluid" style="max-height: 50px; width: auto;">
+        </a>
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -199,9 +324,9 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Members</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Members</a>
                     <div class="dropdown-menu m-0">
-                        <a href="directory.html" class="dropdown-item active">Member Directory</a>
+                        <a href="directory.html" class="dropdown-item">Member Directory</a>
                         <a href="directory.html" class="dropdown-item">Find a Shipmate</a>
                         <a href="profile.html" class="dropdown-item">My Profile</a>
                     </div>
@@ -216,7 +341,16 @@
                         <a href="gallery.html" class="dropdown-item">Personal Memories</a>
                     </div>
                 </div>
-                <a href="achievements.html" class="nav-item nav-link">Achievements</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Achievements</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="achievements.html" class="dropdown-item active">Achievements Home</a>
+                        <a href="service-awards.html" class="dropdown-item">Service Awards</a>
+                        <a href="spotlight.html" class="dropdown-item">Veteran Spotlight</a>
+                        <a href="postservice.html" class="dropdown-item">Post-Service Achievements</a>
+                        <a href="socialwork.html" class="dropdown-item">Social Work</a>
+                    </div>
+                </div>
                 <a href="reunions.html" class="nav-item nav-link">Reunions</a>
                 <a href="discussion.html" class="nav-item nav-link">Discussion</a>
                 <a href="memorial.html" class="nav-item nav-link">Memorial</a>
@@ -227,6 +361,7 @@
         </div>
     </nav>
 </div>
+<!-- Navbar -->
 
 <!-- Page Header -->
 <div class="page-header text-center text-white">
@@ -315,50 +450,169 @@
 </div>
 
 <!-- Footer -->
-<div class="container-fluid footer py-5">
+<div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-4">
         <div class="row g-5">
             <div class="col-lg-4 col-md-6">
-                <div class="footer-brand mb-2"><i class="fa fa-anchor me-2"></i>1/97 Batch</div>
+                
+				<div class="footer-brand mb-3">
+    <img src="icons/logo.png"
+         alt="Indian Navy 1/97 Batch Veterans"
+         class="img-fluid"
+         style="max-height: 50px; width: auto;">
+</div>
                 <p class="footer-motto mb-3">"Together in Service. Together for Life."</p>
-                <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans.</p>
+                <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans. Maintained by the batch, for the batch.</p>
+                <div class="d-flex gap-2 mt-3">
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
             <div class="col-lg-2 col-md-6">
                 <h5 class="text-white mb-3">Quick Links</h5>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="index.html">Home</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="about.html">About the Batch</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="timeline.html">Our Timeline</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="ships.html">Ships &amp; Units</a>
                 <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="directory.html">Member Directory</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="gallery.html">Photo Gallery</a>
                 <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="memorial.html">Memorial Wall</a>
             </div>
             <div class="col-lg-2 col-md-6">
-                <h5 class="text-white mb-3">About</h5>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="about.html">About the Batch</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="history.html">Batch History</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="timeline.html">Our Timeline</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="ships.html">Ships &amp; Units</a>
+                <h5 class="text-white mb-3">Memories</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="gallery.html">Photo Gallery</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="achievements.html">Achievements</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="spotlight.html">Veteran Spotlight</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="reunions.html">Reunions</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="discussion.html">Discussion</a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <h5 class="text-white mb-3">Members</h5>
-                <p class="text-white-50 small mb-3">Verified 1/97 Batch members can log in to access the full community.</p>
-                <a href="login.html" class="btn py-2 px-4 fw-bold" style="background:var(--gold);color:var(--dark);">Member Login</a>
+                <h5 class="text-white mb-3">Get in Touch</h5>
+                <p class="text-white-50 small mb-3">For membership enquiries, content submissions, or corrections, reach out to the batch webmaster.</p>
+                <div class="d-flex mb-2">
+                    <i class="fa fa-envelope text-gold me-3 mt-1"></i>
+                    <span class="text-white-50 small">contact@navy197batch.in</span>
+                </div>
+                <div class="d-flex mb-4">
+                    <i class="fab fa-whatsapp text-gold me-3 mt-1"></i>
+                    <span class="text-white-50 small">Batch WhatsApp Group</span>
+                </div>
+                <a href="login.html" class="btn btn-gold py-2 px-4 fw-bold">Member Login</a>
             </div>
         </div>
         <div class="copyright mt-5 pt-3 text-center text-white-50 small">
-            <p class="mb-0">© 2025 Indian Navy 1/97 Batch. All rights reserved. | Built by
-                <a href="https://abhishekindia.com" target="_blank" class="text-white-50">Abhishek</a>
-                for the 1/97 Batch.</p>
+            <p class="mb-0" style="color: #D4AF37;">
+    © 2026 Indian Navy 1/97 Batch. All rights reserved. | Built by
+    <a href="https://www.abhishekindia.com" target="_blank" style="color: #fff;">Abhishek Kumar</a>
+    for the 1/97 Batch.
+</p>
         </div>
     </div>
 </div>
 
+<!-- Back to top -->
 <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+<!-- Scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="lib/wow/wow.js"></script>
 <script src="lib/easing/easing.min.js"></script>
 <script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+<!-- Background Overlay -->
+<div id="pwa-modal-overlay"></div>
+
+<!-- Centered App Install Modal -->
+<aside id="pwa-install-banner" aria-label="App Installation Prompt">
+  <img src="/icons/icon-192x192.png" alt="Navy 1/97 Crest">
+  <div class="pwa-info">
+    <h3 class="pwa-title">Indian Navy 1/97 App</h3>
+    <p class="pwa-desc" id="pwa-desc-text">Install the batch portal for quick access, offline directories, and reunion updates.</p>
+  </div>
+  <div class="pwa-actions">
+    <button id="pwa-install-btn" class="pwa-btn-install">Install App</button>
+    <button id="pwa-close-btn" class="pwa-btn-dismiss">Maybe Later</button>
+  </div>
+</aside>
+
+<script>
+  // 1. Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((reg) => console.log('ServiceWorker registered with scope:', reg.scope))
+        .catch((err) => console.error('ServiceWorker registration failed:', err));
+    });
+  }
+
+  // 2. Install Modal Logic
+  let deferredPrompt;
+  const banner = document.getElementById('pwa-install-banner');
+  const overlay = document.getElementById('pwa-modal-overlay');
+  const installBtn = document.getElementById('pwa-install-btn');
+  const closeBtn = document.getElementById('pwa-close-btn');
+  const descText = document.getElementById('pwa-desc-text');
+
+  function showPromptModal() {
+    overlay.style.display = 'block';
+    banner.style.display = 'flex';
+  }
+
+  function hidePromptModal() {
+    overlay.style.display = 'none';
+    banner.style.display = 'none';
+  }
+
+  // iOS Safari Check
+  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+  // Chrome / Android Trigger
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    if (!localStorage.getItem('pwa_prompt_dismissed')) {
+      showPromptModal();
+    }
+  });
+
+  // Handle Install Action
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        hidePromptModal();
+      }
+      deferredPrompt = null;
+    }
+  });
+
+  // iOS Safari Guidance
+  if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_prompt_dismissed')) {
+    descText.innerHTML = 'Tap the <strong>Share</strong> button (<span style="font-size:16px;">⎋</span>) below, then select <strong>Add to Home Screen</strong>.';
+    installBtn.style.display = 'none';
+    showPromptModal();
+  }
+
+  // Dismiss Modal
+  closeBtn.addEventListener('click', () => {
+    hidePromptModal();
+    localStorage.setItem('pwa_prompt_dismissed', 'true');
+  });
+
+  overlay.addEventListener('click', () => {
+    hidePromptModal();
+  });
+
+  // Hide if already installed
+  window.addEventListener('appinstalled', () => {
+    hidePromptModal();
+    deferredPrompt = null;
+  });
+</script>
 
 <script>
 // ── Google Sheet CSV URL ──────────────────────────────────────────────
