@@ -1,0 +1,50 @@
+{
+  "name": "Indian Navy 1/97 Batch",
+  "short_name": "Navy 1/97",
+  "description": "Together in Service. Together for Life. Official community for the Indian Navy 1/97 Batch.",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B1D3A",
+  "theme_color": "#0B1D3A",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": ["social", "community", "military"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Shipmate Directory",
+      "short_name": "Directory",
+      "description": "Find and connect with batchmates",
+      "url": "/members/?utm_source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Memorial Wall",
+      "short_name": "Memorial",
+      "description": "Honor and remember fallen shipmates",
+      "url": "/memorial-wall/?utm_source=pwa_shortcut",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
