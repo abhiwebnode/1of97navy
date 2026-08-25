@@ -168,8 +168,7 @@
 <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
     <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5">
         <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-            <div class="batch-name"><i class="fa fa-anchor me-2"></i>1/97 BATCH</div>
-            <div class="batch-tagline">Indian Navy Veterans</div>
+        <img src="icons/logo.png" alt="Indian Navy 1/97 Batch Veterans" class="img-fluid" style="max-height: 50px; width: auto;">
         </a>
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -602,7 +601,13 @@
     <div class="container py-4">
         <div class="row g-5">
             <div class="col-lg-4 col-md-6">
-                <div class="footer-brand mb-2"><i class="fa fa-anchor me-2"></i>1/97 Batch</div>
+                
+				<div class="footer-brand mb-3">
+    <img src="icons/logo.png"
+         alt="Indian Navy 1/97 Batch Veterans"
+         class="img-fluid"
+         style="max-height: 50px; width: auto;">
+</div>
                 <p class="footer-motto mb-3">"Together in Service. Together for Life."</p>
                 <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans. Maintained by the batch, for the batch.</p>
                 <div class="d-flex gap-2 mt-3">
@@ -642,7 +647,11 @@
             </div>
         </div>
         <div class="copyright mt-5 pt-3 text-center text-white-50 small">
-            <p class="mb-0">© 2025 Indian Navy 1/97 Batch. All rights reserved. | Built by <a href="https://www.abhishekindia.com" target="_blank" class="text-white-50">Abhishek Kumar</a> for the 1/97 Batch.</p>
+            <p class="mb-0" style="color: #D4AF37;">
+    © 2026 Indian Navy 1/97 Batch. All rights reserved. | Built by
+    <a href="https://www.abhishekindia.com" target="_blank" style="color: #fff;">Abhishek Kumar</a>
+    for the 1/97 Batch.
+</p>
         </div>
     </div>
 </div>
@@ -677,6 +686,16 @@
 </aside>
 
 <script>
+  // 1. Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((reg) => console.log('ServiceWorker registered with scope:', reg.scope))
+        .catch((err) => console.error('ServiceWorker registration failed:', err));
+    });
+  }
+
+  // 2. Install Modal Logic
   let deferredPrompt;
   const banner = document.getElementById('pwa-install-banner');
   const overlay = document.getElementById('pwa-modal-overlay');
