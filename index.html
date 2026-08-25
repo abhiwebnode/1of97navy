@@ -36,70 +36,106 @@
 <meta name="apple-mobile-web-app-title" content="Navy 1/97">
 <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 
-<!-- CSS for the Custom Install Banner -->
+<!-- CSS for Centered Install Modal & Overlay -->
 <style>
-  #pwa-install-banner {
+  /* 1. Dark Backdrop Overlay */
+  #pwa-modal-overlay {
+    display: none;
     position: fixed;
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    max-width: 480px;
-    margin: 0 auto;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+  }
+
+  /* 2. Centered Modal Box */
+  #pwa-install-banner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 380px;
     background: #0B1D3A;
     color: #FFFFFF;
-    border: 1px solid #D4AF37;
-    border-radius: 12px;
-    padding: 14px 16px;
-    display: none;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border: 2px solid #D4AF37;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
     z-index: 9999;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
+    text-align: center;
+    gap: 16px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
   }
+
   #pwa-install-banner img {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    border: 1px solid #D4AF37;
     flex-shrink: 0;
   }
+
   .pwa-info {
-    flex: 1;
+    width: 100%;
   }
+
   .pwa-title {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 18px;
     color: #D4AF37;
+    margin: 0 0 6px 0;
+  }
+
+  .pwa-desc {
+    font-size: 14px;
+    color: #E2E8F0;
+    line-height: 1.5;
     margin: 0;
   }
-  .pwa-desc {
-    font-size: 12px;
-    color: #E2E8F0;
-    margin: 2px 0 0 0;
-  }
+
   .pwa-actions {
     display: flex;
-    gap: 8px;
-    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-top: 8px;
   }
+
   .pwa-btn-install {
     background: #D4AF37;
     color: #0B1D3A;
     border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 13px;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s ease;
   }
+
+  .pwa-btn-install:active {
+    opacity: 0.85;
+  }
+
   .pwa-btn-dismiss {
     background: transparent;
     color: #94A3B8;
-    border: none;
-    font-size: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    line-height: 1;
-    padding: 4px;
+    width: 100%;
   }
 </style>
 </head>
@@ -624,42 +660,42 @@
 <script src="js/main.js"></script>
 
 
-<!-- Install Banner Component -->
+<!-- Background Overlay -->
+<div id="pwa-modal-overlay"></div>
+
+<!-- Centered App Install Modal -->
 <aside id="pwa-install-banner" aria-label="App Installation Prompt">
   <img src="/icons/icon-192x192.png" alt="Navy 1/97 Crest">
   <div class="pwa-info">
-    <div class="pwa-title">Install Navy 1/97 App</div>
-    <div class="pwa-desc" id="pwa-desc-text">Add to Home Screen for quick offline access</div>
+    <h3 class="pwa-title">Indian Navy 1/97 App</h3>
+    <p class="pwa-desc" id="pwa-desc-text">Install the batch portal for quick access, offline directories, and reunion updates.</p>
   </div>
   <div class="pwa-actions">
-    <button id="pwa-install-btn" class="pwa-btn-install">Install</button>
-    <button id="pwa-close-btn" class="pwa-btn-dismiss" aria-label="Dismiss">&times;</button>
+    <button id="pwa-install-btn" class="pwa-btn-install">Install App</button>
+    <button id="pwa-close-btn" class="pwa-btn-dismiss">Maybe Later</button>
   </div>
 </aside>
 
-<!-- PWA Registration & Install Handler -->
 <script>
-  // 1. Register Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('ServiceWorker registered:', reg.scope))
-        .catch(err => console.error('ServiceWorker error:', err));
-    });
-  }
-
-  // 2. Banner Logic
   let deferredPrompt;
   const banner = document.getElementById('pwa-install-banner');
+  const overlay = document.getElementById('pwa-modal-overlay');
   const installBtn = document.getElementById('pwa-install-btn');
   const closeBtn = document.getElementById('pwa-close-btn');
   const descText = document.getElementById('pwa-desc-text');
 
-  // Detect iOS Safari
-  const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-  };
+  function showPromptModal() {
+    overlay.style.display = 'block';
+    banner.style.display = 'flex';
+  }
+
+  function hidePromptModal() {
+    overlay.style.display = 'none';
+    banner.style.display = 'none';
+  }
+
+  // iOS Safari Check
+  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
   const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
   // Chrome / Android Trigger
@@ -667,40 +703,43 @@
     e.preventDefault();
     deferredPrompt = e;
 
-    // Don't show if user dismissed recently
     if (!localStorage.getItem('pwa_prompt_dismissed')) {
-      banner.style.display = 'flex';
+      showPromptModal();
     }
   });
 
-  // Handle Install Click
+  // Handle Install Action
   installBtn.addEventListener('click', async () => {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
-        banner.style.display = 'none';
+        hidePromptModal();
       }
       deferredPrompt = null;
     }
   });
 
-  // iOS Safari Custom Guidance
+  // iOS Safari Guidance
   if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_prompt_dismissed')) {
-    descText.innerHTML = 'Tap <strong>Share</strong> &rarr; <strong>Add to Home Screen</strong>';
-    installBtn.style.display = 'none'; 
-    banner.style.display = 'flex';
+    descText.innerHTML = 'Tap the <strong>Share</strong> button (<span style="font-size:16px;">⎋</span>) below, then select <strong>Add to Home Screen</strong>.';
+    installBtn.style.display = 'none';
+    showPromptModal();
   }
 
-  // Handle Dismiss Click
+  // Dismiss Modal
   closeBtn.addEventListener('click', () => {
-    banner.style.display = 'none';
+    hidePromptModal();
     localStorage.setItem('pwa_prompt_dismissed', 'true');
   });
 
-  // Hide banner if app is installed
+  overlay.addEventListener('click', () => {
+    hidePromptModal();
+  });
+
+  // Hide if already installed
   window.addEventListener('appinstalled', () => {
-    banner.style.display = 'none';
+    hidePromptModal();
     deferredPrompt = null;
   });
 </script>
