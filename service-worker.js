@@ -1,4 +1,4 @@
-const CACHE_NAME = 'navy-1-97-static-v2';
+const CACHE_NAME = 'navy-1-97-static-v3';
 const OFFLINE_URL = '/offline.html';
 
 // Core static assets and HTML pages to precache on install
@@ -6,6 +6,8 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
+  '/directory.html',
+  '/memorial.html',
   '/manifest.json',
   '/css/style.css',
   '/css/navy.css', 
