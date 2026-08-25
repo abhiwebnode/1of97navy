@@ -36,14 +36,14 @@
       "name": "Shipmate Directory",
       "short_name": "Directory",
       "description": "Find and connect with batchmates",
-      "url": "/members/?utm_source=pwa_shortcut",
+      "url": "/directory.html?utm_source=pwa_shortcut",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     },
     {
       "name": "Memorial Wall",
       "short_name": "Memorial",
       "description": "Honor and remember fallen shipmates",
-      "url": "/memorial-wall/?utm_source=pwa_shortcut",
+      "url": "/memorial.html?utm_source=pwa_shortcut",
       "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
