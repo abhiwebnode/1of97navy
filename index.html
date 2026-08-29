@@ -1,744 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#FF5722">
-<title>NearPop — Offline Mode - Bazaar Run</title>
-<!-- ============================================================
-     BAZAAR Run — NearPop's offline game.
-     100% self-contained: no fonts, no images, no network calls.
-     Drop into the PWA, precache in the service worker, and serve
-     as the navigate-fallback when the user is offline.
-     ============================================================ -->
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
-  html, body { height:100%; overflow:hidden; background:#111827;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  #game { position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+    <meta charset="utf-8">
+    <title>Under Maintenance — Indian Navy 1/97 Batch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B3A6B;
+            --gold:    #C9A84C;
+            --dark:    #0B1E3D;
+            --light:   #F5F7FA;
+        }
 
-  /* ---------- HUD ---------- */
-  .hud { position:fixed; top:0; left:0; right:0; display:flex; justify-content:space-between;
-    align-items:flex-start; padding:max(12px, env(safe-area-inset-top)) 16px 0; pointer-events:none; z-index:5; }
-  .hud-coins { background:rgba(17,24,39,.55); backdrop-filter:blur(4px); color:#fff;
-    font-weight:800; font-size:17px; padding:7px 14px; border-radius:999px; letter-spacing:.3px; }
-  .hud-right { text-align:right; color:#fff; }
-  .hud-dist { font-size:30px; font-weight:900; line-height:1; text-shadow:0 2px 8px rgba(0,0,0,.35);
-    font-variant-numeric: tabular-nums; }
-  .hud-best { font-size:11px; font-weight:700; opacity:.85; margin-top:3px; letter-spacing:.6px; text-transform:uppercase; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .btn-mute { position:fixed; right:14px; bottom:max(14px, env(safe-area-inset-bottom)); z-index:6;
-    width:42px; height:42px; border-radius:50%; border:none; cursor:pointer; font-size:18px;
-    background:rgba(17,24,39,.55); color:#fff; backdrop-filter:blur(4px); }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
 
-  /* ---------- Overlays (start / game over) ---------- */
-  .panel { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center;
-    justify-content:center; text-align:center; z-index:10; padding:24px;
-    background:rgba(17,24,39,.42); backdrop-filter:blur(2px); transition:opacity .25s; }
-  .panel.hide { opacity:0; pointer-events:none; }
-  .card { background:#fff; border-radius:24px; padding:28px 26px; max-width:340px; width:100%;
-    box-shadow:0 24px 60px rgba(0,0,0,.35); }
-  .eyebrow { font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:#FF5722; }
-  .title { font-size:30px; font-weight:900; color:#111827; line-height:1.05; margin:6px 0 4px; }
-  .sub { font-size:13.5px; font-weight:600; color:#6B7280; line-height:1.45; }
-  .deathline { font-size:15px; font-weight:800; color:#111827; margin:14px 0 2px; }
-  .score-row { display:flex; gap:10px; margin:18px 0 6px; }
-  .score-box { flex:1; background:#F8F4EF; border-radius:14px; padding:12px 6px; }
-  .score-num { font-size:26px; font-weight:900; color:#111827; font-variant-numeric:tabular-nums; }
-  .score-lab { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#9CA3AF; margin-top:2px; }
-  .new-best { display:inline-block; margin-top:8px; background:#FFF1EB; color:#FF5722;
-    font-size:11px; font-weight:900; letter-spacing:.8px; padding:5px 12px; border-radius:999px; text-transform:uppercase; }
-  .btn { display:block; width:100%; border:none; cursor:pointer; border-radius:14px; padding:15px;
-    font-size:15px; font-weight:800; font-family:inherit; margin-top:10px; }
-  .btn-go { background:#FF5722; color:#fff; box-shadow:0 8px 20px rgba(255,87,34,.4); }
-  .btn-go:active { transform:scale(.97); }
-  .btn-soft { background:#F3F4F6; color:#111827; }
-  .btn-link { background:none; color:#6B7280; font-size:12.5px; padding:10px; }
-  .hint { margin-top:14px; color:#fff; font-size:12.5px; font-weight:700; opacity:.9; }
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(27,58,107,.5) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(201,168,76,.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
-  /* ---------- toasts ---------- */
-  .toast { position:fixed; left:50%; transform:translateX(-50%);
-    bottom:max(76px, calc(env(safe-area-inset-bottom) + 62px));
-    background:#111827; color:#fff; font-size:13px; font-weight:800; padding:10px 18px;
-    border-radius:999px; opacity:0; transition:opacity .25s; z-index:20; pointer-events:none; white-space:nowrap; }
-  .toast.on { opacity:1; }
-  .online-banner { position:fixed; top:0; left:0; right:0; z-index:30; background:#16A34A; color:#fff;
-    text-align:center; font-size:13px; font-weight:800; padding:10px max(12px, env(safe-area-inset-top));
-    transform:translateY(-110%); transition:transform .3s; cursor:pointer; }
-  .online-banner.on { transform:translateY(0); }
+        /* Anchor watermark */
+        body::after {
+            content: '\f13d';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: fixed;
+            font-size: 60vw;
+            color: rgba(255,255,255,.015);
+            bottom: -15vw;
+            right: -10vw;
+            pointer-events: none;
+            line-height: 1;
+        }
 
-  @media (prefers-reduced-motion: reduce) { .panel, .toast, .online-banner { transition:none; } }
-</style>
+        .card {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(201,168,76,.2);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            max-width: 540px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            margin-bottom: 2rem;
+        }
+        .logo-icon {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: rgba(201,168,76,.1);
+            border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .logo-icon i { color: var(--gold); font-size: 1.8rem; }
+        .logo-name {
+            font-family: 'Saira', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: .05em;
+        }
+        .logo-tag {
+            font-size: .65rem;
+            color: rgba(255,255,255,.4);
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            margin-top: .2rem;
+        }
+
+        .divider {
+            width: 48px; height: 2px;
+            background: var(--gold);
+            margin: 1.5rem auto;
+            opacity: .5;
+        }
+
+        .gear-icon {
+            font-size: 3rem;
+            color: rgba(255,255,255,.15);
+            margin-bottom: 1.25rem;
+            display: block;
+            animation: spin 8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        h1 {
+            font-family: 'Saira', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: .75rem;
+        }
+
+        .subtitle {
+            font-size: .9rem;
+            color: rgba(255,255,255,.55);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .motto {
+            font-size: .82rem;
+            font-style: italic;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            padding: .75rem 1.25rem;
+            background: rgba(201,168,76,.07);
+            border-radius: 6px;
+            border-left: 3px solid var(--gold);
+            text-align: left;
+        }
+
+        /* Countdown */
+        .countdown-wrap {
+            display: none; /* show if you set a back-online time */
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .countdown-wrap.show { display: flex; }
+        .cd-box {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 8px;
+            padding: .75rem .9rem;
+            min-width: 64px;
+        }
+        .cd-num {
+            font-family: 'Saira', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .cd-label {
+            font-size: .62rem;
+            color: rgba(255,255,255,.4);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-top: .25rem;
+        }
+
+        /* Progress bar */
+        .progress-wrap {
+            margin-bottom: 2rem;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: .72rem;
+            color: rgba(255,255,255,.4);
+            margin-bottom: .4rem;
+        }
+        .progress-bar-bg {
+            height: 4px;
+            background: rgba(255,255,255,.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--gold));
+            border-radius: 2px;
+            width: 65%; /* update this to reflect actual progress */
+            transition: width 1s ease;
+        }
+
+        /* Contact */
+        .contact-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            font-size: .8rem;
+            color: rgba(255,255,255,.4);
+            margin-bottom: .5rem;
+        }
+        .contact-row i { color: var(--gold); font-size: .75rem; }
+        .contact-row a { color: rgba(255,255,255,.5); text-decoration: none; }
+        .contact-row a:hover { color: var(--gold); }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: .72rem;
+            color: rgba(255,255,255,.2);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 2rem 1.25rem; }
+            h1 { font-size: 1.3rem; }
+            .cd-num { font-size: 1.4rem; }
+        }
+    </style>
 </head>
 <body>
-<canvas id="game"></canvas>
 
-<div class="hud">
-  <div class="hud-coins" id="hud-coins">💎 0</div>
-  <div class="hud-right">
-    <div class="hud-dist" id="hud-dist">0m</div>
-    <div class="hud-best" id="hud-best">Best 0m</div>
-  </div>
-</div>
-<button class="btn-mute" id="btn-mute" aria-label="Toggle sound">🔊</button>
+<div class="card">
 
-<!-- START -->
-<div class="panel" id="panel-start">
-  <div class="card">
-    <div class="eyebrow">You're offline</div>
-    <div class="title">NearPop Bazaar<br>Run</div>
-    <p class="sub">No network? The bazaar never closes.<br>
-      Dodge the cow, mind the potholes,<br>grab every 💎 you can.</p>
-    <button class="btn btn-go" id="btn-start">Run</button>
-	<button class="btn btn-link" onclick="location.href='/stack'">🛵 Play Scooter Stack instead</button>
-  </div>
-  <div class="hint">Tap to jump &nbsp;·&nbsp; tap again mid-air to double jump</div>
-</div>
-
-<!-- GAME OVER -->
-<div class="panel hide" id="panel-over">
-  <div class="card">
-    <div class="eyebrow">Run over</div>
-    <div class="deathline" id="deathline">The cow had right of way.</div>
-    <div class="score-row">
-      <div class="score-box"><div class="score-num" id="ov-dist">0m</div><div class="score-lab">Distance</div></div>
-      <div class="score-box"><div class="score-num" id="ov-coins">💎 0</div><div class="score-lab">Coins</div></div>
+    <!-- Logo -->
+    <div class="logo">
+        <div class="logo-icon">
+            <i class="fa fa-anchor"></i>
+        </div>
+        <div class="logo-name">1/97 BATCH</div>
+        <div class="logo-tag">Indian Navy Veterans</div>
     </div>
-    <span class="new-best" id="new-best" style="display:none">★ New best</span>
-    <button class="btn btn-go" id="btn-again">Run again</button>
-    <button class="btn btn-soft" id="btn-share">Share my run</button>
-	<button class="btn btn-link" onclick="location.href='/stack'">🛵 Play Scooter Stack instead</button>
-  </div>
-  <div class="hint" id="over-hint">Tip: graze past obstacles for near-miss bonuses</div>
+
+    <div class="divider"></div>
+
+    <!-- Gear icon -->
+    <i class="fa fa-cog gear-icon"></i>
+
+    <!-- Heading -->
+    <h1>Under Maintenance</h1>
+    <p class="subtitle">
+        We are making improvements to the website.<br>
+        The 1/97 Batch website will be back online shortly.<br>
+        Thank you for your patience, shipmate.
+    </p>
+
+    <!-- Motto -->
+    <div class="motto">
+        "Together in Service. Together for Life."
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-wrap">
+        <div class="progress-label">
+            <span>Work in progress</span>
+            <span>Almost there</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- Countdown — uncomment and set TARGET_DATE to show timer -->
+    <!--
+    <div class="countdown-wrap show" id="countdown">
+        <div class="cd-box"><div class="cd-num" id="cd-h">00</div><div class="cd-label">Hours</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-m">00</div><div class="cd-label">Mins</div></div>
+        <div class="cd-box"><div class="cd-num" id="cd-s">00</div><div class="cd-label">Secs</div></div>
+    </div>
+    -->
+
+    <!-- Contact -->
+    <div class="contact-row">
+        <i class="fa fa-envelope"></i>
+        <span>For urgent queries: </span>
+        <a href="mailto:contact@1of97navy.in">contact@1of97navy.in</a>
+    </div>
+    <div class="contact-row">
+        <i class="fab fa-whatsapp"></i>
+        <span>Batch WhatsApp group is active</span>
+    </div>
+
+    <div class="footer-note">
+        © 2025 Indian Navy 1/97 Batch &nbsp;·&nbsp;
+        Built by <a href="https://www.abhishekindia.com" target="_blank"
+            style="color:rgba(255,255,255,.3);text-decoration:none;">Abhishek Kumar</a>
+    </div>
+
 </div>
 
-<!-- NETWORK RESTORED -->
-<div class="panel hide" id="panel-net" style="z-index:15">
-  <div class="card">
-    <div class="eyebrow">Connection restored</div>
-    <div class="title" style="font-size:24px">You're back online!</div>
-    <p class="sub">NearPop is reachable again.<br>Finish your run, or head back to the deals?</p>
-    <button class="btn btn-go" id="btn-net-return">Return to NearPop</button>
-    <button class="btn btn-soft" id="btn-net-stay">Keep playing</button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-<div class="online-banner" id="online-banner">✅ You're back online — tap to return to NearPop</div>
-
+<!-- Optional countdown script — set your back-online datetime -->
 <script>
-'use strict';
-// roundRect polyfill for older WebViews
-if (!CanvasRenderingContext2D.prototype.roundRect) {
-  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-    this.moveTo(x + r, y); this.arcTo(x + w, y, x + w, y + h, r);
-    this.arcTo(x + w, y + h, x, y + h, r); this.arcTo(x, y + h, x, y, r);
-    this.arcTo(x, y, x + w, y, r); return this;
-  };
-}
-/* =====================================================================
-   BAZAAR Run
-   World units: virtual height VH = 540. Everything scales from there,
-   so the game looks identical on every phone.
-   ===================================================================== */
-
-// ---------- safe localStorage (works even where storage is blocked) ----------
-const store = {
-  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-};
-
-// ---------- canvas ----------
-const cv = document.getElementById('game');
-const cx = cv.getContext('2d');
-const VH = 540;                 // virtual height
-let SC = 1, VW = 960;           // scale, virtual width
-const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function resize() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-  cv.width  = Math.round(innerWidth  * dpr);
-  cv.height = Math.round(innerHeight * dpr);
-  cv.style.width = innerWidth + 'px';
-  cv.style.height = innerHeight + 'px';
-  SC = cv.height / VH;
-  VW = cv.width / SC;
-}
-addEventListener('resize', resize); resize();
-
-// ---------- audio: tiny synth, no files ----------
-let AC = null;
-let muted = store.get('np_dash_mute', '0') === '1';
-const btnMute = document.getElementById('btn-mute');
-btnMute.textContent = muted ? '🔇' : '🔊';
-btnMute.onclick = (e) => { e.stopPropagation(); muted = !muted;
-  btnMute.textContent = muted ? '🔇' : '🔊'; store.set('np_dash_mute', muted ? '1' : '0'); };
-
-function beep(f1, f2, dur, type, vol) {
-  if (muted) return;
-  try {
-    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
-    if (AC.state === 'suspended') AC.resume();
-    const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime;
-    o.type = type; o.frequency.setValueAtTime(f1, t);
-    o.frequency.exponentialRampToValueAtTime(Math.max(f2, 1), t + dur);
-    g.gain.setValueAtTime(vol, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
-  } catch (e) {}
-}
-const sJump  = () => beep(330, 560, 0.12, 'square',   0.05);
-const sDjump = () => beep(420, 700, 0.12, 'square',   0.05);
-const sCoin  = () => beep(990, 1480, 0.09, 'sine',    0.07);
-const sNear  = () => beep(620, 980, 0.15, 'triangle', 0.07);
-const sMile  = () => { beep(520, 520, .1, 'sine', .06); setTimeout(() => beep(660, 660, .1, 'sine', .06), 100); setTimeout(() => beep(880, 880, .16, 'sine', .07), 200); };
-const sDead  = () => beep(220, 55, 0.4, 'sawtooth',   0.09);
-
-// ---------- game state ----------
-const GY = VH - 86;             // ground line (top of road)
-const P = {                     // the pin mascot
-  x: 0, y: GY, vy: 0, jumps: 0, run: 0,
-  squash: 0, dead: false
-};
-let state = 'ready';            // ready | run | dead
-let speed = 0, dist = 0, coins = 0, coinStreak = 0;
-let nextSpawn = 0, lastT = 0, shake = 0, deadAt = 0, milestone = 500, bonus = 0;
-let obstacles = [], coinList = [], parts = [], floats = [], signs = [];
-let bestM = parseInt(store.get('np_dash_best', '0'), 10) || 0;
-
-// ---------- copy: death lines per killer (the shareable bit) ----------
-const DEATHS = {
-  cow:     ['The cow had right of way.', 'Mooo-ve over. You lost.', 'Holy cow. Literally.'],
-  auto:    ['Auto bhaiya said: meter se chalega.', 'Flattened by an auto. Classic.', 'The auto saw you. It did not care.'],
-  pothole: ['The pothole wins. It always wins.', 'That pothole has its own PIN code.'],
-  cart:    ['Crashed into the sabzi cart.', 'Tomatoes everywhere. Mostly on you.'],
-  barrier: ['Road work ahead? You sure hoped so.', 'The barrier was, in fact, a barrier.']
-};
-const SIGN_TEXT = ['TUITION', 'PG', 'ROOMS', 'RENT', 'OFFERS', 'EVENTS', 'CAFE', 'CHAI ☕', 'SALE', 'NEARBY', 'JOB', 'SHOP', 'DEALS', 'SERVICES', 'DEAL'];
-
-// ---------- obstacle / coin definitions ----------
-// emoji are pre-rendered to offscreen canvases once → sharp + fast
-function sprite(emoji, px) {
-  const c = document.createElement('canvas');
-  const d = Math.min(window.devicePixelRatio || 1, 2.5);
-  c.width = c.height = Math.ceil(px * d);
-  const g = c.getContext('2d');
-  g.scale(d, d);
-  g.font = px * 0.84 + 'px system-ui';
-  g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(emoji, px / 2, px / 2 + px * 0.04);
-  return c;
-}
-// ---------- mascot: your logo, brought to life ----------
-const MASCOT = {
-  src: '/icons/favicon.png',  // must be in the service worker precache
-  h: 54,            // drawn height in world units (width keeps aspect ratio)
-  feetGap: 6,       // raised a bit so the bigger legs show below the pin tip
-  eyes: true,       // ← ON
-  eyeY: -29,        // centre of your pin's inner circle (53% down the logo)
-  eyeLX: -3.5, eyeRX: 3.5, eyeR: 2.2
-};
-const logoImg = new Image();
-let logoReady = false;
-logoImg.onload  = () => { logoReady = true; };
-logoImg.onerror = () => { logoReady = false; };   // fallback: drawn pin
-logoImg.src = MASCOT.src;
-
-const SPR = {
-  cow:     { img: sprite('🐄', 84), w: 70, h: 52 },
-  auto:    { img: sprite('🛺', 84), w: 66, h: 56, extra: 90 },
-  cart:    { img: sprite('🛒', 64), w: 46, h: 46 },
-  barrier: { img: sprite('🚧', 64), w: 48, h: 44 },
-  coin:    { img: sprite('💎', 44), r: 15 }
-};
-
-// ---------- world generation ----------
-function reset() {
-  obstacles = []; coinList = []; parts = []; floats = []; signs = [];
-  speed = 380; dist = 0; bonus = 0; coins = 0; coinStreak = 0; milestone = 500;
-  nextSpawn = 420; shake = 0;
-  P.x = Math.min(VW * 0.22, 150); P.y = GY; P.vy = 0; P.jumps = 0; P.dead = false; P.squash = 0;
-  // pre-seed background signboards
-  for (let x = 0; x < VW * 2; x += 170 + Math.random() * 120) addSign(x);
-  updateHud();
-}
-function addSign(x) {
-  signs.push({ x, y: GY - 215 - Math.random() * 60,
-    txt: SIGN_TEXT[(Math.random() * SIGN_TEXT.length) | 0],
-    hue: [170, 348, 42, 200, 14][(Math.random() * 5) | 0] });
-}
-
-function spawn() {
-  const r = Math.random();
-  const camX = dist + VW + 80;
-  if (r < 0.16) {
-    // pothole + coin line above it (jump over, get paid)
-    obstacles.push({ type: 'pothole', x: camX, w: 78, h: 16 });
-    for (let i = 0; i < 4; i++)
-      coinList.push({ x: camX - 20 + i * 36, y: GY - 120 - Math.sin(i / 3 * Math.PI) * 36, got: false });
-    nextSpawn = gap();
-  } else if (r < 0.30 && speed > 520) {
-    // double cow — demands the double jump
-    obstacles.push({ type: 'cow', x: camX });
-    obstacles.push({ type: 'cow', x: camX + 76 });
-    nextSpawn = gap() + 80;
-  } else if (r < 0.46) {
-    // coin arc, free money
-    for (let i = 0; i < 5; i++)
-      coinList.push({ x: camX + i * 40, y: GY - 70 - Math.sin(i / 4 * Math.PI) * 95, got: false });
-    nextSpawn = gap() * 0.7;
-  } else {
-    const pick = ['cow', 'auto', 'cart', 'barrier'][(Math.random() * 4) | 0];
-    obstacles.push({ type: pick, x: camX });
-    if (Math.random() < 0.5)
-      for (let i = 0; i < 3; i++)
-        coinList.push({ x: camX - 10 + i * 34, y: GY - 150, got: false });
-    nextSpawn = gap();
-  }
-}
-// safe distance between spawns, scaled to reaction time at current speed
-function gap() { return speed * 0.62 + 150 + Math.random() * 240; }
-
-// ---------- input ----------
-function jump() {
-  if (paused) return;
-  if (state === 'ready') { start(); return; }
-  if (state === 'dead')  { if (performance.now() - deadAt > 500) start(); return; }
-  if (P.jumps === 0 && P.y >= GY - 1) {
-    P.vy = -900; P.jumps = 1; sJump(); dust(6);
-  } else if (P.jumps === 1) {
-    P.vy = -800; P.jumps = 2; sDjump(); dust(4);
-  }
-}
-addEventListener('pointerdown', (e) => {
-  if (e.target.closest('button')) return;   // let buttons be buttons
-  jump();
-});
-addEventListener('keydown', (e) => {
-  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); }
-});
-document.addEventListener('visibilitychange', () => { lastT = 0; });
-
-// ---------- juice ----------
-function dust(n) {
-  for (let i = 0; i < n; i++) parts.push({
-    x: P.x - 8 + Math.random() * 16, y: GY + 2, kind: 'dust',
-    vx: -60 - Math.random() * 80, vy: -40 - Math.random() * 60, life: 0.5 });
-}
-function sparkle(x, y) {
-  for (let i = 0; i < 6; i++) parts.push({
-    x, y, kind: 'gold',
-    vx: (Math.random() - .5) * 260, vy: -60 - Math.random() * 160, life: 0.45 });
-}
-function burst() {
-  for (let i = 0; i < 18; i++) parts.push({
-    x: P.x, y: P.y - 20, kind: 'orange',
-    vx: (Math.random() - .5) * 520, vy: -100 - Math.random() * 360, life: 0.8 });
-}
-function floatText(x, y, txt, big) {
-  floats.push({ x, y, txt, life: 1, big: !!big });
-}
-
-// ---------- flow ----------
-const $ = (id) => document.getElementById(id);
-function start() {
-  reset();
-  state = 'run';
-  $('panel-start').classList.add('hide');
-  $('panel-over').classList.add('hide');
-}
-function die(type) {
-  state = 'dead'; P.dead = true; deadAt = performance.now();
-  sDead(); burst(); if (!REDUCED) shake = 14;
-  const lines = DEATHS[type] || DEATHS.cow;
-  $('deathline').textContent = lines[(Math.random() * lines.length) | 0];
-  const m = Math.floor((dist + bonus) / 10);
-  $('ov-dist').textContent = m + 'm';
-  $('ov-coins').textContent = '💎 ' + coins;
-  const isBest = m > bestM;
-  if (isBest) { bestM = m; store.set('np_dash_best', String(bestM)); }
-  $('new-best').style.display = isBest ? 'inline-block' : 'none';
-  updateHud();
-  setTimeout(() => $('panel-over').classList.remove('hide'), 420);
-}
-function updateHud() {
-  $('hud-coins').textContent = '💎 ' + coins;
-  $('hud-dist').textContent = Math.floor((dist + bonus) / 10) + 'm';
-  $('hud-best').textContent = 'Best ' + bestM + 'm';
-}
-let toastT = null;
-function toast(msg) {
-  const t = $('toast'); t.textContent = msg; t.classList.add('on');
-  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1600);
-}
-
-$('btn-start').onclick = start;
-$('btn-again').onclick = start;
-$('btn-share').onclick = async () => {
-  const m = Math.floor((dist + bonus) / 10);
-  const LINES = [
-    `I survived ${m}m of Indian street traffic and collected ${coins} 💎 in NearPop Bazaar Run. The cow remains undefeated. 👉 https://nearpop.in`,
-    `Ran ${m}m, grabbed ${coins} 💎, then donated my high score to a pothole. Your turn 👉 https://nearpop.in`,
-    `${m}m. ${coins} 💎. Zero traffic rules followed. NearPop Bazaar Run 👉 https://nearpop.in`,
-    `An auto bhaiya ended my ${m}m run. I demand a rematch. Kept the ${coins} 💎 though 😎 👉 https://nearpop.in`,
-    `Gym: skipped. NearPop Bazaar Run: ${m}m + ${coins} 💎. Cardio is cardio 👉 https://nearpop.in`,
-    `Dodged cows, autos and potholes for ${m}m with ${coins} 💎. My city commute was good practice. 👉 https://nearpop.in`,
-    `Breaking: local runner covers ${m}m, earns ${coins} 💎, gets humbled by street cow. 👉 https://nearpop.in`
-  ];
-  const text = LINES[(Math.random() * LINES.length) | 0];
-  try {
-    if (navigator.share) { await navigator.share({ text }); return; }
-    await navigator.clipboard.writeText(text);
-    toast('Copied — paste it anywhere!');
-  } catch (e) { toast('Score: ' + m + 'm · 💎 ' + coins); }
-};
-
-// ---------- network gate: this game is for OFFLINE time only ----------
-// The moment a REAL connection is detected (verified by an actual fetch,
-// because navigator.onLine only means "connected to a router"), the game
-// pauses and asks the user: keep playing, or return to NearPop?
-const banner = $('online-banner');
-let paused = false, staying = false, netChecking = false;
-
-async function hasRealNetwork() {
-  if (!navigator.onLine) return false;             // definitely offline
-  try {                                            // verify it's real internet
-    const r = await fetch('/icons/favicon.png?np_ping=' + Date.now(),
-                          { method: 'HEAD', cache: 'no-store' });
-    return !!r && (r.ok || r.type === 'opaque');
-  } catch (e) { return false; }
-}
-
-async function networkGate() {
-  if (netChecking || staying) return;
-  netChecking = true;
-  const online = await hasRealNetwork();
-  netChecking = false;
-  if (!online) return;
-  paused = true;                                   // freeze the run, mid-air if needed
-  $('panel-net').classList.remove('hide');
-}
-
-$('btn-net-return').onclick = () => { location.href = '/'; };
-$('btn-net-stay').onclick = () => {
-  staying = true;                                  // don't ask again this session
-  $('panel-net').classList.add('hide');
-  banner.classList.add('on');                      // quiet exit door stays visible
-  paused = false; lastT = 0;                       // resume with no dt spike
-};
-banner.onclick = () => { location.href = '/'; };
-
-addEventListener('online', networkGate);
-addEventListener('offline', () => {                // offline again → re-arm the gate
-  staying = false; banner.classList.remove('on');
-});
-networkGate();                                     // gate check on page load too
-
-// ---------- sky: day → dusk → night → dawn as you run ----------
-const SKY = [   // [top, bottom, ambient-light 0..1]
-  ['#FFD9A0', '#FFB36B', 1.00],   // warm morning
-  ['#9ED8F2', '#FDF1DC', 1.00],   // day
-  ['#FF9D6E', '#FFD1A1', 0.95],   // dusk
-  ['#232A52', '#4A3A6B', 0.35],   // night
-];
-function lerpHex(a, b, t) {
-  const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16);
-  const r = ((A >> 16) + (((B >> 16) - (A >> 16)) * t)) | 0;
-  const g = (((A >> 8) & 255) + ((((B >> 8) & 255) - ((A >> 8) & 255)) * t)) | 0;
-  const bl = ((A & 255) + (((B & 255) - (A & 255)) * t)) | 0;
-  return `rgb(${r},${g},${bl})`;
-}
-function skyAt(d) {
-  const CYCLE = 28000;                       // one full day every 2800m
-  const t = (d % CYCLE) / CYCLE * SKY.length;
-  const i = Math.floor(t) % SKY.length, j = (i + 1) % SKY.length, f = t - Math.floor(t);
-  return {
-    top: lerpHex(SKY[i][0], SKY[j][0], f),
-    bot: lerpHex(SKY[i][1], SKY[j][1], f),
-    light: SKY[i][2] + (SKY[j][2] - SKY[i][2]) * f
-  };
-}
-
-// ---------- update ----------
-function update(dt) {
-  if (state !== 'run' || paused) return;
-
-  speed = Math.min(980, speed + 9 * dt);
-  dist += speed * dt;
-
-  // milestones
-  if ((dist + bonus) / 10 >= milestone) {
-    floatText(P.x + 40, GY - 230, milestone + 'm — speeding up!', true);
-    sMile(); milestone += 500;
-  }
-
-  // spawn world
-  nextSpawn -= speed * dt;
-  if (nextSpawn <= 0) spawn();
-  const lastSign = signs.length ? signs[signs.length - 1].x : 0;
-  if (lastSign < dist * 0.55 + VW * 1.4) addSign(lastSign + 170 + Math.random() * 130);
-
-  // player physics
-  P.vy += 2600 * dt;
-  P.y += P.vy * dt;
-  if (P.y >= GY) {
-    if (P.vy > 350) { P.squash = 0.1; dust(3); }
-    P.y = GY; P.vy = 0; P.jumps = 0;
-  }
-  P.squash = Math.max(0, P.squash - dt);
-  P.run += dt * (speed / 38);
-
-  // player hitbox (forgiving circle)
-  const px = P.x, py = P.y - 24, pr = 17;
-
-  // obstacles
-  for (let i = obstacles.length - 1; i >= 0; i--) {
-    const o = obstacles[i];
-    const def = o.type === 'pothole' ? { w: o.w, h: o.h } : SPR[o.type];
-    if (SPR[o.type] && SPR[o.type].extra) o.x -= SPR[o.type].extra * dt;   // autos drive at you
-    const ox = o.x - dist;
-    if (ox < -120) {
-      // passed safely — was it a close shave?
-      if (!o.counted) {
-        o.counted = true;
-        if (o.nearMiss) { coinStreak++; floatText(px, py - 56, 'Close shave! +25m', false); sNear(); bonus += 250; } // display-only bonus
-      }
-      obstacles.splice(i, 1); continue;
-    }
-    // collision: AABB shrunk 22% vs player circle
-    const w = def.w * 0.78, h = (def.h || 16) * 0.8;
-    const bx = ox - w / 2, by = (o.type === 'pothole' ? GY - 12 : GY - h);
-    const nx = Math.max(bx, Math.min(px, bx + w));
-    const ny = Math.max(by, Math.min(py, by + h));
-    const dx = px - nx, dy = py - ny, d2 = dx * dx + dy * dy;
-    if (d2 < pr * pr) { die(o.type); return; }
-    if (d2 < (pr + 26) * (pr + 26)) o.nearMiss = true;   // grazed it
-  }
-
-  // coins
-  for (const c of coinList) {
-    if (c.got) continue;
-    const ox = c.x - dist;
-    const dx = px - ox, dy = py - c.y;
-    if (dx * dx + dy * dy < (pr + SPR.coin.r) * (pr + SPR.coin.r)) {
-      c.got = true; coinStreak++;
-      const mult = 1 + Math.floor(coinStreak / 8);
-      coins += mult;
-      sparkle(ox, c.y); sCoin();
-      floatText(ox, c.y - 26, '+' + mult, false);
-      updateHud();
-    }
-  }
-  coinList = coinList.filter(c => !c.got && c.x - dist > -80);
-
-  // particles & floats
-  for (let i = parts.length - 1; i >= 0; i--) {
-    const p = parts[i];
-    p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt;
-    if (p.life <= 0) parts.splice(i, 1);
-  }
-  for (let i = floats.length - 1; i >= 0; i--) {
-    const f = floats[i]; f.life -= dt * 0.9; f.y -= 46 * dt;
-    if (f.life <= 0) floats.splice(i, 1);
-  }
-  signs = signs.filter(s => s.x - dist * 0.55 > -260);
-
-  shake = Math.max(0, shake - dt * 30);
-  updateHud();
-}
-
-// ---------- render ----------
-function render() {
-  cx.setTransform(SC, 0, 0, SC, 0, 0);
-  if (shake > 0) cx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
-
-  const sky = skyAt(dist);
-  const grad = cx.createLinearGradient(0, 0, 0, GY);
-  grad.addColorStop(0, sky.top); grad.addColorStop(1, sky.bot);
-  cx.fillStyle = grad; cx.fillRect(0, 0, VW, VH);
-
-  // stars at night
-  if (sky.light < 0.6) {
-    cx.fillStyle = 'rgba(255,255,255,' + (0.9 - sky.light) + ')';
-    for (let i = 0; i < 26; i++) {
-      const sx = ((i * 137 + 40) - dist * 0.05) % VW, sy = (i * 61) % (GY - 220);
-      cx.fillRect(sx < 0 ? sx + VW : sx, sy, 2, 2);
-    }
-  }
-
-  // far skyline (parallax .2)
-  cx.fillStyle = 'rgba(17,24,39,' + (0.22 + (1 - sky.light) * 0.4) + ')';
-  const off1 = -(dist * 0.2) % 240;
-  for (let x = off1 - 240; x < VW + 240; x += 240) {
-    cx.fillRect(x, GY - 200, 90, 200);
-    cx.fillRect(x + 110, GY - 150, 70, 150);
-    cx.fillRect(x + 190, GY - 235, 50, 235);
-  }
-
-  // shop strip with awnings + lit signboards (parallax .55)
-  const stripY = GY - 130;
-  cx.fillStyle = sky.light > 0.6 ? '#E8DECF' : '#3A4060';
-  cx.fillRect(0, stripY, VW, 130);
-  const off2 = -(dist * 0.55) % 150;
-  for (let x = off2 - 150, k = 0; x < VW + 150; x += 150, k++) {
-    // door + window
-    cx.fillStyle = 'rgba(17,24,39,' + (sky.light > 0.6 ? 0.18 : 0.45) + ')';
-    cx.fillRect(x + 18, stripY + 56, 38, 74);
-    // lit window at night
-    cx.fillStyle = sky.light > 0.6 ? 'rgba(17,24,39,.12)' : 'rgba(255,200,90,.85)';
-    cx.fillRect(x + 78, stripY + 58, 46, 38);
-    // awning stripes
-    for (let s = 0; s < 5; s++) {
-      cx.fillStyle = s % 2 ? '#fff' : (k % 2 ? '#FF5722' : '#0FA3A3');
-      cx.fillRect(x + s * 30, stripY, 30, 22);
-    }
-  }
-  // glowing deal signboards
-  for (const s of signs) {
-    const sx = s.x - dist * 0.55;
-    if (sx < -240 || sx > VW + 60) continue;
-    const w = 14 + s.txt.length * 9;
-    cx.fillStyle = `hsl(${s.hue} 70% ${sky.light > 0.6 ? 38 : 30}%)`;
-    cx.beginPath(); cx.roundRect(sx, s.y, w, 30, 6); cx.fill();
-    cx.fillStyle = sky.light > 0.6 ? '#fff' : '#FFE9A8';
-    cx.font = '800 14px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-    cx.fillText(s.txt, sx + w / 2, s.y + 16);
-  }
-
-  // road
-  cx.fillStyle = '#2B2F36'; cx.fillRect(0, GY, VW, VH - GY);
-  cx.fillStyle = '#3a3f47'; cx.fillRect(0, GY, VW, 5);
-  cx.fillStyle = 'rgba(255,255,255,.5)';
-  const off3 = -dist % 90;
-  for (let x = off3 - 90; x < VW + 90; x += 90) cx.fillRect(x, GY + 42, 44, 6);
-
-  // obstacles
-  for (const o of obstacles) {
-    const ox = o.x - dist;
-    if (ox < -120 || ox > VW + 120) continue;
-    if (o.type === 'pothole') {
-      cx.fillStyle = '#15171c';
-      cx.beginPath(); cx.ellipse(ox, GY + 8, o.w / 2, 11, 0, 0, Math.PI * 2); cx.fill();
-      cx.strokeStyle = 'rgba(255,255,255,.18)'; cx.lineWidth = 2;
-      cx.beginPath(); cx.ellipse(ox, GY + 8, o.w / 2, 11, 0, Math.PI, Math.PI * 2); cx.stroke();
-    } else {
-      const d = SPR[o.type], size = Math.max(d.w, d.h) * 1.25;
-      cx.drawImage(d.img, ox - size / 2, GY - size + 6, size, size);
-    }
-  }
-
-  // coins
-  for (const c of coinList) {
-    const ox = c.x - dist;
-    if (ox < -60 || ox > VW + 60) continue;
-    const bob = Math.sin((dist + c.x) / 60) * 4;
-    cx.drawImage(SPR.coin.img, ox - 20, c.y - 20 + bob, 40, 40);
-  }
-
-  // particles
-  for (const p of parts) {
-    cx.globalAlpha = Math.max(0, p.life * 2);
-    cx.fillStyle = p.kind === 'gold' ? '#F7B500' : p.kind === 'orange' ? '#FF5722' : '#B9B3A8';
-    cx.fillRect(p.x - 3, p.y - 3, 6, 6);
-  }
-  cx.globalAlpha = 1;
-
-  // ---- the pin mascot ----
-  drawPin();
-
-  // float texts
-  for (const f of floats) {
-    cx.globalAlpha = Math.max(0, Math.min(1, f.life * 1.4));
-    cx.fillStyle = '#fff';
-    cx.font = (f.big ? '900 22px' : '900 16px') + ' system-ui';
-    cx.textAlign = 'center';
-    cx.strokeStyle = 'rgba(17,24,39,.6)'; cx.lineWidth = 4; cx.lineJoin = 'round';
-    cx.strokeText(f.txt, f.x, f.y);
-    cx.fillText(f.txt, f.x, f.y);
-  }
-  cx.globalAlpha = 1;
-}
-
-function drawPin() {
-  const grounded = P.y >= GY - 0.5;
-  const sq = P.squash > 0 ? 1 - P.squash * 1.6 : 1;          // land squash
-  const rot = grounded ? 0 : Math.max(-0.3, Math.min(0.35, P.vy * 0.00045));
-  cx.save();
-  cx.translate(P.x, P.y);
-  cx.rotate(rot);
-  cx.scale(2 - sq, sq);
-
-// running legs — longer stride, thicker
-  if (grounded && state === 'run') {
-    const a = Math.sin(P.run * 14) * 11;
-    cx.strokeStyle = '#111827'; cx.lineWidth = 5.5; cx.lineCap = 'round';
-    cx.beginPath(); cx.moveTo(-7, -5); cx.lineTo(-7 + a, 4); cx.stroke();
-    cx.beginPath(); cx.moveTo(7, -5);  cx.lineTo(7 - a, 4);  cx.stroke();
-  }
-
-  if (logoReady) {
-    // ---- your logo as the runner ----
-    const h = MASCOT.h;
-    const w = h * (logoImg.naturalWidth / logoImg.naturalHeight);
-    if (P.dead) { try { cx.filter = 'grayscale(1)'; } catch (e) {} }
-    cx.drawImage(logoImg, -w / 2, -h - MASCOT.feetGap, w, h);
-    try { cx.filter = 'none'; } catch (e) {}
-
-    // optional animated eyes overlaid on the logo
-    if (MASCOT.eyes) {
-      cx.fillStyle = '#111827';
-      if (P.dead) {
-        cx.font = '900 10px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-        cx.fillText('×   ×', (MASCOT.eyeLX + MASCOT.eyeRX) / 2, MASCOT.eyeY);
-      } else {
-        const look = grounded ? 1.5 : 2.5;                         // eyes look ahead, more in air
-        const blink = (performance.now() % 3200) < 110 ? 0.25 : 1; // blink every ~3.2s
-        cx.save(); cx.scale(1, blink);
-        const ey = MASCOT.eyeY / blink;
-        cx.beginPath(); cx.arc(MASCOT.eyeLX + look, ey, MASCOT.eyeR, 0, Math.PI * 2); cx.fill();
-        cx.beginPath(); cx.arc(MASCOT.eyeRX + look, ey, MASCOT.eyeR, 0, Math.PI * 2); cx.fill();
-        cx.restore();
-      }
-    }
-  } else {
-    // ---- fallback: the original drawn pin (image missing / not cached) ----
-    cx.fillStyle = P.dead ? '#9CA3AF' : '#FF5722';
-    cx.beginPath();
-    cx.arc(0, -34, 21, Math.PI * 0.86, Math.PI * 0.14);
-    cx.quadraticCurveTo(14, -16, 0, -4);
-    cx.quadraticCurveTo(-14, -16, -19.2, -27);
-    cx.closePath(); cx.fill();
-    cx.fillStyle = '#fff';
-    cx.beginPath(); cx.arc(0, -36, 11, 0, Math.PI * 2); cx.fill();
-    cx.fillStyle = '#111827';
-    if (P.dead) {
-      cx.font = '900 10px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-      cx.fillText('×   ×', 0, -36);
-    } else {
-      const look = grounded ? 2.5 : 3.5;
-      cx.beginPath(); cx.arc(-3 + look, -37, 2.4, 0, Math.PI * 2); cx.fill();
-      cx.beginPath(); cx.arc(5 + look - 2.5, -37, 2.4, 0, Math.PI * 2); cx.fill();
-    }
-  }
-  cx.restore();
-
-  // ready-state bobbing hint
-  if (state === 'ready') {
-    P.y = GY + Math.sin(performance.now() / 300) * 3;
-  }
-}
-
-// ---------- main loop ----------
-function loop(t) {
-  if (!lastT) lastT = t;
-  const dt = Math.min(0.033, (t - lastT) / 1000);
-  lastT = t;
-  update(dt);
-  render();
-  requestAnimationFrame(loop);
-}
-reset();
-requestAnimationFrame(loop);
+// const TARGET_DATE = new Date('2025-09-01T09:00:00');
+// function updateCountdown() {
+//     const now  = new Date();
+//     const diff = TARGET_DATE - now;
+//     if (diff <= 0) { document.getElementById('countdown').classList.remove('show'); return; }
+//     const h = Math.floor(diff / 3600000);
+//     const m = Math.floor((diff % 3600000) / 60000);
+//     const s = Math.floor((diff % 60000) / 1000);
+//     document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+//     document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+//     document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+// }
+// setInterval(updateCountdown, 1000);
+// updateCountdown();
 </script>
+
 </body>
 </html>
