@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#FF5722">
+<title>NearPop — Offline Mode - Scooter Stack</title>
+<!-- ============================================================
+     SCOOTER STACK — NearPop offline game #2.
+     How much can one scooter carry? (Yes.)
+     100% self-contained: no fonts, no images, no network calls.
+     ============================================================ -->
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none; }
+  html, body { height:100%; overflow:hidden; background:#111827;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #game { position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+
+  .hud { position:fixed; top:0; left:0; right:0; display:flex; justify-content:space-between;
+    align-items:flex-start; padding:max(12px, env(safe-area-inset-top)) 16px 0; pointer-events:none; z-index:5; }
+  .hud-coins { background:rgba(17,24,39,.55); backdrop-filter:blur(4px); color:#fff;
+    font-weight:800; font-size:17px; padding:7px 14px; border-radius:999px; letter-spacing:.3px; }
+  .hud-right { text-align:right; color:#fff; }
+  .hud-dist { font-size:34px; font-weight:900; line-height:1; text-shadow:0 2px 8px rgba(0,0,0,.35);
+    font-variant-numeric: tabular-nums; }
+  .hud-best { font-size:11px; font-weight:700; opacity:.85; margin-top:3px; letter-spacing:.6px; text-transform:uppercase; }
+
+  .btn-mute { position:fixed; right:14px; bottom:max(14px, env(safe-area-inset-bottom)); z-index:6;
+    width:42px; height:42px; border-radius:50%; border:none; cursor:pointer; font-size:18px;
+    background:rgba(17,24,39,.55); color:#fff; backdrop-filter:blur(4px); }
+
+  .panel { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; z-index:10; padding:24px;
+    background:rgba(17,24,39,.42); backdrop-filter:blur(2px); transition:opacity .25s; }
+  .panel.hide { opacity:0; pointer-events:none; }
+  .card { background:#fff; border-radius:24px; padding:28px 26px; max-width:340px; width:100%;
+    box-shadow:0 24px 60px rgba(0,0,0,.35); }
+  .eyebrow { font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:#FF5722; }
+  .title { font-size:30px; font-weight:900; color:#111827; line-height:1.05; margin:6px 0 4px; }
+  .sub { font-size:13.5px; font-weight:600; color:#6B7280; line-height:1.45; }
+  .deathline { font-size:15px; font-weight:800; color:#111827; margin:14px 0 2px; }
+  .score-row { display:flex; gap:10px; margin:18px 0 6px; }
+  .score-box { flex:1; background:#F8F4EF; border-radius:14px; padding:12px 6px; }
+  .score-num { font-size:26px; font-weight:900; color:#111827; font-variant-numeric:tabular-nums; }
+  .score-lab { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#9CA3AF; margin-top:2px; }
+  .new-best { display:inline-block; margin-top:8px; background:#FFF1EB; color:#FF5722;
+    font-size:11px; font-weight:900; letter-spacing:.8px; padding:5px 12px; border-radius:999px; text-transform:uppercase; }
+  .btn { display:block; width:100%; border:none; cursor:pointer; border-radius:14px; padding:15px;
+    font-size:15px; font-weight:800; font-family:inherit; margin-top:10px; }
+  .btn-go { background:#FF5722; color:#fff; box-shadow:0 8px 20px rgba(255,87,34,.4); }
+  .btn-go:active { transform:scale(.97); }
+  .btn-soft { background:#F3F4F6; color:#111827; }
+  .btn-link { background:none; color:#6B7280; font-size:12.5px; padding:10px; }
+  .hint { margin-top:14px; color:#fff; font-size:12.5px; font-weight:700; opacity:.9; }
+
+  .toast { position:fixed; left:50%; transform:translateX(-50%);
+    bottom:max(76px, calc(env(safe-area-inset-bottom) + 62px));
+    background:#111827; color:#fff; font-size:13px; font-weight:800; padding:10px 18px;
+    border-radius:999px; opacity:0; transition:opacity .25s; z-index:20; pointer-events:none; white-space:nowrap; }
+  .toast.on { opacity:1; }
+  .online-banner { position:fixed; top:0; left:0; right:0; z-index:30; background:#16A34A; color:#fff;
+    text-align:center; font-size:13px; font-weight:800; padding:10px max(12px, env(safe-area-inset-top));
+    transform:translateY(-110%); transition:transform .3s; cursor:pointer; }
+  .online-banner.on { transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) { .panel, .toast, .online-banner { transition:none; } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div class="hud">
+  <div class="hud-coins" id="hud-coins">💎 0</div>
+  <div class="hud-right">
+    <div class="hud-dist" id="hud-dist">0</div>
+    <div class="hud-best" id="hud-best">Best 0</div>
+  </div>
+</div>
+<button class="btn-mute" id="btn-mute" aria-label="Toggle sound">🔊</button>
+
+<!-- START -->
+<div class="panel" id="panel-start">
+  <div class="card">
+    <div class="eyebrow">You're offline</div>
+    <div class="title">Scooter<br>Stack</div>
+    <p class="sub">How much can one scooter carry?<br>(Yes.)<br><br>
+      Tap to drop the box. Overhang falls off.<br>Perfect drops grow it back + build 💎 combos.</p>
+    <button class="btn btn-go" id="btn-start">Load it up</button>
+    <button class="btn btn-link" id="btn-other1">🏃 Play Bazaar Run instead</button>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div class="panel hide" id="panel-over">
+  <div class="card">
+    <div class="eyebrow">Delivery failed</div>
+    <div class="deathline" id="deathline">Physics has entered the chat.</div>
+    <div class="score-row">
+      <div class="score-box"><div class="score-num" id="ov-h">0</div><div class="score-lab">Boxes</div></div>
+      <div class="score-box"><div class="score-num" id="ov-coins">💎 0</div><div class="score-lab">Gems</div></div>
+    </div>
+    <span class="new-best" id="new-best" style="display:none">★ New best</span>
+    <button class="btn btn-go" id="btn-again">Load again</button>
+    <button class="btn btn-soft" id="btn-share">Share my load</button>
+    <button class="btn btn-link" id="btn-other2">🏃 Play Bazaar Run instead</button>
+  </div>
+</div>
+
+<!-- NETWORK RESTORED -->
+<div class="panel hide" id="panel-net" style="z-index:15">
+  <div class="card">
+    <div class="eyebrow">Connection restored</div>
+    <div class="title" style="font-size:24px">You're back online!</div>
+    <p class="sub">NearPop is reachable again.<br>Finish your stack, or head back to the deals?</p>
+    <button class="btn btn-go" id="btn-net-return">Return to NearPop</button>
+    <button class="btn btn-soft" id="btn-net-stay">Keep playing</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="online-banner" id="online-banner">✅ You're back online — tap to return to NearPop</div>
+
+<script>
+'use strict';
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    this.moveTo(x + r, y); this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r); this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r); return this;
+  };
+}
+
+// ---------- safe localStorage ----------
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+
+// ---------- canvas ----------
+const cv = document.getElementById('game');
+const cx = cv.getContext('2d');
+const VH = 540;
+let SC = 1, VW = 960;
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  cv.width = Math.round(innerWidth * dpr);
+  cv.height = Math.round(innerHeight * dpr);
+  cv.style.width = innerWidth + 'px';
+  cv.style.height = innerHeight + 'px';
+  SC = cv.height / VH;
+  VW = cv.width / SC;
+}
+addEventListener('resize', resize); resize();
+
+// ---------- audio: tiny synth ----------
+let AC = null;
+let muted = store.get('np_stack_mute', '0') === '1';
+const btnMute = document.getElementById('btn-mute');
+btnMute.textContent = muted ? '🔇' : '🔊';
+btnMute.onclick = (e) => { e.stopPropagation(); muted = !muted;
+  btnMute.textContent = muted ? '🔇' : '🔊'; store.set('np_stack_mute', muted ? '1' : '0'); };
+function beep(f1, f2, dur, type, vol) {
+  if (muted) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime;
+    o.type = type; o.frequency.setValueAtTime(f1, t);
+    o.frequency.exponentialRampToValueAtTime(Math.max(f2, 1), t + dur);
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + dur + 0.02);
+  } catch (e) {}
+}
+const sDrop = () => beep(150, 85, 0.09, 'square', 0.07);
+const sPerf = () => { beep(700, 700, .08, 'sine', .07); setTimeout(() => beep(1050, 1050, .12, 'sine', .08), 70); };
+const sCut  = () => beep(420, 160, 0.14, 'sawtooth', 0.05);
+const sMile = () => { beep(520, 520, .1, 'sine', .06); setTimeout(() => beep(660, 660, .1, 'sine', .06), 100); setTimeout(() => beep(880, 880, .16, 'sine', .07), 200); };
+const sDead = () => { beep(260, 50, 0.5, 'sawtooth', 0.1); setTimeout(() => beep(120, 35, .4, 'square', .08), 120); };
+
+// ---------- game constants ----------
+const GY = VH - 64;            // street level
+const BH = 26;                 // box height
+const PALETTE = ['#FF5722', '#0FA3A3', '#F7B500', '#E85D75', '#7C4DFF'];
+const SPECIALS = ['🛢️', '📺', '🐔', '🧺', '🪜', '🛒', '📦'];
+
+// ---------- state ----------
+let state = 'ready';           // ready | run | dead
+let blocks = [];               // {x, w, icon} — index 0 sits on the scooter rack
+let baseW = 0, centerX = 0, scooterX = 0;
+let swing = { x: 0, w: 0, dir: 1, t: 0, icon: null };
+let cam = 0, camT = 0;
+let gems = 0, combo = 0, best = parseInt(store.get('np_stack_best', '0'), 10) || 0;
+let chunks = [], parts = [], floats = [], props = [];
+let lastT = 0, shake = 0, deadAt = 0, propTimer = 0, kiteShown = false;
+
+// ---------- copy ----------
+const DEATHS = [
+  'Physics has entered the chat.',
+  'The scooter has filed an FIR.',
+  'Gravity: 1 — Delivery: 0.',
+  'That last box had other plans.',
+  'Insurance claim rejected: "overconfidence".',
+  'The boxes have unionised and left.'
+];
+const MILESTONES = {
+  5:  'RTO has stopped looking 👀',
+  10: 'Taller than an auto!',
+  15: 'Metro-pillar height 🏗️',
+  20: 'Pigeons are concerned',
+  25: 'Air traffic control notified ✈️',
+  30: 'Clouds achieved ☁️',
+  40: 'ISRO has questions 🛰️',
+  50: 'The moon can see your parcel 🌙'
+};
+
+// ---------- flow helpers ----------
+const $ = (id) => document.getElementById(id);
+let toastT = null;
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1800);
+}
+function updateHud() {
+  $('hud-coins').textContent = '💎 ' + gems;
+  $('hud-dist').textContent = blocks.length;
+  $('hud-best').textContent = 'Best ' + best;
+}
+function floatText(x, y, txt, big) { floats.push({ x, y, txt, life: 1, big: !!big }); }
+function puff(x, y, n, color) {
+  for (let i = 0; i < n; i++) parts.push({
+    x, y, color, vx: (Math.random() - .5) * 240, vy: -40 - Math.random() * 160, life: .5 });
+}
+
+// ---------- reset / start ----------
+function reset() {
+  blocks = []; chunks = []; parts = []; floats = []; props = [];
+  gems = 0; combo = 0; cam = 0; camT = 0; shake = 0; kiteShown = false;
+  centerX = VW / 2;
+  scooterX = centerX - 24;
+  baseW = Math.min(190, VW * 0.55);
+  newSwing();
+  updateHud();
+}
+function newSwing() {
+  const n = blocks.length;
+  swing.w = n === 0 ? baseW : blocks[n - 1].w;
+  swing.t = Math.random() * 6.28;
+  swing.icon = (n > 0 && n % 7 === 3) ? SPECIALS[(Math.random() * SPECIALS.length) | 0] : null;
+}
+function start() {
+  reset(); state = 'run';
+  $('panel-start').classList.add('hide');
+  $('panel-over').classList.add('hide');
+}
+
+// ---------- the drop ----------
+function drop() {
+  if (state === 'ready') { start(); return; }
+  if (state === 'dead') { if (performance.now() - deadAt > 500) start(); return; }
+
+  const n = blocks.length;
+  const prev = n === 0 ? { x: centerX, w: baseW } : blocks[n - 1];
+  const L = Math.max(swing.x - swing.w / 2, prev.x - prev.w / 2);
+  const R = Math.min(swing.x + swing.w / 2, prev.x + prev.w / 2);
+  const overlap = R - L;
+  const topW = topWorldY();           // world y of current stack top
+
+  if (overlap <= 5) {
+    // total miss — the box tumbles past the stack
+    chunks.push({ x: swing.x, y: topW - BH, w: swing.w, vy: -60, vx: (swing.x < prev.x ? -1 : 1) * 120, rot: 0, vr: (Math.random() - .5) * 8, color: PALETTE[n % PALETTE.length] });
+    die(); return;
+  }
+
+  const perfect = overlap >= prev.w - 7;
+  let nx, nw;
+  if (perfect) {
+    nx = prev.x;
+    nw = Math.min(prev.w + 8, baseW);   // perfect drops REGROW the tower
+    combo++;
+    const reward = combo + (swing.icon ? 10 : 0);
+    gems += reward;
+    floatText(nx, topW - BH - 30, 'PERFECT! +' + reward + ' 💎' + (combo > 1 ? '  ×' + combo : ''), combo >= 3);
+    sPerf(); puff(nx, topW - BH, 10, '#F7B500');
+  } else {
+    nx = (L + R) / 2; nw = overlap;
+    combo = 0;
+    if (swing.icon) { gems += 5; floatText(nx, topW - BH - 30, '+5 💎', false); }
+    // the overhang slices off and falls
+    const cutW = swing.w - overlap;
+    const cutX = swing.x < prev.x ? L - cutW / 2 : R + cutW / 2;
+    chunks.push({ x: cutX, y: topW - BH, w: cutW, vy: -40, vx: (cutX < nx ? -1 : 1) * 90, rot: 0, vr: (cutX < nx ? -1 : 1) * 5, color: PALETTE[n % PALETTE.length] });
+    sCut();
+    sDrop();
+  }
+
+  blocks.push({ x: nx, w: nw, icon: swing.icon });
+  if (!perfect) puff(nx, topW - BH, 5, '#9CA3AF');
+  if (perfect && !REDUCED) shake = Math.max(shake, 3);
+
+  const h = blocks.length;
+  if (MILESTONES[h]) { toast(MILESTONES[h]); sMile(); }
+  newSwing();
+  updateHud();
+}
+function topWorldY() { return GY - 58 - blocks.length * BH; }
+
+function die() {
+  state = 'dead'; deadAt = performance.now();
+  sDead(); if (!REDUCED) shake = 16;
+  const h = blocks.length;
+  $('deathline').textContent = DEATHS[(Math.random() * DEATHS.length) | 0];
+  $('ov-h').textContent = h;
+  $('ov-coins').textContent = '💎 ' + gems;
+  const isBest = h > best;
+  if (isBest) { best = h; store.set('np_stack_best', String(best)); }
+  $('new-best').style.display = isBest ? 'inline-block' : 'none';
+  updateHud();
+  setTimeout(() => $('panel-over').classList.remove('hide'), 600);
+}
+
+// ---------- input ----------
+addEventListener('pointerdown', (e) => {
+  if (e.target.closest('button')) return;
+  if (paused) return;
+  drop();
+});
+addEventListener('keydown', (e) => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); if (!paused) drop(); }
+});
+document.addEventListener('visibilitychange', () => { lastT = 0; });
+
+$('btn-start').onclick = start;
+$('btn-again').onclick = start;
+$('btn-other1').onclick = () => { location.href = '/offline'; };
+$('btn-other2').onclick = () => { location.href = '/offline'; };
+$('btn-share').onclick = async () => {
+  const h = blocks.length;
+  const LINES = [
+    `I loaded ${h} boxes on ONE scooter in NearPop Scooter Stack. RTO can't catch me. 👉 https://nearpop.in`,
+    `${h} boxes. One scooter. ${gems} 💎. Indian logistics has no limits. 👉 https://nearpop.in`,
+    `Stacked ${h} boxes before physics intervened. Your move. 👉 https://nearpop.in`,
+    `My scooter carries ${h} boxes. Your SUV could never. 👉 https://nearpop.in`,
+    `Air traffic control called about my ${h}-box scooter. Worth it (${gems} 💎). 👉 https://nearpop.in`
+  ];
+  const text = LINES[(Math.random() * LINES.length) | 0];
+  try {
+    if (navigator.share) { await navigator.share({ text }); return; }
+    await navigator.clipboard.writeText(text);
+    toast('Copied — paste it anywhere!');
+  } catch (e) { toast('Boxes: ' + h + ' · 💎 ' + gems); }
+};
+
+// ---------- network gate (same contract as Bazaar Run) ----------
+const banner = $('online-banner');
+let paused = false, staying = false, netChecking = false;
+async function hasRealNetwork() {
+  if (!navigator.onLine) return false;
+  try {
+    const r = await fetch('/icons/favicon.png?np_ping=' + Date.now(),
+                          { method: 'HEAD', cache: 'no-store' });
+    return !!r && (r.ok || r.type === 'opaque');
+  } catch (e) { return false; }
+}
+async function networkGate() {
+  if (netChecking || staying) return;
+  netChecking = true;
+  const online = await hasRealNetwork();
+  netChecking = false;
+  if (!online) return;
+  paused = true;
+  $('panel-net').classList.remove('hide');
+}
+$('btn-net-return').onclick = () => { location.href = '/'; };
+$('btn-net-stay').onclick = () => {
+  staying = true;
+  $('panel-net').classList.add('hide');
+  banner.classList.add('on');
+  paused = false; lastT = 0;
+};
+banner.onclick = () => { location.href = '/'; };
+addEventListener('online', networkGate);
+addEventListener('offline', () => { staying = false; banner.classList.remove('on'); });
+networkGate();
+
+// ---------- altitude props (the screenshot factory) ----------
+function spawnProp(dt) {
+  propTimer -= dt;
+  if (propTimer > 0 || state !== 'run') return;
+  propTimer = 1.1 + Math.random() * 1.2;
+  const h = blocks.length;
+  const topY = topWorldY();
+  const fromLeft = Math.random() < 0.5;
+  const y = topY - 60 - Math.random() * 160;
+  if (h >= 40 && Math.random() < .3) {
+    props.push({ emoji: '🛰️', x: fromLeft ? -60 : VW + 60, y, vx: (fromLeft ? 1 : -1) * 26, s: 34 });
+  } else if (h >= 25 && Math.random() < .4) {
+    props.push({ emoji: '✈️', x: fromLeft ? -80 : VW + 80, y, vx: (fromLeft ? 1 : -1) * 170, s: 40, flip: !fromLeft });
+  } else if (h >= 18 && !kiteShown) {
+    kiteShown = true;
+    props.push({ emoji: '🪁', x: fromLeft ? -60 : VW + 60, y, vx: (fromLeft ? 1 : -1) * 34, s: 36,
+      banner: 'NearPop: deals at ground level 👇' });
+  } else if (h >= 8) {
+    props.push({ emoji: ['🕊️', '🐦', '🦅'][(Math.random() * 3) | 0],
+      x: fromLeft ? -50 : VW + 50, y, vx: (fromLeft ? 1 : -1) * (60 + Math.random() * 60), s: 28, flip: fromLeft });
+  }
+}
+
+// ---------- sky by height ----------
+const SKY = [
+  [0,   '#FFD9A0', '#FFB36B'],   // street level — warm evening
+  [10,  '#9ED8F2', '#FDF1DC'],   // open sky
+  [22,  '#5E8FD9', '#A9C6F0'],   // high blue
+  [34,  '#2B3A6E', '#5E6FA8'],   // thin air
+  [48,  '#0E1330', '#283058']    // basically space
+];
+function lerpHex(a, b, t) {
+  const A = parseInt(a.slice(1), 16), B = parseInt(b.slice(1), 16);
+  const r = ((A >> 16) + (((B >> 16) - (A >> 16)) * t)) | 0;
+  const g = (((A >> 8) & 255) + ((((B >> 8) & 255) - ((A >> 8) & 255)) * t)) | 0;
+  const bl = ((A & 255) + (((B & 255) - (A & 255)) * t)) | 0;
+  return `rgb(${r},${g},${bl})`;
+}
+function skyAt(h) {
+  let i = 0;
+  while (i < SKY.length - 1 && h > SKY[i + 1][0]) i++;
+  const a = SKY[i], b = SKY[Math.min(i + 1, SKY.length - 1)];
+  const f = b[0] === a[0] ? 0 : Math.min(1, (h - a[0]) / (b[0] - a[0]));
+  return { top: lerpHex(a[1], b[1], f), bot: lerpHex(a[2], b[2], f), space: Math.max(0, Math.min(1, (h - 20) / 22)) };
+}
+
+// ---------- update ----------
+function update(dt) {
+  if (paused) return;
+  const time = performance.now() / 1000;
+
+  // camera follows the tower top
+  camT = Math.max(0, 235 - topWorldY());
+  cam += (camT - cam) * Math.min(1, dt * 4);
+
+  if (state === 'run') {
+    // swinging crate
+    const n = blocks.length;
+    const freq = Math.min(4.2, 1.55 + n * 0.05);
+    const amp = Math.min(VW * 0.42, 230);
+    swing.t += dt * freq;
+    swing.x = centerX + Math.sin(swing.t) * amp;
+    spawnProp(dt);
+  }
+
+  // falling chunks
+  for (let i = chunks.length - 1; i >= 0; i--) {
+    const c = chunks[i];
+    c.vy += 1500 * dt; c.y += c.vy * dt; c.x += c.vx * dt; c.rot += c.vr * dt;
+    if (c.y + cam > VH + 80) chunks.splice(i, 1);
+  }
+  // particles
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i];
+    p.life -= dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 800 * dt;
+    if (p.life <= 0) parts.splice(i, 1);
+  }
+  // floats
+  for (let i = floats.length - 1; i >= 0; i--) {
+    const f = floats[i]; f.life -= dt * 0.85; f.y -= 42 * dt;
+    if (f.life <= 0) floats.splice(i, 1);
+  }
+  // props
+  for (let i = props.length - 1; i >= 0; i--) {
+    const p = props[i]; p.x += p.vx * dt;
+    if (p.x < -260 || p.x > VW + 260) props.splice(i, 1);
+  }
+  shake = Math.max(0, shake - dt * 26);
+}
+
+// ---------- render ----------
+function render() {
+  const time = performance.now() / 1000;
+  cx.setTransform(SC, 0, 0, SC, 0, 0);
+  if (shake > 0) cx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
+
+  const skyNow = skyAt(cam / BH);   // sky follows the camera, not the score
+  const grad = cx.createLinearGradient(0, 0, 0, VH);
+  grad.addColorStop(0, skyNow.top); grad.addColorStop(1, skyNow.bot);
+  cx.fillStyle = grad; cx.fillRect(0, 0, VW, VH);
+
+  // stars fade in near space
+  if (skyNow.space > 0) {
+    cx.fillStyle = 'rgba(255,255,255,' + (skyNow.space * 0.9) + ')';
+    for (let i = 0; i < 30; i++) {
+      cx.fillRect(((i * 173 + 31) % VW), ((i * 97 + cam * 0.1) % VH), 2, 2);
+    }
+  }
+
+  // ----- street level (scrolls away as you climb) -----
+  const gy = GY + cam;
+  if (gy < VH + 200) {
+    // skyline
+    cx.fillStyle = 'rgba(17,24,39,.28)';
+    for (let x = -40; x < VW + 240; x += 240) {
+      cx.fillRect(x, gy - 190, 90, 190);
+      cx.fillRect(x + 110, gy - 140, 70, 140);
+      cx.fillRect(x + 190, gy - 225, 50, 225);
+    }
+    // shop strip
+    cx.fillStyle = '#E8DECF'; cx.fillRect(0, gy - 120, VW, 120);
+    const SIGNS = ['TUITION', 'PG', 'CHAI ☕', 'OFFERS', 'RENT', 'CAFE', 'DEALS'];
+    for (let x = 10, k = 0; x < VW; x += 150, k++) {
+      cx.fillStyle = 'rgba(17,24,39,.18)'; cx.fillRect(x + 14, gy - 66, 36, 66);
+      for (let s = 0; s < 5; s++) {
+        cx.fillStyle = s % 2 ? '#fff' : (k % 2 ? '#FF5722' : '#0FA3A3');
+        cx.fillRect(x + s * 28 - 10, gy - 120, 28, 20);
+      }
+      cx.fillStyle = `hsl(${[170, 348, 42, 200, 14][k % 5]} 70% 38%)`;
+      cx.beginPath(); cx.roundRect(x + 58, gy - 96, 78, 24, 5); cx.fill();
+      cx.fillStyle = '#fff'; cx.font = '800 12px system-ui';
+      cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText(SIGNS[k % SIGNS.length], x + 97, gy - 84);
+    }
+    // road
+    cx.fillStyle = '#2B2F36'; cx.fillRect(0, gy, VW, VH - gy + 40);
+    cx.fillStyle = 'rgba(255,255,255,.5)';
+    for (let x = 10; x < VW; x += 90) cx.fillRect(x, gy + 30, 44, 6);
+    // the scooter (with a tiny idle bob — it's alive and very nervous)
+    const bob = Math.sin(time * 6) * 1.5;
+    cx.font = '110px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'alphabetic';
+    cx.fillText('🛵', scooterX, gy + 8 + bob);
+    // exhaust puffs
+    if (state === 'run' && Math.random() < 0.05)
+      parts.push({ x: scooterX - 52, y: gy - 8, color: '#9CA3AF', vx: -40 - Math.random() * 30, vy: -20, life: .6 });
+  }
+
+  // ----- altitude props (behind the tower) -----
+  for (const p of props) {
+    const py = p.y + cam;
+    if (py < -80 || py > VH + 80) continue;
+    cx.save();
+    cx.translate(p.x, py);
+    if (p.flip) cx.scale(-1, 1);
+    cx.font = p.s + 'px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    cx.fillText(p.emoji, 0, 0);
+    cx.restore();
+    if (p.banner) {
+      const bw = 10 + p.banner.length * 7.4;
+      cx.fillStyle = '#FF5722';
+      cx.beginPath(); cx.roundRect(p.x + (p.vx > 0 ? -bw - 28 : 28), py - 12, bw, 24, 6); cx.fill();
+      cx.fillStyle = '#fff'; cx.font = '800 12px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText(p.banner, p.x + (p.vx > 0 ? -bw / 2 - 28 : 28 + bw / 2), py);
+    }
+  }
+
+  // ----- the tower -----
+  const wob = Math.min(0.9, blocks.length * 0.022);   // taller = sway-ier (visual only)
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    const sway = Math.sin(time * 1.7 + i * 0.28) * wob * (i / Math.max(1, blocks.length)) * 6;
+    const by = GY - 58 - (i + 1) * BH + cam;
+    if (by > VH + 40 || by + BH < -40) continue;
+    drawBox(b.x + sway, by, b.w, PALETTE[i % PALETTE.length], b.icon);
+  }
+
+  // swinging crate + drop guide
+  if (state === 'run') {
+    const sy = topWorldY() - BH - 16 + cam;
+    cx.strokeStyle = 'rgba(255,255,255,.25)'; cx.lineWidth = 2; cx.setLineDash([6, 8]);
+    cx.beginPath(); cx.moveTo(swing.x, sy + BH); cx.lineTo(swing.x, topWorldY() + cam); cx.stroke();
+    cx.setLineDash([]);
+    drawBox(swing.x, sy, swing.w, PALETTE[blocks.length % PALETTE.length], swing.icon);
+    // crane hook
+    cx.strokeStyle = 'rgba(17,24,39,.5)'; cx.lineWidth = 3;
+    cx.beginPath(); cx.moveTo(swing.x, sy); cx.lineTo(swing.x, -10); cx.stroke();
+  }
+
+  // falling chunks
+  for (const c of chunks) {
+    cx.save(); cx.translate(c.x, c.y + cam); cx.rotate(c.rot);
+    drawBox(0, -BH / 2, c.w, c.color, null, true);
+    cx.restore();
+  }
+
+  // particles
+  for (const p of parts) {
+    cx.globalAlpha = Math.max(0, p.life * 2);
+    cx.fillStyle = p.color;
+    cx.fillRect(p.x - 3, p.y + cam - 3, 6, 6);
+  }
+  cx.globalAlpha = 1;
+
+  // float texts
+  for (const f of floats) {
+    cx.globalAlpha = Math.max(0, Math.min(1, f.life * 1.4));
+    cx.fillStyle = '#fff';
+    cx.font = (f.big ? '900 22px' : '900 16px') + ' system-ui';
+    cx.textAlign = 'center';
+    cx.strokeStyle = 'rgba(17,24,39,.6)'; cx.lineWidth = 4; cx.lineJoin = 'round';
+    cx.strokeText(f.txt, f.x, f.y + cam);
+    cx.fillText(f.txt, f.x, f.y + cam);
+  }
+  cx.globalAlpha = 1;
+}
+
+function drawBox(xc, y, w, color, icon, centered) {
+  const x = centered ? xc - w / 2 : xc - w / 2;
+  cx.fillStyle = color;
+  cx.beginPath(); cx.roundRect(x, y, w, BH, 5); cx.fill();
+  // packing tape
+  cx.fillStyle = 'rgba(255,255,255,.35)';
+  cx.fillRect(x, y + BH / 2 - 2.5, w, 5);
+  cx.fillStyle = 'rgba(0,0,0,.12)';
+  cx.fillRect(x, y + BH - 5, w, 5);
+  if (icon) {
+    cx.font = '22px system-ui'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+    cx.fillText(icon, xc, y - 6);
+  }
+}
+
+// ---------- main loop ----------
+function loop(t) {
+  if (!lastT) lastT = t;
+  const dt = Math.min(0.033, (t - lastT) / 1000);
+  lastT = t;
+  update(dt);
+  render();
+  requestAnimationFrame(loop);
+}
+reset();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

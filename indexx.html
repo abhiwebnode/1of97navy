@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>1/97 Batch — Indian Navy Veterans</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Official website of the Indian Navy 1/97 Batch veterans. Together in Service. Together for Life.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+	<link rel="icon" href="favicon.ico" sizes="any">
+
+    <!-- Libraries -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Bootstrap + Template + Custom -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/navy.css" rel="stylesheet">
+	
+	
+	<!-- PWA & Mobile Meta Tags -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0B1D3A">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Apple / iOS Support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Navy 1/97">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NN1NPJGY7L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NN1NPJGY7L');
+</script>
+
+<!-- CSS for Centered Install Modal & Overlay -->
+<style>
+  /* 1. Dark Backdrop Overlay */
+  #pwa-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9998;
+  }
+
+  /* 2. Centered Modal Box */
+  #pwa-install-banner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 380px;
+    background: #0B1D3A;
+    color: #FFFFFF;
+    border: 2px solid #D4AF37;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+  }
+
+  #pwa-install-banner img {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    border: 1px solid #D4AF37;
+    flex-shrink: 0;
+  }
+
+  .pwa-info {
+    width: 100%;
+  }
+
+  .pwa-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #D4AF37;
+    margin: 0 0 6px 0;
+  }
+
+  .pwa-desc {
+    font-size: 14px;
+    color: #E2E8F0;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .pwa-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .pwa-btn-install {
+    background: #D4AF37;
+    color: #0B1D3A;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s ease;
+  }
+
+  .pwa-btn-install:active {
+    opacity: 0.85;
+  }
+
+  .pwa-btn-dismiss {
+    background: transparent;
+    color: #94A3B8;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- Spinner -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+
+
+
+<!-- Navbar -->
+<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+    <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5">
+        <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+            <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+        <img src="icons/logo.png" alt="Indian Navy 1/97 Batch Veterans" class="img-fluid" style="max-height: 50px; width: auto;">
+        </a>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link">Home</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">About</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="about.html" class="dropdown-item">About 1/97 Batch</a>
+                        <a href="history.html" class="dropdown-item">Batch History</a>
+                        <a href="timeline.html" class="dropdown-item">Our Journey / Timeline</a>
+                        <a href="ships.html" class="dropdown-item">Ships &amp; Units</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Members</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="directory.html" class="dropdown-item">Member Directory</a>
+                        <a href="directory.html" class="dropdown-item">Find a Shipmate</a>
+                        <a href="profile.html" class="dropdown-item">My Profile</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Memories</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="gallery.html" class="dropdown-item">Photo Gallery</a>
+                        <a href="gallery.html" class="dropdown-item">Training Days</a>
+                        <a href="gallery.html" class="dropdown-item">Ships &amp; Deployments</a>
+                        <a href="reunions.html" class="dropdown-item">Reunions</a>
+                        <a href="gallery.html" class="dropdown-item">Personal Memories</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Achievements</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="achievements.html" class="dropdown-item active">Achievements Home</a>
+                        <a href="service-awards.html" class="dropdown-item">Service Awards</a>
+                        <a href="spotlight.html" class="dropdown-item">Veteran Spotlight</a>
+                        <a href="postservice.html" class="dropdown-item">Post-Service Achievements</a>
+                        <a href="socialwork.html" class="dropdown-item">Social Work</a>
+                    </div>
+                </div>
+                <a href="reunions.html" class="nav-item nav-link">Reunions</a>
+                <a href="discussion.html" class="nav-item nav-link">Discussion</a>
+                <a href="memorial.html" class="nav-item nav-link">Memorial</a>
+            </div>
+            <div class="d-flex align-items-center ms-2 p-4 p-lg-0">
+                <a href="login.html" class="btn-login">Member Login</a>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- Navbar -->
+
+<!-- Hero Carousel -->
+<div class="container-fluid p-0 mb-0">
+    <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" src="img/carousel-1.jpg" alt="1/97 Batch Navy Veterans" style="height:100vh;object-fit:cover;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-11">
+                                <span class="hero-badge wow fadeInDown" data-wow-delay="0.1s">Indian Navy · 1/97 Batch</span>
+                                <h1 class="display-3 text-white mb-3 wow fadeInDown" data-wow-delay="0.2s">Together in Service.<br>Together for Life.</h1>
+                                <p class="fs-5 text-white-50 mb-4 wow fadeInDown" data-wow-delay="0.3s">Enrolement in 1997. Bound by salt water, steel, and an unbreakable brotherhood. This is our home — always.</p>
+                                <div class="d-flex gap-3 justify-content-center flex-wrap wow fadeInDown" data-wow-delay="0.4s">
+                                    <a href="about.html" class="btn btn-primary py-2 px-4">
+                                        Our Story <i class="fa fa-arrow-right ms-2"></i>
+                                    </a>
+                                    <a href="directory.html" class="btn btn-outline-light py-2 px-4">
+                                        Find a Shipmate
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img class="w-100" src="img/carousel-2.jpg" alt="Navy Ships and Deployments" style="height:100vh;object-fit:cover;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-11">
+                                <span class="hero-badge">Our Ships · Our Deployments</span>
+                                <h1 class="display-3 text-white mb-3">Decades of Service Across Seven Seas</h1>
+                                <p class="fs-5 text-white-50 mb-4">From the Arabian Sea to the Indian Ocean — the 1/97 Batch served with distinction across India's finest warships.</p>
+                                <a href="ships.html" class="btn btn-primary py-2 px-4">
+                                    Ships &amp; Units <i class="fa fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img class="w-100" src="img/carousel-3.jpg" alt="Training Days" style="height:100vh;object-fit:cover;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-11">
+                                <span class="hero-badge">Training Days · 1997</span>
+                                <h1 class="display-3 text-white mb-3">Where It All Began</h1>
+                                <p class="fs-5 text-white-50 mb-4">From the parade grounds to the sea — the friendships forged in training became the bonds of a lifetime.</p>
+                                <a href="gallery.html" class="btn btn-primary py-2 px-4">
+                                    View Memories <i class="fa fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img class="w-100" src="img/carousel-4.jpg" alt="Reunions" style="height:100vh;object-fit:cover;">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-11">
+                                <span class="hero-badge">Reunions · Brotherhood</span>
+                                <h1 class="display-3 text-white mb-3">Always Finding Our Way Back</h1>
+                                <p class="fs-5 text-white-50 mb-4">No matter where life takes us, the 1/97 Batch always comes together. Join us at the next reunion.</p>
+                                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                    <a href="reunions.html#upcoming" class="btn btn-primary py-2 px-4">
+                                        Upcoming Reunions <i class="fa fa-arrow-right ms-2"></i>
+                                    </a>
+                                    <a href="reunions.html#past" class="btn btn-outline-light py-2 px-4">
+                                        Past Reunions
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
+
+<!-- Stat Strip -->
+<div class="stat-strip py-4 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="row g-4 text-center text-white">
+            <div class="col-6 col-md-3">
+                <div class="stat-num">~1,200</div>
+                <div class="stat-label">Batch Members</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-num">29+</div>
+                <div class="stat-label">Years of Brotherhood</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-num">1997</div>
+                <div class="stat-label">Year Joined</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-num">All 3</div>
+                <div class="stat-label">Naval Arms Represented</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About / Welcome Section -->
+<div class="container-fluid py-5">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.1s">
+                <span class="section-eyebrow">Who We Are</span>
+                <h2 class="section-title display-6 mb-3">The 1/97 Batch — A Brotherhood Forged at Sea</h2>
+                <div class="section-divider mb-4" style="margin: 0 0 1.5rem 0;"></div>
+                <p class="text-muted mb-4">We are the men who joined the Indian Navy in January 1997. Our journey began together at INS Chilka, with six months of basic training followed by ship and professional training. From there, we went on to serve aboard the Navy’s finest ships and at establishments across the country. The years may have taken us on different paths, but the values we learned, the memories we created, and the bonds we forged in service remain with us—in uniform and beyond.</p>
+                <p class="text-muted mb-4">This website is our shared home. A place to reconnect with shipmates, honour those no longer with us, share the stories of our service, and celebrate what we continue to achieve.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="about.html" class="btn btn-primary py-2 px-4">Read Our Story <i class="fa fa-arrow-right ms-2"></i></a>
+                    <a href="timeline.html" class="btn btn-outline-primary py-2 px-4">View Timeline</a>
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <img src="img/about-1.jpg" class="w-100 rounded shadow" alt="Navy veterans" style="height:220px;object-fit:cover;">
+                    </div>
+                    <div class="col-6 pt-4">
+                        <img src="img/about-2.jpg" class="w-100 rounded shadow" alt="Ship deployments" style="height:220px;object-fit:cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Cards -->
+<div class="container-fluid bg-light py-5">
+    <div class="container py-3">
+        <div class="text-center mb-5 wow fadeIn">
+            <span class="section-eyebrow">What's Here</span>
+            <h2 class="section-title display-6">Everything the Batch Needs, In One Place</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="feature-card card p-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa fa-users"></i></div>
+                    <h5 class="fw-bold mb-2">Shipmate Directory</h5>
+                    <p class="text-muted small mb-3">Search and reconnect with batchmates by name, ship, or specialisation. 1,200 members, one directory.</p>
+                    <a href="directory.html" class="text-primary fw-semibold small">Find Shipmates →</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.15s">
+                <div class="feature-card card p-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa fa-images"></i></div>
+                    <h5 class="fw-bold mb-2">Photo Memories</h5>
+                    <p class="text-muted small mb-3">Training days, ships and deployments, reunions — decades of shared photographs in one archive.</p>
+                    <a href="gallery.html" class="text-primary fw-semibold small">Browse Gallery →</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="feature-card card p-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa fa-medal"></i></div>
+                    <h5 class="fw-bold mb-2">Achievements</h5>
+                    <p class="text-muted small mb-3">Service awards, commendations, and the remarkable second careers our batchmates have built.</p>
+                    <a href="achievements.html" class="text-primary fw-semibold small">See Achievements →</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="feature-card card p-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa fa-calendar-alt"></i></div>
+                    <h5 class="fw-bold mb-2">Reunions</h5>
+                    <p class="text-muted small mb-3">Upcoming events, reunion planning, and archives from past gatherings across the country.</p>
+                    <a href="reunions.html" class="text-primary fw-semibold small">View Reunions →</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.15s">
+                <div class="feature-card card p-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa fa-comments"></i></div>
+                    <h5 class="fw-bold mb-2">Discussion Forums</h5>
+                    <p class="text-muted small mb-3">Batch memories, welfare matters, reunion planning — conversations that matter to the batch.</p>
+                    <a href="discussion.html" class="text-primary fw-semibold small">Join Discussion →</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="feature-card card p-4 h-100">
+                    <div class="feature-icon mb-3"><i class="fa fa-star"></i></div>
+                    <h5 class="fw-bold mb-2">Veteran Spotlight</h5>
+                    <p class="text-muted small mb-3">Stories of batchmates making a mark — in service, in business, in community, and beyond.</p>
+                    <a href="spotlight.html" class="text-primary fw-semibold small">Read Spotlights →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Timeline Strip -->
+<div class="timeline-strip py-5">
+    <div class="container py-3">
+        <div class="text-center mb-5 wow fadeIn">
+            <span class="section-eyebrow">Our Journey</span>
+            <h2 class="section-title display-6">Milestones of the 1/97 Batch</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <div class="timeline-year">1997</div>
+                    <p class="small text-muted mb-0">Joined the Indian Navy. Training commenced at INS Chilka and various training establishments.</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.15s">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <div class="timeline-year">1998</div>
+                    <p class="small text-muted mb-0">Posted to ships and shore establishments across the Indian Navy.</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <div class="timeline-year">2012</div>
+                    <p class="small text-muted mb-0">First group to retire with distinction.</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.25s">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <div class="timeline-year">Today</div>
+                    <p class="small text-muted mb-0">Veterans in second careers, still serving the nation — in business, public service, and community.</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="timeline.html" class="btn btn-outline-primary py-2 px-4">Full Timeline →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Memories Gallery Teaser -->
+<div class="container-fluid py-5">
+    <div class="container py-3">
+        <div class="text-center mb-5 wow fadeIn">
+            <span class="section-eyebrow">Photo Archive</span>
+            <h2 class="section-title display-6">Moments We'll Never Forget</h2>
+            <div class="section-divider"></div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="memory-card position-relative">
+                    <img src="img/courses-1.jpg" class="w-100" style="height:230px;object-fit:cover;" alt="Training Days">
+                    <div class="overlay">
+                        <span class="badge badge-cat me-2">Training Days</span>
+                        <div class="text-white fw-semibold">Back at INS Chilka</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.15s">
+                <div class="memory-card position-relative">
+                    <img src="img/courses-2.jpg" class="w-100" style="height:230px;object-fit:cover;" alt="Ships">
+                    <div class="overlay">
+                        <span class="badge badge-cat me-2">Ships & Deployments</span>
+                        <div class="text-white fw-semibold">Life at Sea</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="memory-card position-relative">
+                    <img src="img/courses-3.jpg" class="w-100" style="height:230px;object-fit:cover;" alt="Reunions">
+                    <div class="overlay">
+                        <span class="badge badge-cat me-2">Reunions</span>
+                        <div class="text-white fw-semibold">Back Together Again</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="gallery.html" class="btn btn-primary py-2 px-4">View Full Gallery <i class="fa fa-arrow-right ms-2"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- Memorial Section -->
+<div class="memorial-section py-5">
+    <div class="container py-3">
+        <div class="text-center mb-5 wow fadeIn">
+            <span class="section-eyebrow" style="color:var(--gold-light)">In Memoriam</span>
+            <h2 class="display-6 text-white mb-2">Remembering Our Shipmates</h2>
+            <div class="section-divider"></div>
+            <p class="text-white-50 mt-3 mb-0">We remember those who have sailed beyond the horizon. Their service lives on in us.</p>
+        </div>
+        <div class="row g-3 justify-content-center mb-5">
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="memorial-card">
+                    <img src="img/testimonial-1.jpg" alt="In Memory">
+                    <div class="mem-name">Name of Shipmate</div>
+                    <div class="mem-detail">Branch · Ship</div>
+                    <div class="eternal-flame mt-2">🕯️</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.15s">
+                <div class="memorial-card">
+                    <img src="img/testimonial-2.jpg" alt="In Memory">
+                    <div class="mem-name">Name of Shipmate</div>
+                    <div class="mem-detail">Branch · Ship</div>
+                    <div class="eternal-flame mt-2">🕯️</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="memorial-card">
+                    <img src="img/testimonial-3.jpg" alt="In Memory">
+                    <div class="mem-name">Name of Shipmate</div>
+                    <div class="mem-detail">Branch · Ship</div>
+                    <div class="eternal-flame mt-2">🕯️</div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="memorial.html" class="btn btn-outline-light py-2 px-4">View Memorial Wall →</a>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Join -->
+<div class="cta-join py-5">
+    <div class="container py-3">
+        <div class="row align-items-center justify-content-between g-4">
+            <div class="col-lg-7 wow fadeInLeft">
+                <span class="section-eyebrow" style="color:var(--gold-light)">Members Only</span>
+                <h2 class="display-6 text-white mb-2">Are You Part of the 1/97 Batch?</h2>
+                <p class="text-white-50 mb-0">Log in to access the member directory, discussion forums, full photo archive, and your personal profile. Not yet registered? Request access to join the community.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end d-flex flex-column flex-lg-row gap-3 justify-content-lg-end wow fadeInRight">
+                <a href="login.html" class="btn btn-gold py-3 px-5 fw-bold">Member Login</a>
+                <a href="register.html" class="btn btn-outline-light py-3 px-4">Request Access</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-4">
+        <div class="row g-5">
+            <div class="col-lg-4 col-md-6">
+                
+				<div class="footer-brand mb-3">
+    <img src="icons/logo.png"
+         alt="Indian Navy 1/97 Batch Veterans"
+         class="img-fluid"
+         style="max-height: 50px; width: auto;">
+</div>
+                <p class="footer-motto mb-3">"Together in Service. Together for Life."</p>
+                <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans. Maintained by the batch, for the batch.</p>
+                <div class="d-flex gap-2 mt-3">
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-white mb-3">Quick Links</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="about.html">About the Batch</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="timeline.html">Our Timeline</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="ships.html">Ships &amp; Units</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="directory.html">Member Directory</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="memorial.html">Memorial Wall</a>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h5 class="text-white mb-3">Memories</h5>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="gallery.html">Photo Gallery</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="achievements.html">Achievements</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="spotlight.html">Veteran Spotlight</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="reunions.html">Reunions</a>
+                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="discussion.html">Discussion</a>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <h5 class="text-white mb-3">Get in Touch</h5>
+                <p class="text-white-50 small mb-3">For membership enquiries, content submissions, or corrections, reach out to the batch webmaster.</p>
+                <div class="d-flex mb-2">
+                    <i class="fa fa-envelope text-gold me-3 mt-1"></i>
+                    <span class="text-white-50 small">contact@1of97navy.in</span>
+                </div>
+                <div class="d-flex mb-4">
+                    <i class="fab fa-whatsapp text-gold me-3 mt-1"></i>
+                    <span class="text-white-50 small">Batch WhatsApp Group</span>
+                </div>
+                <a href="login.html" class="btn btn-gold py-2 px-4 fw-bold">Member Login</a>
+            </div>
+        </div>
+        <div class="copyright mt-5 pt-3 text-center text-white-50 small">
+            <p class="mb-0" style="color: #D4AF37;">
+    © 2026 Indian Navy 1/97 Batch. All rights reserved. | Built by
+    <a href="https://www.abhishekindia.com" target="_blank" style="color: #fff;">Abhishek Kumar</a>
+    for the 1/97 Batch.
+</p>
+        </div>
+    </div>
+</div>
+
+<!-- Back to top -->
+<a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="js/main.js"></script>
+
+
+<!-- Background Overlay -->
+<div id="pwa-modal-overlay"></div>
+
+<!-- Centered App Install Modal -->
+<aside id="pwa-install-banner" aria-label="App Installation Prompt">
+  <img src="/icons/icon-192x192.png" alt="Navy 1/97 Crest">
+  <div class="pwa-info">
+    <h3 class="pwa-title">Indian Navy 1/97 App</h3>
+    <p class="pwa-desc" id="pwa-desc-text">Install the batch portal for quick access, offline directories, and reunion updates.</p>
+  </div>
+  <div class="pwa-actions">
+    <button id="pwa-install-btn" class="pwa-btn-install">Install App</button>
+    <button id="pwa-close-btn" class="pwa-btn-dismiss">Maybe Later</button>
+  </div>
+</aside>
+
+<script>
+  // 1. Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((reg) => console.log('ServiceWorker registered with scope:', reg.scope))
+        .catch((err) => console.error('ServiceWorker registration failed:', err));
+    });
+  }
+
+  // 2. Install Modal Logic
+  let deferredPrompt;
+  const banner = document.getElementById('pwa-install-banner');
+  const overlay = document.getElementById('pwa-modal-overlay');
+  const installBtn = document.getElementById('pwa-install-btn');
+  const closeBtn = document.getElementById('pwa-close-btn');
+  const descText = document.getElementById('pwa-desc-text');
+
+  function showPromptModal() {
+    overlay.style.display = 'block';
+    banner.style.display = 'flex';
+  }
+
+  function hidePromptModal() {
+    overlay.style.display = 'none';
+    banner.style.display = 'none';
+  }
+
+  // iOS Safari Check
+  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+  // Chrome / Android Trigger
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    if (!localStorage.getItem('pwa_prompt_dismissed')) {
+      showPromptModal();
+    }
+  });
+
+  // Handle Install Action
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        hidePromptModal();
+      }
+      deferredPrompt = null;
+    }
+  });
+
+  // iOS Safari Guidance
+  if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_prompt_dismissed')) {
+    descText.innerHTML = 'Tap the <strong>Share</strong> button (<span style="font-size:16px;">⎋</span>) below, then select <strong>Add to Home Screen</strong>.';
+    installBtn.style.display = 'none';
+    showPromptModal();
+  }
+
+  // Dismiss Modal
+  closeBtn.addEventListener('click', () => {
+    hidePromptModal();
+    localStorage.setItem('pwa_prompt_dismissed', 'true');
+  });
+
+  overlay.addEventListener('click', () => {
+    hidePromptModal();
+  });
+
+  // Hide if already installed
+  window.addEventListener('appinstalled', () => {
+    hidePromptModal();
+    deferredPrompt = null;
+  });
+</script>
+</body>
+</html>
