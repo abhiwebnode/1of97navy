@@ -53,7 +53,7 @@
     // ── config.js (Synchronous maintenance check) ────────────────────
     if (typeof SITE_CONFIG === 'undefined') {
         var configScript = document.createElement('script');
-        configScript.src = '/config.js';
+        configScript.src = 'js/config.js';
         configScript.async = false;
         head.insertBefore(configScript, head.firstChild);
     }
