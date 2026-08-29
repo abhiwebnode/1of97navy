@@ -6,39 +6,292 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <title>Offline | Indian Navy 1/97</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background-color: #0B1D3A;
       color: #FFFFFF;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
       text-align: center;
       padding: 20px;
     }
-    .container { max-width: 450px; }
-    h1 { color: #D4AF37; margin-bottom: 12px; }
-    p { color: #E0E0E0; line-height: 1.6; }
+    .container { max-width: 480px; width: 100%; }
+    h1 { color: #D4AF37; margin-bottom: 8px; font-size: 1.5rem; }
+    p { color: #E0E0E0; line-height: 1.5; font-size: 0.9rem; margin-bottom: 6px; }
+    .motto { color: #D4AF37; font-style: italic; font-size: 0.85rem; margin-bottom: 16px; }
+    
+    /* ── Retro Arcade Box ── */
+    .arcade-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #D4AF37;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .arcade-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #D4AF37;
+      margin-bottom: 10px;
+    }
+    canvas {
+      background: #061124;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      height: 220px;
+      display: block;
+      margin: 0 auto;
+      touch-action: none;
+    }
+    .controls-hint {
+      font-size: 0.75rem;
+      color: #94A3B8;
+      margin-top: 8px;
+    }
+    
+    .btn-wrap {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
     button {
-      margin-top: 20px;
-      padding: 12px 24px;
+      padding: 10px 20px;
       background: #D4AF37;
       color: #0B1D3A;
       font-weight: bold;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Connection Lost not Friendship</h1>
-    <p>You are currently offline. Please check your internet connection to access the 1/97 Indian Navy Batch portal.</p>
-    <p><em>"Together in Service. Together for Life."</em></p>
-    <button onclick="window.location.reload()">Retry Connection</button>
+    <h1>Connection Lost, Not Brotherhood</h1>
+    <p>You are currently offline. Check your internet connection to rejoin the 1/97 Batch portal.</p>
+    <p class="motto">"Together in Service. Together for Life."</p>
+
+    <!-- Retro Mini-Game -->
+    <div class="arcade-card">
+      <div class="arcade-title">⚓ Naval Torpedo Dodger ⚓</div>
+      <canvas id="gameCanvas" width="400" height="220"></canvas>
+      <div class="controls-hint">Tap screen or use Up / Down / Spacebar to navigate your warship</div>
+    </div>
+
+    <div class="btn-wrap">
+      <button onclick="window.location.reload()">Retry Connection</button>
+      <button class="btn-secondary" onclick="resetGame()">Restart Game</button>
+    </div>
   </div>
+
+  <script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let ship = { x: 40, y: 100, width: 26, height: 16, vy: 0 };
+  let obstacles = [];
+  let stars = [];
+  let score = 0;
+  let highScore = parseInt(localStorage.getItem('navy_high_score'), 10) || 0;
+  let gameOver = false;
+  let gameStarted = false;
+  let frame = 0;
+
+  // Background ocean particles
+  for (let i = 0; i < 25; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      speed: 0.5 + Math.random() * 1.5,
+      size: Math.random() * 2
+    });
+  }
+
+  function jump() {
+    if (!gameStarted) {
+      gameStarted = true;
+      return;
+    }
+    if (gameOver) {
+      resetGame();
+      return;
+    }
+    ship.vy = -3.8;
+  }
+
+  // Controls (Keyboard & Touch)
+  window.addEventListener('keydown', (e) => {
+    if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) {
+      e.preventDefault();
+      jump();
+    }
+  });
+  canvas.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    jump();
+  });
+
+  function resetGame() {
+    ship.y = 100;
+    ship.vy = 0;
+    obstacles = [];
+    score = 0;
+    frame = 0;
+    gameOver = false;
+    gameStarted = true;
+  }
+
+  function spawnObstacle() {
+    const gap = 85;
+    const topHeight = 20 + Math.random() * (canvas.height - gap - 40);
+    obstacles.push({
+      x: canvas.width,
+      top: topHeight,
+      bottom: canvas.height - (topHeight + gap),
+      width: 18,
+      passed: false
+    });
+  }
+
+  function update() {
+    frame++;
+
+    if (gameStarted && !gameOver) {
+      // Ship physics
+      ship.vy += 0.2; // Gravity
+      ship.y += ship.vy;
+
+      // Boundaries
+      if (ship.y < 0) { ship.y = 0; ship.vy = 0; }
+      if (ship.y + ship.height >= canvas.height) {
+        gameOver = true;
+      }
+
+      // Spawn obstacle reefs
+      if (frame % 85 === 0) spawnObstacle();
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const obs = obstacles[i];
+        obs.x -= 2.2;
+
+        // Collision Check
+        if (
+          ship.x < obs.x + obs.width &&
+          ship.x + ship.width > obs.x &&
+          (ship.y < obs.top || ship.y + ship.height > canvas.height - obs.bottom)
+        ) {
+          gameOver = true;
+        }
+
+        // Score Update (triggers as soon as obstacle's right edge passes ship's front)
+        if (!obs.passed && (obs.x + obs.width) < ship.x) {
+          obs.passed = true;
+          score += 1;
+          if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('navy_high_score', highScore);
+          }
+        }
+
+        // Remove offscreen obstacles
+        if (obs.x + obs.width < 0) {
+          obstacles.splice(i, 1);
+        }
+      }
+    }
+
+    // Move background particles
+    stars.forEach(s => {
+      s.x -= s.speed;
+      if (s.x < 0) s.x = canvas.width;
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Particles
+    ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
+    stars.forEach(s => {
+      ctx.fillRect(s.x, s.y, s.size, s.size);
+    });
+
+    // Vessel
+    ctx.fillStyle = '#D4AF37';
+    ctx.fillRect(ship.x, ship.y + 4, ship.width, ship.height - 8); // hull
+    ctx.fillRect(ship.x + 8, ship.y, 8, 4); // conning tower
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(ship.x + ship.width - 4, ship.y + 6, 4, 4); // bow light
+
+    // Obstacles
+    obstacles.forEach(obs => {
+      ctx.fillStyle = '#1B3A6B';
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 1.5;
+
+      // Top Reef
+      ctx.fillRect(obs.x, 0, obs.width, obs.top);
+      ctx.strokeRect(obs.x, 0, obs.width, obs.top);
+
+      // Bottom Reef
+      ctx.fillRect(obs.x, canvas.height - obs.bottom, obs.width, obs.bottom);
+      ctx.strokeRect(obs.x, canvas.height - obs.bottom, obs.width, obs.bottom);
+    });
+
+    // Score Text
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 13px "Segoe UI", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Score: ${score}`, 12, 22);
+    ctx.textAlign = 'right';
+    ctx.fillText(`Best: ${highScore}`, canvas.width - 12, 22);
+
+    // Overlay Screens
+    if (!gameStarted) {
+      ctx.fillStyle = 'rgba(11, 29, 58, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#D4AF37';
+      ctx.font = 'bold 14px "Segoe UI", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('PRESS SPACE / TAP TO SAIL', canvas.width / 2, canvas.height / 2);
+    } else if (gameOver) {
+      ctx.fillStyle = 'rgba(11, 29, 58, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#FF5252';
+      ctx.font = 'bold 15px "Segoe UI", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('MISSION FAILED (HULL BREACH)', canvas.width / 2, canvas.height / 2 - 10);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '12px "Segoe UI", sans-serif';
+      ctx.fillText(`Final Score: ${score}  ·  Tap to Relaunch`, canvas.width / 2, canvas.height / 2 + 14);
+    }
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
 </body>
 </html>

@@ -162,3 +162,8 @@ footer .footer-motto { color: rgba(255,255,255,.5); font-size: .82rem; font-styl
         top: 56px;
     }
 }
+/* Ensure fixed-top navigation stays above the hero carousel */
+.fixed-top {
+    z-index: 1030 !important;
+    background-color: var(--dark);
+}

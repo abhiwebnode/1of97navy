@@ -2,291 +2,259 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Photo Gallery — Indian Navy 1/97 Batch</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap" rel="stylesheet">
+    <title>Photo Gallery — Indian Navy 1/97 Batch</title>
+    <meta name="description" content="Explore photographic memories of the Indian Navy 1/97 Batch — training days at INS Chilka, life aboard warships, deployments, reunions, and community service.">
 
-    <!-- Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-	<link rel="icon" href="favicon.ico" sizes="any">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
+    <meta property="og:title" content="Photo Gallery — Indian Navy 1/97 Batch">
+    <meta property="og:description" content="Explore photographic memories of the Indian Navy 1/97 Batch — training days at INS Chilka, life aboard warships, deployments, reunions, and community service.">
+    <meta property="og:image" content="https://www.1of97navy.in/img/og-image.jpg">
+    <meta property="og:locale" content="en_IN">
 
-    <!-- Libraries -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@1of97navy">
+    <meta name="twitter:title" content="Photo Gallery — Indian Navy 1/97 Batch">
+    <meta name="twitter:description" content="Explore photographic memories of the Indian Navy 1/97 Batch — training days at INS Chilka, life aboard warships, deployments, reunions, and community service.">
+    <meta name="twitter:image" content="https://www.1of97navy.in/img/og-image.jpg">
 
-    <!-- Bootstrap + Template + Custom -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/navy.css" rel="stylesheet">
-	
-	
-	<!-- PWA & Mobile Meta Tags -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#0B1D3A">
-<meta name="mobile-web-app-capable" content="yes">
+    <!-- Consolidated Stylesheet -->
+    <link href="css/all.css" rel="stylesheet">
 
-<!-- Apple / iOS Support -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Navy 1/97">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <!-- Page-Specific Styles -->
+    <style>
+        /* ── Album Cards ── */
+        .album-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(27,58,107,.08);
+            transition: .3s;
+            cursor: pointer;
+            position: relative;
+        }
+        .album-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(27,58,107,.16); }
+        .album-thumb {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+            display: block;
+        }
+        .album-thumb-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), #2952A3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(255,255,255,.3);
+        }
+        .album-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(11,30,61,.92) 0%, transparent 100%);
+            padding: 2rem 1rem .9rem;
+        }
+        .album-title { color: #fff; font-family: 'Saira', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: .2rem; }
+        .album-desc  { color: rgba(255,255,255,.65); font-size: .75rem; margin-bottom: .4rem; }
+        .album-count-badge {
+            display: inline-block;
+            font-size: .65rem; font-weight: 700;
+            padding: .15rem .5rem; border-radius: 10px;
+        }
+        .badge-loaded { background: var(--gold); color: var(--dark); }
+        .badge-empty  { background: rgba(255,255,255,.15); color: rgba(255,255,255,.5); }
+        .badge-loading { background: rgba(255,255,255,.1); color: rgba(255,255,255,.4); }
 
-<!-- CSS for Centered Install Modal & Overlay -->
-<style>
-  /* 1. Dark Backdrop Overlay */
-  #pwa-modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-    z-index: 9998;
-  }
+        /* ── Photo Grid ── */
+        .back-bar {
+            display: flex; align-items: center; gap: .75rem;
+            padding: .75rem 0; margin-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary);
+            flex-wrap: wrap;
+        }
+        .back-btn {
+            background: none; border: none; color: var(--primary);
+            font-size: .85rem; font-weight: 600; cursor: pointer; padding: 0;
+            display: flex; align-items: center; gap: .4rem;
+        }
+        .back-btn:hover { color: var(--gold); }
+        .back-bar-title { font-family: 'Saira', sans-serif; font-weight: 700; color: var(--dark); font-size: 1.1rem; }
 
-  /* 2. Centered Modal Box */
-  #pwa-install-banner {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    max-width: 380px;
-    background: #0B1D3A;
-    color: #FFFFFF;
-    border: 2px solid #D4AF37;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
-    z-index: 9999;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 16px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    box-sizing: border-box;
-  }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: .75rem;
+        }
+        .photo-item {
+            position: relative; aspect-ratio: 4/3;
+            overflow: hidden; border-radius: 6px;
+            cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        }
+        .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: .3s; }
+        .photo-item:hover img { transform: scale(1.06); }
+        .photo-item-overlay {
+            position: absolute; inset: 0;
+            background: rgba(11,30,61,.5);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: .2s;
+        }
+        .photo-item:hover .photo-item-overlay { opacity: 1; }
+        .photo-item-overlay i { color: #fff; font-size: 1.5rem; }
 
-  #pwa-install-banner img {
-    width: 72px;
-    height: 72px;
-    border-radius: 16px;
-    border: 1px solid #D4AF37;
-    flex-shrink: 0;
-  }
+        /* ── Lightbox ── */
+        .lb-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.96);
+            z-index: 9999; display: none; flex-direction: column;
+        }
+        .lb-overlay.active { display: flex; }
+        .lb-header {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: .75rem 1.25rem;
+            background: rgba(0,0,0,.5); flex-shrink: 0;
+        }
+        .lb-album-name { color: var(--gold); font-family: 'Saira', sans-serif; font-size: .95rem; font-weight: 700; }
+        .lb-counter    { color: rgba(255,255,255,.5); font-size: .8rem; }
+        .lb-close {
+            background: none; border: none; color: #fff;
+            font-size: 1.5rem; cursor: pointer; padding: 0 .5rem;
+            opacity: .7; transition: .2s; line-height: 1;
+        }
+        .lb-close:hover { opacity: 1; color: var(--gold); }
+        .lb-body {
+            flex: 1; display: flex; align-items: center;
+            justify-content: center; position: relative; overflow: hidden;
+        }
+        .lb-img {
+            max-width: 92%; max-height: calc(100vh - 140px);
+            object-fit: contain; border-radius: 4px;
+            box-shadow: 0 8px 40px rgba(0,0,0,.6); transition: opacity .2s;
+        }
+        .lb-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,.1); border: none;
+            color: #fff; font-size: 1.4rem;
+            width: 48px; height: 48px; border-radius: 50%;
+            cursor: pointer; transition: .2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lb-nav:hover { background: var(--gold); color: var(--dark); }
+        .lb-prev { left: .75rem; }
+        .lb-next { right: .75rem; }
+        .lb-thumbs {
+            display: flex; gap: 6px;
+            padding: .5rem 1rem; overflow-x: auto;
+            background: rgba(0,0,0,.4); flex-shrink: 0;
+            scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+        }
+        .lb-thumb-item {
+            width: 52px; height: 40px; object-fit: cover;
+            border-radius: 3px; cursor: pointer;
+            opacity: .5; transition: .2s; flex-shrink: 0;
+            border: 2px solid transparent;
+        }
+        .lb-thumb-item.active, .lb-thumb-item:hover { opacity: 1; border-color: var(--gold); }
 
-  .pwa-info {
-    width: 100%;
-  }
+        /* ── Spinner ── */
+        .mini-spinner {
+            width: 28px; height: 28px;
+            border: 3px solid #eee; border-top-color: var(--primary);
+            border-radius: 50%; animation: sp .7s linear infinite;
+            margin: 2rem auto;
+        }
+        @keyframes sp { to { transform: rotate(360deg); } }
 
-  .pwa-title {
-    font-weight: 700;
-    font-size: 18px;
-    color: #D4AF37;
-    margin: 0 0 6px 0;
-  }
+        @media (max-width: 576px) {
+            .photo-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: .5rem; }
+            .lb-nav { width: 38px; height: 38px; font-size: 1.1rem; }
+            .lb-thumb-item { width: 40px; height: 32px; }
+        }
+    </style>
 
-  .pwa-desc {
-    font-size: 14px;
-    color: #E2E8F0;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .pwa-actions {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-    margin-top: 8px;
-  }
-
-  .pwa-btn-install {
-    background: #D4AF37;
-    color: #0B1D3A;
-    border: none;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    width: 100%;
-    transition: opacity 0.2s ease;
-  }
-
-  .pwa-btn-install:active {
-    opacity: 0.85;
-  }
-
-  .pwa-btn-dismiss {
-    background: transparent;
-    color: #94A3B8;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 100%;
-  }
-</style>
+    <!-- Global Head Injector -->
+    <script src="js/header.js"></script>
 </head>
-<body>
+<body data-page="memories">
+
 <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" role="status"></div>
 </div>
+
 <!-- Navbar -->
-<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
-    <nav class="navbar navbar-expand-lg navbar-dark py-lg-0 px-lg-5">
-        <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-            <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-        <img src="icons/logo.png" alt="Indian Navy 1/97 Batch Veterans" class="img-fluid" style="max-height: 50px; width: auto;">
-        </a>
-        </a>
-        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" class="nav-item nav-link">Home</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">About</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="about.html" class="dropdown-item">About 1/97 Batch</a>
-                        <a href="history.html" class="dropdown-item">Batch History</a>
-                        <a href="timeline.html" class="dropdown-item">Our Journey / Timeline</a>
-                        <a href="ships.html" class="dropdown-item">Ships &amp; Units</a>
-                    </div>
-                </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Members</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="directory.html" class="dropdown-item">Member Directory</a>
-                        <a href="directory.html" class="dropdown-item">Find a Shipmate</a>
-                        <a href="profile.html" class="dropdown-item">My Profile</a>
-                    </div>
-                </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Memories</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="gallery.html" class="dropdown-item">Photo Gallery</a>
-                        <a href="gallery.html" class="dropdown-item">Training Days</a>
-                        <a href="gallery.html" class="dropdown-item">Ships &amp; Deployments</a>
-                        <a href="reunions.html" class="dropdown-item">Reunions</a>
-                        <a href="gallery.html" class="dropdown-item">Personal Memories</a>
-                    </div>
-                </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Achievements</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="achievements.html" class="dropdown-item active">Achievements Home</a>
-                        <a href="service-awards.html" class="dropdown-item">Service Awards</a>
-                        <a href="spotlight.html" class="dropdown-item">Veteran Spotlight</a>
-                        <a href="postservice.html" class="dropdown-item">Post-Service Achievements</a>
-                        <a href="socialwork.html" class="dropdown-item">Social Work</a>
-                    </div>
-                </div>
-                <a href="reunions.html" class="nav-item nav-link">Reunions</a>
-                <a href="discussion.html" class="nav-item nav-link">Discussion</a>
-                <a href="memorial.html" class="nav-item nav-link">Memorial</a>
-            </div>
-            <div class="d-flex align-items-center ms-2 p-4 p-lg-0">
-                <a href="login.html" class="btn-login">Member Login</a>
-            </div>
-        </div>
-    </nav>
-</div>
-<!-- Navbar -->
-<div class="page-header text-center text-white">
+<div id="nav-placeholder"></div>
+<script src="js/nav.js"></script>
+
+<!-- Page Header -->
+<div class="page-header text-center text-white wow fadeIn">
     <div class="container">
-        <span class="hero-badge">Indian Navy · 1/97 Batch</span>
-        <h1 class="display-5 mt-2 mb-3">Photo Gallery</h1>
+        <span class="hero-badge">1/97 Batch · Memories</span>
+        <h1 class="display-5 mt-2 mb-3" id="page-title">Photo Gallery</h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item"><a href="index.html" class="text-white-50">Home</a></li>
-                <li class="breadcrumb-item active text-white">Photo Gallery</li>
+                <li class="breadcrumb-item active text-white" id="breadcrumb-label">Gallery</li>
             </ol>
         </nav>
     </div>
 </div>
-<div class="container py-5 my-3 text-center">
-    <i class="fa Decades of shared photographs — training, deployments, reunions, and personal memories. fa-4x mb-4" style="color: var(--primary);"></i>
-    <h2 class="mb-3" style="color: var(--dark);">Photo Gallery</h2>
-    <p class="text-muted mb-4" style="max-width:520px;margin:0 auto;"></p>
-    <span class="badge px-3 py-2" style="background: var(--gold); color: var(--dark); font-size:.85rem;">Content coming soon — this page is under construction</span>
-    <div class="mt-4">
-        <a href="index.html" class="btn btn-outline-primary py-2 px-4">← Back to Home</a>
-    </div>
-</div>
-<!-- Footer -->
-<div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.1s">
-    <div class="container py-4">
-        <div class="row g-5">
-            <div class="col-lg-4 col-md-6">
-                
-				<div class="footer-brand mb-3">
-    <img src="icons/logo.png"
-         alt="Indian Navy 1/97 Batch Veterans"
-         class="img-fluid"
-         style="max-height: 50px; width: auto;">
-</div>
-                <p class="footer-motto mb-3">"Together in Service. Together for Life."</p>
-                <p class="small text-white-50">The official website of the Indian Navy 1/97 Batch veterans. Maintained by the batch, for the batch.</p>
-                <div class="d-flex gap-2 mt-3">
-                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a class="btn btn-square btn-outline-light rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6">
-                <h5 class="text-white mb-3">Quick Links</h5>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="about.html">About the Batch</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="timeline.html">Our Timeline</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="ships.html">Ships &amp; Units</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="directory.html">Member Directory</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="memorial.html">Memorial Wall</a>
-            </div>
-            <div class="col-lg-2 col-md-6">
-                <h5 class="text-white mb-3">Memories</h5>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="gallery.html">Photo Gallery</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="achievements.html">Achievements</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="spotlight.html">Veteran Spotlight</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="reunions.html">Reunions</a>
-                <a class="btn btn-link text-white-50 p-0 d-block mb-2" href="discussion.html">Discussion</a>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <h5 class="text-white mb-3">Get in Touch</h5>
-                <p class="text-white-50 small mb-3">For membership enquiries, content submissions, or corrections, reach out to the batch webmaster.</p>
-                <div class="d-flex mb-2">
-                    <i class="fa fa-envelope text-gold me-3 mt-1"></i>
-                    <span class="text-white-50 small">contact@1of97navy.in</span>
-                </div>
-                <div class="d-flex mb-4">
-                    <i class="fab fa-whatsapp text-gold me-3 mt-1"></i>
-                    <span class="text-white-50 small">Batch WhatsApp Group</span>
-                </div>
-                <a href="login.html" class="btn btn-gold py-2 px-4 fw-bold">Member Login</a>
-            </div>
+
+<!-- Gallery Section -->
+<div class="container py-5">
+
+    <!-- Album Index View -->
+    <div id="view-albums">
+        <div class="text-center mb-5">
+            <span class="section-eyebrow">Our Memories</span>
+            <h2 class="section-title h4 mb-0">Photographs from the 1/97 Batch</h2>
+            <div class="section-divider mt-3"></div>
+            <p class="text-muted mt-3 mb-0" style="max-width:560px;margin:0 auto !important;">
+                Click any album to browse photos. Images are loaded live from our media library.
+            </p>
         </div>
-        <div class="copyright mt-5 pt-3 text-center text-white-50 small">
-            <p class="mb-0" style="color: #D4AF37;">
-    © 2026 Indian Navy 1/97 Batch. All rights reserved. | Built by
-    <a href="https://www.abhishekindia.com" target="_blank" style="color: #fff;">Abhishek Kumar</a>
-    for the 1/97 Batch.
-</p>
+        <div class="row g-4" id="albums-grid">
+            <!-- Rendered by JS -->
         </div>
     </div>
+
+    <!-- Single Album View -->
+    <div id="view-photos" style="display:none;">
+        <div class="back-bar">
+            <button class="back-btn" id="back-btn">
+                <i class="fa fa-arrow-left"></i> All Albums
+            </button>
+            <span style="color:#ddd;">|</span>
+            <span class="back-bar-title" id="album-view-title"></span>
+            <span class="ms-2 album-count-badge badge-loaded" id="album-view-count"></span>
+        </div>
+        <p class="text-muted small mb-4" id="album-view-desc"></p>
+        <div class="photo-grid" id="photos-grid"></div>
+    </div>
+
 </div>
 
-<!-- Back to top -->
-<a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+<!-- Lightbox -->
+<div class="lb-overlay" id="lightbox">
+    <div class="lb-header">
+        <div class="lb-album-name" id="lb-album-name"></div>
+        <div class="lb-counter"    id="lb-counter"></div>
+        <button class="lb-close"   id="lb-close"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="lb-body">
+        <button class="lb-nav lb-prev" id="lb-prev"><i class="fa fa-chevron-left"></i></button>
+        <img src="" alt="" class="lb-img" id="lb-img">
+        <button class="lb-nav lb-next" id="lb-next"><i class="fa fa-chevron-right"></i></button>
+    </div>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+</div>
+
+<!-- Footer -->
+<div id="footer-placeholder"></div>
+<script src="js/footer.js"></script>
 
 <!-- Scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -294,103 +262,262 @@
 <script src="lib/wow/wow.js"></script>
 <script src="lib/easing/easing.min.js"></script>
 <script src="lib/waypoints/waypoints.min.js"></script>
-<script src="lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
 
-
-<!-- Background Overlay -->
-<div id="pwa-modal-overlay"></div>
-
-<!-- Centered App Install Modal -->
-<aside id="pwa-install-banner" aria-label="App Installation Prompt">
-  <img src="/icons/icon-192x192.png" alt="Navy 1/97 Crest">
-  <div class="pwa-info">
-    <h3 class="pwa-title">Indian Navy 1/97 App</h3>
-    <p class="pwa-desc" id="pwa-desc-text">Install the batch portal for quick access, offline directories, and reunion updates.</p>
-  </div>
-  <div class="pwa-actions">
-    <button id="pwa-install-btn" class="pwa-btn-install">Install App</button>
-    <button id="pwa-close-btn" class="pwa-btn-dismiss">Maybe Later</button>
-  </div>
-</aside>
-
 <script>
-  // 1. Service Worker Registration
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then((reg) => console.log('ServiceWorker registered with scope:', reg.scope))
-        .catch((err) => console.error('ServiceWorker registration failed:', err));
+// ══════════════════════════════════════════════════════════════════════
+// CONFIGURATION — edit here only
+// ══════════════════════════════════════════════════════════════════════
+const CLOUD_NAME = 'y1x8pb8j';
+
+const ALBUMS = [
+    {
+        id:          'charity',
+        tag:         'charity',
+        title:       'Charity & Community Work',
+        description: '1/97 Batch veterans giving back to society',
+        icon:        'fa-hands-helping'
+    },
+    {
+        id:          'training',
+        tag:         'training',
+        title:       'Training Days — INS Chilka 1997',
+        description: 'Where it all began — basic training memories',
+        icon:        'fa-graduation-cap'
+    },
+    {
+        id:          'ships',
+        tag:         'ships',
+        title:       'Ships & Deployments',
+        description: 'Life at sea across the Indian Ocean',
+        icon:        'fa-ship'
+    },
+    {
+        id:          'reunions',
+        tag:         'reunions',
+        title:       'Reunions',
+        description: 'Coming back together — batch reunion photographs',
+        icon:        'fa-users'
+    },
+    {
+        id:          'social-work',
+        tag:         'social-work',
+        title:       'Social Work',
+        description: 'Regional group activities and community service',
+        icon:        'fa-heart'
+    },
+    {
+        id:          'personal',
+        tag:         'personal',
+        title:       'Personal Memories',
+        description: 'Moments shared by batchmates',
+        icon:        'fa-camera'
+    }
+];
+// ══════════════════════════════════════════════════════════════════════
+
+let currentAlbum  = null;
+let lbIndex       = 0;
+const photoCache  = {};
+
+function thumbUrl(img) {
+    const v = img.version ? `v${img.version}/` : '';
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_450,h_300,c_fill,f_auto,q_auto/${v}${img.public_id}.${img.format}`;
+}
+function fullUrl(img) {
+    const v = img.version ? `v${img.version}/` : '';
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_1600,c_limit,f_auto,q_auto/${v}${img.public_id}.${img.format}`;
+}
+
+async function fetchTag(tag) {
+    if (photoCache[tag]) return photoCache[tag];
+    const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/list/${tag}.json`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Tag fetch failed (${res.status}). Enable Resource list in Cloudinary Security Settings.`);
+    const data = await res.json();
+    photoCache[tag] = data.resources || [];
+    return photoCache[tag];
+}
+
+async function renderAlbums() {
+    const grid = document.getElementById('albums-grid');
+
+    grid.innerHTML = ALBUMS.map(album => `
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="album-card" id="card-${album.id}"
+                 onclick="openAlbum('${album.id}')">
+                <div class="album-thumb-placeholder" id="thumb-${album.id}">
+                    <i class="fa ${album.icon}"></i>
+                </div>
+                <div class="album-overlay">
+                    <div class="album-title">${album.title}</div>
+                    <div class="album-desc">${album.description}</div>
+                    <span class="album-count-badge badge-loading" id="count-${album.id}">
+                        <i class="fa fa-circle-notch fa-spin me-1" style="font-size:.6rem;"></i> Loading...
+                    </span>
+                </div>
+            </div>
+        </div>`
+    ).join('');
+
+    await Promise.all(ALBUMS.map(async album => {
+        try {
+            const resources = await fetchTag(album.tag);
+            const countEl   = document.getElementById(`count-${album.id}`);
+            const thumbEl   = document.getElementById(`thumb-${album.id}`);
+
+            if (resources.length > 0) {
+                const cover = resources[0];
+                const coverThumb = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_600,h_200,c_fill,f_auto,q_auto/v${cover.version}/${cover.public_id}.${cover.format}`;
+                thumbEl.outerHTML = `<img src="${coverThumb}" alt="${album.title}" class="album-thumb" loading="lazy">`;
+
+                countEl.className = 'album-count-badge badge-loaded';
+                countEl.textContent = `${resources.length} photo${resources.length !== 1 ? 's' : ''}`;
+            } else {
+                countEl.className = 'album-count-badge badge-empty';
+                countEl.textContent = 'Coming soon';
+            }
+        } catch(e) {
+            const countEl = document.getElementById(`count-${album.id}`);
+            if (countEl) {
+                countEl.className = 'album-count-badge badge-empty';
+                countEl.textContent = 'Unavailable';
+            }
+        }
+    }));
+}
+
+async function openAlbum(albumId) {
+    const config = ALBUMS.find(a => a.id === albumId);
+    if (!config) return;
+
+    document.getElementById('view-albums').style.display = 'none';
+    document.getElementById('view-photos').style.display = '';
+    document.getElementById('album-view-title').textContent = config.title;
+    document.getElementById('album-view-desc').textContent  = config.description;
+    document.getElementById('breadcrumb-label').textContent = config.title;
+    document.getElementById('album-view-count').textContent = '...';
+
+    document.getElementById('photos-grid').innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:3rem 0;">
+            <div class="mini-spinner"></div>
+            <div class="text-muted small">Loading photos...</div>
+        </div>`;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+        const resources = await fetchTag(config.tag);
+        currentAlbum = { ...config, resources };
+
+        document.getElementById('album-view-count').textContent =
+            `${resources.length} photo${resources.length !== 1 ? 's' : ''}`;
+
+        renderPhotoGrid(resources);
+    } catch(e) {
+        document.getElementById('photos-grid').innerHTML = `
+            <div style="grid-column:1/-1;text-align:center;padding:3rem 0;">
+                <i class="fa fa-exclamation-circle fa-3x mb-3 d-block" style="color:#dde3ef;"></i>
+                <h5 class="text-muted">Could not load photos</h5>
+                <p class="small text-muted">${e.message}</p>
+            </div>`;
+    }
+}
+
+function renderPhotoGrid(resources) {
+    const grid = document.getElementById('photos-grid');
+
+    if (!resources.length) {
+        grid.innerHTML = `
+            <div style="grid-column:1/-1;text-align:center;padding:3rem 0;">
+                <i class="fa fa-images fa-3x mb-3 d-block" style="color:#dde3ef;"></i>
+                <h5 class="text-muted">No photos yet</h5>
+                <p class="small text-muted">Upload photos to Cloudinary with the tag
+                   <strong>${currentAlbum.tag}</strong> and they'll appear here automatically.</p>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = resources.map((img, i) => `
+        <div class="photo-item" onclick="openLightbox(${i})">
+            <img src="${thumbUrl(img)}" alt="" loading="lazy">
+            <div class="photo-item-overlay">
+                <i class="fa fa-expand"></i>
+            </div>
+        </div>`
+    ).join('');
+}
+
+document.getElementById('back-btn').addEventListener('click', () => {
+    document.getElementById('view-photos').style.display = 'none';
+    document.getElementById('view-albums').style.display = '';
+    document.getElementById('breadcrumb-label').textContent = 'Gallery';
+    currentAlbum = null;
+    history.pushState({}, '', window.location.pathname);
+});
+
+function openLightbox(index) {
+    if (!currentAlbum?.resources?.length) return;
+    lbIndex = index;
+    document.getElementById('lightbox').classList.add('active');
+    document.getElementById('lb-album-name').textContent = currentAlbum.title;
+    renderLbThumbs();
+    showLbPhoto();
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.getElementById('lb-img').src = '';
+    document.body.style.overflow = '';
+}
+
+function showLbPhoto() {
+    const img  = currentAlbum.resources[lbIndex];
+    const el   = document.getElementById('lb-img');
+    el.style.opacity = '0';
+    el.src = fullUrl(img);
+    el.onload = () => { el.style.opacity = '1'; };
+    document.getElementById('lb-counter').textContent =
+        `${lbIndex + 1} / ${currentAlbum.resources.length}`;
+
+    document.querySelectorAll('.lb-thumb-item').forEach((t, i) => {
+        t.classList.toggle('active', i === lbIndex);
     });
-  }
+    const active = document.querySelector('.lb-thumb-item.active');
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
 
-  // 2. Install Modal Logic
-  let deferredPrompt;
-  const banner = document.getElementById('pwa-install-banner');
-  const overlay = document.getElementById('pwa-modal-overlay');
-  const installBtn = document.getElementById('pwa-install-btn');
-  const closeBtn = document.getElementById('pwa-close-btn');
-  const descText = document.getElementById('pwa-desc-text');
+function renderLbThumbs() {
+    document.getElementById('lb-thumbs').innerHTML =
+        currentAlbum.resources.map((img, i) => `
+            <img src="${thumbUrl(img)}"
+                 class="lb-thumb-item${i === lbIndex ? ' active' : ''}"
+                 onclick="lbIndex=${i};showLbPhoto();" loading="lazy">`
+        ).join('');
+}
 
-  function showPromptModal() {
-    overlay.style.display = 'block';
-    banner.style.display = 'flex';
-  }
+function lbPrev() { lbIndex = (lbIndex - 1 + currentAlbum.resources.length) % currentAlbum.resources.length; showLbPhoto(); }
+function lbNext() { lbIndex = (lbIndex + 1) % currentAlbum.resources.length; showLbPhoto(); }
 
-  function hidePromptModal() {
-    overlay.style.display = 'none';
-    banner.style.display = 'none';
-  }
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+document.getElementById('lb-prev').addEventListener('click', lbPrev);
+document.getElementById('lb-next').addEventListener('click', lbNext);
+document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'ArrowLeft')  lbPrev();
+    if (e.key === 'ArrowRight') lbNext();
+    if (e.key === 'Escape')     closeLightbox();
+});
 
-  // iOS Safari Check
-  const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-  const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
-
-  // Chrome / Android Trigger
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-
-    if (!localStorage.getItem('pwa_prompt_dismissed')) {
-      showPromptModal();
-    }
-  });
-
-  // Handle Install Action
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        hidePromptModal();
-      }
-      deferredPrompt = null;
-    }
-  });
-
-  // iOS Safari Guidance
-  if (isIos() && !isInStandaloneMode() && !localStorage.getItem('pwa_prompt_dismissed')) {
-    descText.innerHTML = 'Tap the <strong>Share</strong> button (<span style="font-size:16px;">⎋</span>) below, then select <strong>Add to Home Screen</strong>.';
-    installBtn.style.display = 'none';
-    showPromptModal();
-  }
-
-  // Dismiss Modal
-  closeBtn.addEventListener('click', () => {
-    hidePromptModal();
-    localStorage.setItem('pwa_prompt_dismissed', 'true');
-  });
-
-  overlay.addEventListener('click', () => {
-    hidePromptModal();
-  });
-
-  // Hide if already installed
-  window.addEventListener('appinstalled', () => {
-    hidePromptModal();
-    deferredPrompt = null;
-  });
+const urlParams = new URLSearchParams(window.location.search);
+const directAlbum = urlParams.get('album');
+if (directAlbum && ALBUMS.find(a => a.id === directAlbum)) {
+    document.getElementById('view-albums').style.display = 'none';
+    openAlbum(directAlbum);
+} else {
+    renderAlbums();
+}
 </script>
-<!-- Footer -->
 </body>
 </html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Maintenance — Indian Navy 1/97 Batch</title>
+    <meta name="description" content="The official website of the Indian Navy 1/97 Batch is currently undergoing scheduled maintenance. We will be back online shortly.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon & Theme -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+    <meta name="theme-color" content="#0B1E3D">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Saira:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Standalone Maintenance Styles -->
+    <style>
+        :root {
+            --primary: #1B3A6B;
+            --gold:    #C9A84C;
+            --dark:    #0B1E3D;
+            --light:   #F5F7FA;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Background pattern */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(27,58,107,.5) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(201,168,76,.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Anchor watermark */
+        body::after {
+            content: '\f13d';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: fixed;
+            font-size: 60vw;
+            color: rgba(255,255,255,.015);
+            bottom: -15vw;
+            right: -10vw;
+            pointer-events: none;
+            line-height: 1;
+        }
+
+        .card {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(201,168,76,.2);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            max-width: 540px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            margin: auto 0;
+        }
+
+        .logo {
+            margin-bottom: 1.5rem;
+        }
+        .logo-img {
+            max-height: 70px;
+            width: auto;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .divider {
+            width: 48px; height: 2px;
+            background: var(--gold);
+            margin: 1.5rem auto;
+            opacity: .5;
+        }
+
+        .gear-icon {
+            font-size: 3rem;
+            color: rgba(255,255,255,.15);
+            margin-bottom: 1.25rem;
+            display: block;
+            animation: spin 8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        h1 {
+            font-family: 'Saira', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: .75rem;
+        }
+
+        .subtitle {
+            font-size: .9rem;
+            color: rgba(255,255,255,.55);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .motto {
+            font-size: .82rem;
+            font-style: italic;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            padding: .75rem 1.25rem;
+            background: rgba(201,168,76,.07);
+            border-radius: 6px;
+            border-left: 3px solid var(--gold);
+            text-align: left;
+        }
+
+        /* Progress bar */
+        .progress-wrap {
+            margin-bottom: 2rem;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: .72rem;
+            color: rgba(255,255,255,.4);
+            margin-bottom: .4rem;
+        }
+        .progress-bar-bg {
+            height: 4px;
+            background: rgba(255,255,255,.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--gold));
+            border-radius: 2px;
+            width: 65%;
+            transition: width 1s ease;
+        }
+
+        /* Contact */
+        .contact-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            font-size: .8rem;
+            color: rgba(255,255,255,.4);
+            margin-bottom: .5rem;
+        }
+        .contact-row i { color: var(--gold); font-size: .75rem; }
+        .contact-row a { color: rgba(255,255,255,.5); text-decoration: none; }
+        .contact-row a:hover { color: var(--gold); }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: .72rem;
+            color: rgba(255,255,255,.2);
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 2rem 1.25rem; }
+            h1 { font-size: 1.3rem; }
+            .logo-img { max-height: 55px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <!-- Logo -->
+    <div class="logo">
+        <img src="icons/logo.png" alt="Indian Navy 1/97 Batch Veterans" class="logo-img">
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Gear icon -->
+    <i class="fa fa-cog gear-icon"></i>
+
+    <!-- Heading -->
+    <h1>Under Maintenance</h1>
+    <p class="subtitle">
+        We are making improvements to the website.<br>
+        The 1/97 Batch website will be back online shortly.<br>
+        Thank you for your patience, shipmate.
+    </p>
+
+    <!-- Motto -->
+    <div class="motto">
+        "Together in Service. Together for Life."
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-wrap">
+        <div class="progress-label">
+            <span>Work in progress</span>
+            <span>Almost there</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-row">
+        <i class="fa fa-envelope"></i>
+        <span>For urgent queries: </span>
+        <a href="mailto:contact@1of97navy.in">contact@1of97navy.in</a>
+    </div>
+    <div class="contact-row">
+        <i class="fab fa-whatsapp"></i>
+        <span>Batch WhatsApp group is active</span>
+    </div>
+
+    <div class="footer-note">
+        © Indian Navy 1/97 Batch &nbsp;·&nbsp;
+        Built by <a href="https://www.abhishekindia.com" target="_blank"
+            style="color:rgba(255,255,255,.3);text-decoration:none;">Abhishek Kumar</a>
+    </div>
+
+</div>
+
+</body>
+</html>
