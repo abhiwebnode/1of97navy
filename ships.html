@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ships &amp; Units — Indian Navy 1/97 Batch</title>
-    <meta name="description" content="Warships, submarines, aviation squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
+    <meta name="description" content="Warships, submarines, air squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
     <meta property="og:title" content="Ships &amp; Units — Indian Navy 1/97 Batch">
-    <meta property="og:description" content="Warships, submarines, aviation squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
+    <meta property="og:description" content="Warships, submarines, air squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
     <meta property="og:image" content="https://www.1of97navy.in/img/og-image.jpg">
     <meta property="og:locale" content="en_IN">
 
@@ -18,11 +18,93 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@1of97navy">
     <meta name="twitter:title" content="Ships &amp; Units — Indian Navy 1/97 Batch">
-    <meta name="twitter:description" content="Warships, submarines, aviation squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
+    <meta name="twitter:description" content="Warships, submarines, air squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
     <meta name="twitter:image" content="https://www.1of97navy.in/img/og-image.jpg">
 
     <!-- Consolidated Stylesheet -->
     <link href="css/all.css" rel="stylesheet">
+
+    <!-- Page-Specific Styles -->
+    <style>
+        .ship-filter-btn {
+            padding: .4rem 1rem;
+            border: 1.5px solid #dde3ef;
+            border-radius: 20px;
+            background: #fff;
+            font-size: .8rem;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            transition: .2s;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+        .ship-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .ship-filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        .ship-card {
+            background: #fff;
+            border-radius: 12px;
+            border-top: 3px solid var(--gold);
+            box-shadow: 0 4px 18px rgba(27,58,107,.07);
+            padding: 1.25rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: .3s;
+        }
+        .ship-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(27,58,107,.14); }
+
+        .ship-type-badge {
+            display: inline-block;
+            font-size: .65rem;
+            font-weight: 700;
+            padding: .2rem .55rem;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        .serve-btn {
+            border: 1.5px solid var(--gold);
+            background: transparent;
+            color: var(--dark);
+            border-radius: 8px;
+            padding: .45rem .8rem;
+            font-size: .78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            transition: .2s;
+            width: 100%;
+            justify-content: center;
+        }
+        .serve-btn:hover { background: var(--gold); color: #0B1D3A; }
+        .serve-btn.served {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .serve-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .served-count-badge {
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: .35rem;
+        }
+        .served-count-badge i { color: var(--gold); font-size: .85rem; }
+    </style>
 
     <!-- Global Head Injector -->
     <script src="js/header.js"></script>
@@ -53,15 +135,63 @@
     </div>
 </div>
 
-<!-- Content -->
-<div class="container py-5 my-3 text-center">
-    <i class="fa fa-ship fa-4x mb-4" style="color: var(--primary);"></i>
-    <h2 class="mb-3" style="color: var(--dark);">Ships &amp; Units</h2>
-    <p class="text-muted mb-4" style="max-width:520px;margin:0 auto;">Every ship, submarine, air squadron, and shore establishment where 1/97 Batch members served.</p>
-    <span class="badge px-3 py-2" style="background: var(--gold); color: var(--dark); font-size:.85rem;">Content coming soon — this page is under construction</span>
-    <div class="mt-4">
+<!-- Main Section -->
+<div class="container py-5">
+
+    <!-- Image Showcase Banner -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5 bg-white p-3 text-center">
+        <img src="./img/ship_served.png" alt="Ships and Units where 1/97 Batch members served" class="img-fluid rounded-3 mx-auto" style="max-height: 480px; object-fit: contain;">
+        <div class="p-3">
+            <h5 class="fw-bold mt-2" style="color: var(--dark);">Where 1/97 Batch Sailors Served Across the Fleet</h5>
+            <p class="text-muted small mb-0" style="max-width: 680px; margin: 0 auto;">
+                From the Western Seaboard to the Eastern Fleet, our shipmates formed the technical and operational backbone across Indian Navy warships, submarines, air stations, and shore commands.
+            </p>
+        </div>
+    </div>
+
+    <!-- Live Interactive Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="h4 fw-bold mb-1" style="color: var(--dark);">Vessels &amp; Establishments Directory</h2>
+            <p class="text-muted small mb-0">Click <strong>"I Served Here"</strong> on any vessel to mark your service and increment the batch count permanently.</p>
+        </div>
+        <div class="text-md-end">
+            <span class="hero-badge" style="border-color:var(--primary);color:var(--primary);">
+                <i class="fa fa-anchor me-1"></i> <span id="total-served-counter">0</span> Batch Deployments Recorded
+            </span>
+        </div>
+    </div>
+
+    <!-- Search and Category Filters -->
+    <div class="bg-white p-3 rounded-3 shadow-sm mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-12 col-md-5">
+                <div class="position-relative">
+                    <i class="fa fa-search" style="position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:#aaa;font-size:.85rem;"></i>
+                    <input type="text" class="form-control ps-5" id="ship-search" placeholder="Search INS Vikrant, Rajput, Chilka...">
+                </div>
+            </div>
+            <div class="col-12 col-md-7">
+                <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="category-filters">
+                    <button class="ship-filter-btn active" data-filter="all">All</button>
+                    <button class="ship-filter-btn" data-filter="Carrier">Carriers</button>
+                    <button class="ship-filter-btn" data-filter="Destroyer">Destroyers</button>
+                    <button class="ship-filter-btn" data-filter="Frigate">Frigates</button>
+                    <button class="ship-filter-btn" data-filter="Corvette">Corvettes</button>
+                    <button class="ship-filter-btn" data-filter="Submarine">Submarines</button>
+                    <button class="ship-filter-btn" data-filter="Amphibious">Amphibious</button>
+                    <button class="ship-filter-btn" data-filter="Establishment">Shore Base</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ships Grid -->
+    <div class="row g-4" id="ships-grid"></div>
+
+    <div class="text-center mt-5">
         <a href="about.html" class="btn btn-outline-primary py-2 px-4 me-2">← Back to About</a>
-        <a href="index.html" class="btn btn-outline-primary py-2 px-4">Home</a>
+        <a href="directory.html" class="btn btn-primary py-2 px-4">Find Shipmates</a>
     </div>
 </div>
 
@@ -78,5 +208,218 @@
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
 
+<script>
+// ── App Script Web App URL ─────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+// ── Fleet & Unit Data ───────────────────────────────────────────────────
+const SHIPS_DATA = [
+    // Aircraft Carriers
+    { id: 'viraat', name: 'INS Viraat (R22)', type: 'Carrier', icon: 'fa-ship' },
+    { id: 'vikramaditya', name: 'INS Vikramaditya (R33)', type: 'Carrier', icon: 'fa-ship' },
+    { id: 'vikrant_r11', name: 'INS Vikrant (R11)', type: 'Carrier', icon: 'fa-ship' },
+
+    // Destroyers
+    { id: 'delhi', name: 'INS Delhi (D61)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'mysore', name: 'INS Mysore (D60)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'mumbai', name: 'INS Mumbai (D62)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'rajput', name: 'INS Rajput (D51)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'rana', name: 'INS Rana (D52)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'ranvir', name: 'INS Ranvir (D54)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'ranvijay', name: 'INS Ranvijay (D55)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'kolkata', name: 'INS Kolkata (D63)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'kochi', name: 'INS Kochi (D64)', type: 'Destroyer', icon: 'fa-ship' },
+
+    // Frigates
+    { id: 'talwar', name: 'INS Talwar (F40)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'trishul', name: 'INS Trishul (F43)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tabar', name: 'INS Tabar (F44)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'shivalik', name: 'INS Shivalik (F47)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'satpura', name: 'INS Satpura (F48)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'sahyadri', name: 'INS Sahyadri (F49)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'godavari', name: 'INS Godavari (F20)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'gomati', name: 'INS Gomati (F21)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'ganga', name: 'INS Ganga (F22)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'brahmaputra', name: 'INS Brahmaputra (F31)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'betwa', name: 'INS Betwa (F39)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'beas', name: 'INS Beas (F37)', type: 'Frigate', icon: 'fa-ship' },
+
+    // Corvettes & Patrol Vessels
+    { id: 'kora', name: 'INS Kora (P61)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kirch', name: 'INS Kirch (P62)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kulish', name: 'INS Kulish (P63)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'karmuk', name: 'INS Karmuk (P64)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'khukri', name: 'INS Khukri (P49)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kuthar', name: 'INS Kuthar (P46)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'sukanya', name: 'INS Sukanya (P54)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'subhadra', name: 'INS Subhadra (P51)', type: 'Corvette', icon: 'fa-ship' },
+
+    // Submarines
+    { id: 'sindhughosh', name: 'INS Sindhughosh (S55)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhuraj', name: 'INS Sindhuraj (S57)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhuratna', name: 'INS Sindhuratna (S59)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhukesari', name: 'INS Sindhukesari (S60)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'shishumar', name: 'INS Shishumar (S44)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'shankush', name: 'INS Shankush (S45)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'arihant', name: 'INS Arihant (S2)', type: 'Submarine', icon: 'fa-water' },
+
+    // Amphibious & Fleet Tankers
+    { id: 'jalashwa', name: 'INS Jalashwa (L41)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'magar', name: 'INS Magar (L20)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'gharial', name: 'INS Gharial (L23)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'jyoti', name: 'INS Jyoti (A58)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'aditya', name: 'INS Aditya (A59)', type: 'Amphibious', icon: 'fa-ship' },
+
+    // Shore Establishments & Training Bases
+    { id: 'chilka', name: 'INS Chilka (Initial Training)', type: 'Establishment', icon: 'fa-graduation-cap' },
+    { id: 'valsura', name: 'INS Valsura (Electrical)', type: 'Establishment', icon: 'fa-bolt' },
+    { id: 'shivaji', name: 'INS Shivaji (Engineering)', type: 'Establishment', icon: 'fa-cogs' },
+    { id: 'dronacharya', name: 'INS Dronacharya (Gunnery)', type: 'Establishment', icon: 'fa-crosshairs' },
+    { id: 'hamla', name: 'INS Hamla (Logistics)', type: 'Establishment', icon: 'fa-boxes' },
+    { id: 'venduruthy', name: 'INS Venduruthy (Kochi Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'angre', name: 'INS Angre (Western HQ)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'circars', name: 'INS Circars (Eastern HQ)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'garuda', name: 'INS Garuda (Naval Aviation)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'hansa', name: 'INS Hansa (Goa Air Station)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'kadamba', name: 'INS Kadamba (Karwar Base)', type: 'Establishment', icon: 'fa-shield-alt' }
+];
+
+// ── Live State ────────────────────────────────────────────────────────
+let serverCounts = {};
+let userServed = JSON.parse(localStorage.getItem('navy_user_served_ships') || '{}');
+let updatingShip = null;
+
+async function fetchCounts() {
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec') {
+        renderShips();
+        return;
+    }
+    try {
+        const res = await fetch(APPS_SCRIPT_URL);
+        serverCounts = await res.json();
+    } catch (err) {
+        console.error('Failed to load live counts:', err);
+    }
+    renderShips();
+}
+
+async function toggleServe(shipId) {
+    if (updatingShip) return;
+    updatingShip = shipId;
+    renderShips();
+
+    const isCurrentlyServed = !!userServed[shipId];
+    const action = isCurrentlyServed ? 'remove' : 'add';
+
+    // Optimistic UI update
+    if (isCurrentlyServed) {
+        delete userServed[shipId];
+        serverCounts[shipId] = Math.max(0, (serverCounts[shipId] || 1) - 1);
+    } else {
+        userServed[shipId] = true;
+        serverCounts[shipId] = (serverCounts[shipId] || 0) + 1;
+    }
+    localStorage.setItem('navy_user_served_ships', JSON.stringify(userServed));
+    renderShips();
+
+    // Sync with Google Sheets
+    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+        try {
+            await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shipId: shipId, action: action })
+            });
+        } catch (err) {
+            console.error('Failed to sync with Google Sheet:', err);
+        }
+    }
+
+    updatingShip = null;
+    renderShips();
+}
+
+function getCount(shipId) {
+    return serverCounts[shipId] || 0;
+}
+
+function updateTotalCounter() {
+    const total = SHIPS_DATA.reduce((acc, ship) => acc + getCount(ship.id), 0);
+    document.getElementById('total-served-counter').textContent = total.toLocaleString();
+}
+
+function renderShips() {
+    const grid = document.getElementById('ships-grid');
+    const query = document.getElementById('ship-search').value.toLowerCase().trim();
+    const activeFilter = document.querySelector('.ship-filter-btn.active').dataset.filter;
+
+    const filtered = SHIPS_DATA.filter(ship => {
+        const matchesQuery = !query || ship.name.toLowerCase().includes(query) || ship.type.toLowerCase().includes(query);
+        const matchesFilter = activeFilter === 'all' || ship.type === activeFilter;
+        return matchesQuery && matchesFilter;
+    });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="fa fa-ship fa-3x mb-3 text-muted"></i>
+                <h5 class="text-muted">No ships or establishments match your search</h5>
+            </div>`;
+        updateTotalCounter();
+        return;
+    }
+
+    grid.innerHTML = filtered.map(ship => {
+        const hasServed = !!userServed[ship.id];
+        const count = getCount(ship.id);
+        const isBusy = updatingShip === ship.id;
+        const btnClass = hasServed ? 'serve-btn served' : 'serve-btn';
+        const btnText = isBusy 
+            ? '<i class="fa fa-spinner fa-spin"></i> Updating...' 
+            : (hasServed ? '<i class="fa fa-check"></i> I Served Here' : '<i class="fa fa-plus"></i> I Served Here');
+
+        return `
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <div class="ship-card">
+                <div>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="ship-type-badge">${ship.type}</span>
+                        <div class="served-count-badge">
+                            <i class="fa fa-users"></i>
+                            <span>${count}</span>
+                        </div>
+                    </div>
+                    <h5 class="fw-bold mb-1" style="color:var(--dark); font-size:1.05rem;">${ship.name}</h5>
+                    <div class="small text-muted mb-3">
+                        <i class="fa ${ship.icon} me-1" style="color:var(--gold);"></i>
+                        ${count === 1 ? '1 batchmate served' : `${count} batchmates served`}
+                    </div>
+                </div>
+                <div>
+                    <button class="${btnClass}" onclick="toggleServe('${ship.id}')" ${isBusy ? 'disabled' : ''}>
+                        ${btnText}
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    updateTotalCounter();
+}
+
+// ── Event Listeners ───────────────────────────────────────────────────
+document.getElementById('ship-search').addEventListener('input', renderShips);
+
+document.querySelectorAll('.ship-filter-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.ship-filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        renderShips();
+    });
+});
+
+fetchCounts();
+</script>
 </body>
 </html>
