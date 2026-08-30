@@ -209,8 +209,8 @@
 <script src="js/main.js"></script>
 
 <script>
-// ── App Script Web App URL ─────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+// Paste your Web App URL here
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec';
 
 // ── Fleet & Unit Data ───────────────────────────────────────────────────
 const SHIPS_DATA = [
@@ -284,13 +284,13 @@ const SHIPS_DATA = [
     { id: 'kadamba', name: 'INS Kadamba (Karwar Base)', type: 'Establishment', icon: 'fa-shield-alt' }
 ];
 
-// ── Live State ────────────────────────────────────────────────────────
+// ── State Management ──────────────────────────────────────────────────
 let serverCounts = {};
 let userServed = JSON.parse(localStorage.getItem('navy_user_served_ships') || '{}');
 let updatingShip = null;
 
 async function fetchCounts() {
-    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec') {
+    if (!APPS_SCRIPT_URL) {
         renderShips();
         return;
     }
@@ -298,7 +298,7 @@ async function fetchCounts() {
         const res = await fetch(APPS_SCRIPT_URL);
         serverCounts = await res.json();
     } catch (err) {
-        console.error('Failed to load live counts:', err);
+        console.error('Failed to load counts:', err);
     }
     renderShips();
 }
@@ -322,17 +322,13 @@ async function toggleServe(shipId) {
     localStorage.setItem('navy_user_served_ships', JSON.stringify(userServed));
     renderShips();
 
-    // Sync with Google Sheets
-    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    // Trigger update in Google Sheets
+    if (APPS_SCRIPT_URL) {
         try {
-            await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ shipId: shipId, action: action })
-            });
+            const url = `${APPS_SCRIPT_URL}?shipId=${encodeURIComponent(shipId)}&action=${action}`;
+            await fetch(url, { mode: 'no-cors' });
         } catch (err) {
-            console.error('Failed to sync with Google Sheet:', err);
+            console.error('Failed to sync with Google Sheets:', err);
         }
     }
 
