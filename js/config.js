@@ -20,7 +20,7 @@ var SITE_CONFIG = {
     // ── Site Info ────────────────────────────────────────────────────
     siteName:    '1/97 Batch',
     siteTagline: 'Indian Navy Veterans',
-    siteUrl:     'https://www.1of97navy.in',
+    siteUrl:     'https://1of97navy.in',
     email:       'contact@1of97navy.in',
     motto:       'Together in Service. Together for Life.',
 

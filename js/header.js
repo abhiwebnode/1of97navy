@@ -4,6 +4,20 @@
 // ════════════════════════════════════════════════════════════════════
 
 (function () {
+
+    // ── Force non-www domain ─────────────────────────────────────────
+    // Safety net: redirect www requests to the canonical non-www domain.
+    // The server/.htaccess redirect should still be used when available.
+    if (window.location.hostname === 'www.1of97navy.in') {
+        window.location.replace(
+            'https://1of97navy.in' +
+            window.location.pathname +
+            window.location.search +
+            window.location.hash
+        );
+        return;
+    }
+
     var head = document.head;
 
     function meta(attrs) {
