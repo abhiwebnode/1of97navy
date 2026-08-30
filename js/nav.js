@@ -78,7 +78,7 @@ var html = '\
                     <a href="#" class="nav-link dropdown-toggle' + activeClass('members') + '" data-bs-toggle="dropdown">Members</a>\
                     <div class="dropdown-menu m-0">\
                         <a href="/directory.html" class="dropdown-item">Member Directory</a>\
-                        <a href="/directory.html" class="dropdown-item">Find a Shipmate</a>\
+                        <a href="/shipmates.html" class="dropdown-item">Find a Shipmate</a>\
                         <a href="/profile.html"   class="dropdown-item">My Profile</a>\
                     </div>\
                 </div>\
