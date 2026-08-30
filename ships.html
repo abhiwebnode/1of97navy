@@ -152,8 +152,8 @@
     <!-- Live Interactive Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
         <div>
-            <h2 class="h4 fw-bold mb-1" style="color: var(--dark);">Ships &amp; Establishments Directory</h2>
-            <p class="text-muted small mb-0">Click <strong>"I Served Here"</strong> on any Ships, Establishments to mark your service and increment the batch count permanently.</p>
+            <h2 class="h4 fw-bold mb-1" style="color: var(--dark);">Vessels &amp; Establishments Directory</h2>
+            <p class="text-muted small mb-0">Click <strong>"I Served Here"</strong> on any vessel to mark your service and increment the batch count permanently.</p>
         </div>
         <div class="text-md-end">
             <span class="hero-badge" style="border-color:var(--primary);color:var(--primary);">
@@ -165,13 +165,13 @@
     <!-- Search and Category Filters -->
     <div class="bg-white p-3 rounded-3 shadow-sm mb-4">
         <div class="row g-3 align-items-center">
-            <div class="col-12 col-md-5">
+            <div class="col-12 col-md-4">
                 <div class="position-relative">
                     <i class="fa fa-search" style="position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:#aaa;font-size:.85rem;"></i>
                     <input type="text" class="form-control ps-5" id="ship-search" placeholder="Search INS Vikrant, Rajput, Chilka...">
                 </div>
             </div>
-            <div class="col-12 col-md-7">
+            <div class="col-12 col-md-8">
                 <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="category-filters">
                     <button class="ship-filter-btn active" data-filter="all">All</button>
                     <button class="ship-filter-btn" data-filter="Carrier">Carriers</button>
@@ -180,6 +180,7 @@
                     <button class="ship-filter-btn" data-filter="Corvette">Corvettes</button>
                     <button class="ship-filter-btn" data-filter="Submarine">Submarines</button>
                     <button class="ship-filter-btn" data-filter="Amphibious">Amphibious</button>
+                    <button class="ship-filter-btn" data-filter="Coast Guard Ship">Coast Guard</button>
                     <button class="ship-filter-btn" data-filter="Establishment">Shore Base</button>
                 </div>
             </div>
@@ -209,7 +210,7 @@
 <script src="js/main.js"></script>
 
 <script>
-
+// Paste your Web App URL here
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec';
 
 // ── Fleet & Unit Data ───────────────────────────────────────────────────
@@ -270,6 +271,9 @@ const SHIPS_DATA = [
     { id: 'jyoti', name: 'INS Jyoti (A58)', type: 'Amphibious', icon: 'fa-ship' },
     { id: 'aditya', name: 'INS Aditya (A59)', type: 'Amphibious', icon: 'fa-ship' },
 
+    // Coast Guard Ships
+    { id: 'bhikajicama', name: 'CGS Bhikaji Cama', type: 'Coast Guard Ship', icon: 'fa-ship' },
+
     // Shore Establishments & Training Bases
     { id: 'chilka', name: 'INS Chilka (Initial Training)', type: 'Establishment', icon: 'fa-graduation-cap' },
     { id: 'valsura', name: 'INS Valsura (Electrical)', type: 'Establishment', icon: 'fa-bolt' },
@@ -280,10 +284,13 @@ const SHIPS_DATA = [
     { id: 'angre', name: 'INS Angre (Western HQ)', type: 'Establishment', icon: 'fa-anchor' },
     { id: 'circars', name: 'INS Circars (Eastern HQ)', type: 'Establishment', icon: 'fa-anchor' },
     { id: 'garuda', name: 'INS Garuda (Naval Aviation)', type: 'Establishment', icon: 'fa-plane' },
-    { id: 'hansa', name: 'INS Hansa (Goa Air Station)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'hansa', name: 'INS Hansa (Air Station)', type: 'Establishment', icon: 'fa-plane' },
+	{ id: 'dega', name: 'INS Dega (Air Station)', type: 'Establishment', icon: 'fa-plane' },
+	{ id: 'rajali', name: 'INS Rajali (Air Station)', type: 'Establishment', icon: 'fa-plane' },
+	{ id: 'utkrosh', name: 'INS Utkrosh (Air Station)', type: 'Establishment', icon: 'fa-plane' },
+	{ id: 'perandu', name: 'INS Perandu (Air Station)', type: 'Establishment', icon: 'fa-plane' },
+	{ id: 'shikra', name: 'INS Shikra (Air Station)', type: 'Establishment', icon: 'fa-plane' },
     { id: 'kadamba', name: 'INS Kadamba (Karwar Base)', type: 'Establishment', icon: 'fa-shield-alt' }
-	
-	
 ];
 
 // ── State Management ──────────────────────────────────────────────────
