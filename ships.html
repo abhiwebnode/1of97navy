@@ -290,7 +290,181 @@ const SHIPS_DATA = [
 	{ id: 'utkrosh', name: 'INS Utkrosh (Air Station)', type: 'Establishment', icon: 'fa-plane' },
 	{ id: 'perandu', name: 'INS Perandu (Air Station)', type: 'Establishment', icon: 'fa-plane' },
 	{ id: 'shikra', name: 'INS Shikra (Air Station)', type: 'Establishment', icon: 'fa-plane' },
-    { id: 'kadamba', name: 'INS Kadamba (Karwar Base)', type: 'Establishment', icon: 'fa-shield-alt' }
+    { id: 'kadamba', name: 'INS Kadamba (Karwar Base)', type: 'Establishment', icon: 'fa-shield-alt' },
+	
+	    // Additional Destroyers
+    { id: 'chennai', name: 'INS Chennai (D65)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'visakhapatnam', name: 'INS Visakhapatnam (D66)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'mormugao', name: 'INS Mormugao (D67)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'imphal', name: 'INS Imphal (D68)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'surat', name: 'INS Surat (D69)', type: 'Destroyer', icon: 'fa-ship' },
+
+    // Additional Frigates
+    { id: 'teg', name: 'INS Teg (F45)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tarkash', name: 'INS Tarkash (F50)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'trikand', name: 'INS Trikand (F51)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tushil', name: 'INS Tushil (F70)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tamal', name: 'INS Tamal (F71)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'nilgiri', name: 'INS Nilgiri (F33)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'himgiri', name: 'INS Himgiri (F34)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'udaygiri', name: 'INS Udaygiri (F35)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'taragiri', name: 'INS Taragiri (F41)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'dunagiri', name: 'INS Dunagiri (F36)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'mahendragiri', name: 'INS Mahendragiri (F38)', type: 'Frigate', icon: 'fa-ship' },
+
+    // Additional Corvettes
+    { id: 'kamorta', name: 'INS Kamorta (P28)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kadmatt', name: 'INS Kadmatt (P29)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kiltan', name: 'INS Kiltan (P30)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kavaratti', name: 'INS Kavaratti (P31)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'khanjar', name: 'INS Khanjar (P47)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vibhuti', name: 'INS Vibhuti (K45)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vipul', name: 'INS Vipul (K46)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vinash', name: 'INS Vinash (K47)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vidyut', name: 'INS Vidyut (K48)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'nashak', name: 'INS Nashak (K83)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'pralaya', name: 'INS Pralaya (K91)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'prabal', name: 'INS Prabal (K92)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'arnala', name: 'INS Arnala (P68)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'androth', name: 'INS Androth (P69)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'anjadip', name: 'INS Anjadip (P73)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'agray', name: 'INS Agray (P36)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'mahe', name: 'INS Mahe (P80)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'malwan', name: 'INS Malwan (P81)', type: 'Corvette', icon: 'fa-ship' },
+
+    // Additional Submarines
+    { id: 'arighaat', name: 'INS Arighaat (S3)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'aridhaman', name: 'INS Aridhaman (S4)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'kalvari', name: 'INS Kalvari (S21)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'khanderi', name: 'INS Khanderi (S22)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'karanj', name: 'INS Karanj (S23)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'vela', name: 'INS Vela (S24)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'vagir', name: 'INS Vagir (S25)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'vagsheer', name: 'INS Vagsheer (S26)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhukirti', name: 'INS Sindhukirti (S61)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhuvijay', name: 'INS Sindhuvijay (S62)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhurashtra', name: 'INS Sindhurashtra (S65)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'shalki', name: 'INS Shalki (S46)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'shankul', name: 'INS Shankul (S47)', type: 'Submarine', icon: 'fa-water' },
+
+    // Additional Amphibious Ships
+    { id: 'shardul', name: 'INS Shardul (L16)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'kesari', name: 'INS Kesari (L15)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'airavat', name: 'INS Airavat (L24)', type: 'Amphibious', icon: 'fa-ship' },
+
+    // Additional Landing Craft
+    { id: 'lcu51', name: 'INS LCU 51 (L51)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu52', name: 'INS LCU 52 (L52)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu53', name: 'INS LCU 53 (L53)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu54', name: 'INS LCU 54 (L54)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu55', name: 'INS LCU 55 (L55)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu56', name: 'INS LCU 56 (L56)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu57', name: 'INS LCU 57 (L57)', type: 'Landing Craft', icon: 'fa-ship' },
+    { id: 'lcu58', name: 'INS LCU 58 (L58)', type: 'Landing Craft', icon: 'fa-ship' },
+
+    // Additional Offshore Patrol Vessels
+    { id: 'saryu', name: 'INS Saryu (P54)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'sunayna', name: 'INS Sunayna (P57)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'sumedha', name: 'INS Sumedha (P58)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'sumitra', name: 'INS Sumitra (P59)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'suvarna', name: 'INS Suvarna (P52)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'savitri', name: 'INS Savitri (P53)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'sharda', name: 'INS Sharda (P55)', type: 'Patrol Vessel', icon: 'fa-ship' },
+    { id: 'sujata', name: 'INS Sujata (P56)', type: 'Patrol Vessel', icon: 'fa-ship' },
+
+    // Additional Fleet Tankers / Replenishment Ships
+    { id: 'deepak', name: 'INS Deepak (A50)', type: 'Fleet Tanker', icon: 'fa-ship' },
+    { id: 'shakti', name: 'INS Shakti (A57)', type: 'Fleet Tanker', icon: 'fa-ship' },
+
+    // Instrumentation & Research Ships
+    { id: 'anvesh', name: 'INS Anvesh (A41)', type: 'Instrumentation', icon: 'fa-ship' },
+    { id: 'dhruv', name: 'INS Dhruv (A40)', type: 'Instrumentation', icon: 'fa-ship' },
+    { id: 'sagardhwani', name: 'INS Sagardhwani (A74)', type: 'Research Vessel', icon: 'fa-ship' },
+
+    // Survey Ships
+    { id: 'sandhayak', name: 'INS Sandhayak (J18)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'nirdeshak', name: 'INS Nirdeshak (J19)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'ikshak', name: 'INS Ikshak (J23)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'sanshodhak', name: 'INS Sanshodhak (J24)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'makar', name: 'INS Makar (J31)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'investigator', name: 'INS Investigator (J15)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'jamuna', name: 'INS Jamuna (J16)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'sutlej', name: 'INS Sutlej (J17)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'darshak', name: 'INS Darshak (J21)', type: 'Survey Ship', icon: 'fa-ship' },
+    { id: 'sarvekshak', name: 'INS Sarvekshak (J22)', type: 'Survey Ship', icon: 'fa-ship' },
+
+    // Diving / Support Ships
+    { id: 'nireekshak', name: 'INS Nireekshak (A15)', type: 'Support Vessel', icon: 'fa-ship' },
+    { id: 'nistar', name: 'INS Nistar (A16)', type: 'Support Vessel', icon: 'fa-ship' },
+    { id: 'nipun', name: 'INS Nipun (A17)', type: 'Support Vessel', icon: 'fa-ship' },
+
+    // Training Ships
+    { id: 'tir', name: 'INS Tir (A86)', type: 'Training Ship', icon: 'fa-graduation-cap' },
+    { id: 'tarangini', name: 'INS Tarangini (A75)', type: 'Training Ship', icon: 'fa-graduation-cap' },
+    { id: 'sudarshini', name: 'INS Sudarshini (A77)', type: 'Training Ship', icon: 'fa-graduation-cap' },
+    { id: 'varuna', name: 'INS Varuna', type: 'Training Ship', icon: 'fa-graduation-cap' },
+    { id: 'mhadei', name: 'INSV Mhadei (A76)', type: 'Training Ship', icon: 'fa-sailboat' },
+    { id: 'tarini', name: 'INSV Tarini', type: 'Training Ship', icon: 'fa-sailboat' },
+
+    // Naval Air / Auxiliary
+    { id: 'kaundinya', name: 'INSV Kaundinya', type: 'Sailing Vessel', icon: 'fa-sailboat' },
+	
+	    // Additional Shore Establishments
+    { id: 'india', name: 'INS India (Naval Headquarters)', type: 'Establishment', icon: 'fa-building' },
+    { id: 'aravali', name: 'INS Aravali (Maritime Information Centre)', type: 'Establishment', icon: 'fa-broadcast-tower' },
+
+    // Western Naval Command
+    { id: 'dwarka', name: 'INS Dwarka (Naval Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'sardarpatel', name: 'INS Sardar Patel (Porbandar)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'abhimanyu', name: 'INS Abhimanyu (MARCOS Base)', type: 'Establishment', icon: 'fa-shield-alt' },
+    { id: 'agnibahu', name: 'INS Agnibahu (Missile Boat Base)', type: 'Establishment', icon: 'fa-ship' },
+    { id: 'tanaji', name: 'INS Tanaji (Ammunition Depot)', type: 'Establishment', icon: 'fa-boxes' },
+    { id: 'trata', name: 'INS Trata (Coastal Missile Defence)', type: 'Establishment', icon: 'fa-crosshairs' },
+    { id: 'tunir', name: 'INS Tunir (Missile Depot)', type: 'Establishment', icon: 'fa-boxes' },
+    { id: 'vajrabahu', name: 'INS Vajrabahu (Submarine Base)', type: 'Establishment', icon: 'fa-water' },
+    { id: 'gomantak', name: 'INS Gomantak (Goa Naval Area)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'vajrakosh', name: 'INS Vajrakosh (Ammunition & Missile Depot)', type: 'Establishment', icon: 'fa-boxes' },
+
+    // Southern Naval Command
+    { id: 'dweeprakshak', name: 'INS Dweeprakshak (Kavaratti)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'jatayu', name: 'INS Jatayu (Minicoy Forward Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'garuda_snc', name: 'INS Garuda (Naval Air Station)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'zamorin', name: 'INS Zamorin (Ezhimala)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'mandovi', name: 'INS Mandovi (Provost & Physical Training)', type: 'Establishment', icon: 'fa-graduation-cap' },
+    { id: 'agrani', name: 'INS Agrani (Leadership Training)', type: 'Establishment', icon: 'fa-graduation-cap' },
+
+    // Eastern Naval Command
+    { id: 'satavahana', name: 'INS Satavahana (Submarine Warfare Training)', type: 'Establishment', icon: 'fa-water' },
+    { id: 'vishwakarma', name: 'INS Vishwakarma (Shipwright School)', type: 'Establishment', icon: 'fa-cogs' },
+    { id: 'virbahu', name: 'INS Virbahu (Submarine Base)', type: 'Establishment', icon: 'fa-water' },
+    { id: 'kalinga', name: 'INS Kalinga (Missile Depot)', type: 'Establishment', icon: 'fa-boxes' },
+    { id: 'eksila', name: 'INS Eksila (Marine Gas Turbine Maintenance)', type: 'Establishment', icon: 'fa-cogs' },
+    { id: 'karna', name: 'INS Karna (MARCOS Garrison)', type: 'Establishment', icon: 'fa-shield-alt' },
+    { id: 'varsha', name: 'INS Varsha (Submarine Base)', type: 'Establishment', icon: 'fa-water' },
+    { id: 'badangi', name: 'INS Badangi (Naval Air Station)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'pudur', name: 'INS Pudur (Submarine VLF Facility)', type: 'Establishment', icon: 'fa-broadcast-tower' },
+    { id: 'adyar', name: 'INS Adyar (Chennai Naval Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'kattabomman', name: 'INS Kattabomman (VLF/ELF Facility)', type: 'Establishment', icon: 'fa-broadcast-tower' },
+    { id: 'thoothukudi', name: 'INS Thoothukudi (Naval Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'netajisubhas', name: 'INS Netaji Subhas (Kolkata)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'haldia', name: 'INS Haldia (Naval Base)', type: 'Establishment', icon: 'fa-anchor' },
+
+    // Andaman & Nicobar Command
+    { id: 'kardip', name: 'INS Kardip (Forward Operating Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'jarawa', name: 'INS Jarawa (Naval Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'baaz', name: 'INS Baaz (Naval Air Station)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'campbellbay', name: 'INS Campbell Bay (Forward Operating Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'kohassa', name: 'INS Kohassa (Naval Air Station)', type: 'Establishment', icon: 'fa-plane' },
+
+    // Naval Air Enclaves / Detachments
+    { id: 'nae_porbandar', name: 'NAE Porbandar (Naval Air Enclave)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'nae_santacruz', name: 'NAE Santa Cruz (Naval Air Enclave)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'nae_kochi', name: 'NAE Kochi (Naval Air Enclave)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'nae_chennai', name: 'NAE Chennai (Naval Air Enclave)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'nae_bhubaneswar', name: 'NAE Bhubaneswar (Naval Air Enclave)', type: 'Establishment', icon: 'fa-plane' },
+    { id: 'navdet_androth', name: 'NavDet Androth (Naval Detachment)', type: 'Establishment', icon: 'fa-radar' },
+    { id: 'navdet_bitra', name: 'NavDet Bitra (Forward Operating Base)', type: 'Establishment', icon: 'fa-anchor' },
+    { id: 'navdet_paradip', name: 'NavDet Paradip (Forward Operating Base)', type: 'Establishment', icon: 'fa-anchor' }
 ];
 
 // ── State Management ──────────────────────────────────────────────────
