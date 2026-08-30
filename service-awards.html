@@ -122,6 +122,74 @@
             border-radius: 10px;
             font-weight: 700;
         }
+
+        /* ── Person-grouped card ── */
+        .person-card {
+            background: #fff;
+            border-radius: 10px;
+            border-top: 3px solid var(--gold);
+            box-shadow: 0 2px 16px rgba(27,58,107,.07);
+            padding: 1.25rem;
+            height: 100%;
+            transition: .3s;
+        }
+        .person-card:hover { box-shadow: 0 6px 24px rgba(27,58,107,.13); }
+
+        .person-header {
+            display: flex;
+            align-items: flex-start;
+            gap: .85rem;
+            margin-bottom: .85rem;
+            padding-bottom: .75rem;
+            border-bottom: 1px solid #f0f3fa;
+        }
+        .person-name  { font-weight: 700; font-size: .95rem; color: var(--dark); line-height: 1.3; }
+        .person-rank  { font-size: .75rem; color: var(--primary); font-weight: 600; }
+        .person-trade { font-size: .72rem; color: #888; }
+
+        .award-line {
+            display: flex;
+            align-items: flex-start;
+            gap: .5rem;
+            padding: .35rem 0;
+            border-bottom: 1px dashed #f0f3fa;
+        }
+        .award-line:last-child { border-bottom: none; padding-bottom: 0; }
+        .award-line-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--gold);
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .award-line-name {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+        .award-line-meta {
+            font-size: .72rem;
+            color: #888;
+            margin-top: .1rem;
+        }
+        .award-line-citation {
+            font-size: .72rem;
+            color: #aaa;
+            font-style: italic;
+            margin-top: .1rem;
+        }
+        .award-count-pill {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            font-size: .65rem;
+            font-weight: 700;
+            padding: .1rem .45rem;
+            border-radius: 8px;
+            margin-left: .4rem;
+            vertical-align: middle;
+        }
     </style>
 
     <!-- Global Head Injector -->
@@ -176,8 +244,8 @@
         </div>
         <div class="col-6 col-md-3">
             <div class="text-center p-3 rounded" style="background:var(--primary);">
-                <div id="stat-avsm" style="font-family:'Saira',sans-serif;font-size:2rem;font-weight:700;color:var(--gold);">0</div>
-                <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.7);">AVSM</div>
+                <div id="stat-recipients" style="font-family:'Saira',sans-serif;font-size:2rem;font-weight:700;color:var(--gold);">0</div>
+                <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.7);">Recipients</div>
             </div>
         </div>
         <div class="col-6 col-md-3">
@@ -351,11 +419,11 @@ function convertDriveUrl(url) {
 }
 
 function updateStats() {
-    const avsm = allAwards.filter(a => a.award === 'Ati Vishisht Seva Medal').length;
+    const recipients = new Set(allAwards.map(a => a.name.trim().toLowerCase())).size;
     const nsm  = allAwards.filter(a => a.award === 'Nau Sena Medal').length;
     const comm = allAwards.filter(a => a.award.includes('Commendation')).length;
     document.getElementById('stat-total').textContent        = allAwards.length;
-    document.getElementById('stat-avsm').textContent         = avsm;
+    document.getElementById('stat-recipients').textContent   = recipients;
     document.getElementById('stat-nsm').textContent          = nsm;
     document.getElementById('stat-commendations').textContent = comm;
 }
@@ -366,77 +434,116 @@ function getBadgeInfo(awardName) {
 }
 
 function render() {
-    const grid = document.getElementById('awards-grid');
-    const info = document.getElementById('results-count');
+    const grid        = document.getElementById('awards-grid');
+    const info        = document.getElementById('results-count');
     const filterLabel = document.getElementById('active-filter-label');
 
+    // ── Filter by selected award tab ──────────────────────────────────
     const filtered = activeAward === 'all'
         ? [...allAwards]
         : allAwards.filter(a => a.award === activeAward);
-
-    info.textContent = filtered.length;
-    filterLabel.textContent = activeAward === 'all' ? '' : ` · ${activeAward}`;
 
     if (filtered.length === 0) {
         grid.innerHTML = `<div class="col-12 text-center py-5">
             <i class="fa fa-search fa-3x mb-3 d-block" style="color:#dde3ef;"></i>
             <h5 class="text-muted">No awards found</h5></div>`;
+        info.textContent = '0';
+        filterLabel.textContent = activeAward === 'all' ? '' : ` · ${activeAward}`;
         return;
     }
 
-    const ordered = activeAward === 'all'
-        ? AWARD_ORDER.map(a => a.name)
-        : [activeAward];
+    // ── Group by person (name + rank as key) ──────────────────────────
+    const personMap = new Map();
+    filtered.forEach(a => {
+        const key = a.name.trim().toLowerCase();
+        if (!personMap.has(key)) {
+            personMap.set(key, {
+                name:  a.name,
+                rank:  a.rank,
+                trade: a.trade,
+                photo: a.photo,
+                awards: []
+            });
+        }
+        personMap.get(key).awards.push({
+            award:       a.award,
+            year:        a.year,
+            presentedBy: a.presentedBy,
+            citation:    a.citation
+        });
+    });
 
-    const knownAwards = new Set(AWARD_ORDER.map(a => a.name));
-    const extraAwards = [...new Set(filtered.map(a => a.award).filter(a => !knownAwards.has(a)))];
-    const allGroups   = [...ordered, ...extraAwards];
+    // Sort each person's awards by priority order
+    const knownAwards = AWARD_ORDER.map(a => a.name);
+    personMap.forEach(person => {
+        person.awards.sort((a, b) => {
+            const ai = knownAwards.indexOf(a.award);
+            const bi = knownAwards.indexOf(b.award);
+            return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+        });
+    });
 
+    // Sort persons — those with most awards first, then alphabetically
+    const persons = [...personMap.values()].sort((a, b) => {
+        if (b.awards.length !== a.awards.length) return b.awards.length - a.awards.length;
+        return a.name.localeCompare(b.name);
+    });
+
+    // Update result count — show persons not raw rows
+    info.textContent = persons.length + (persons.length !== filtered.length
+        ? ` (${filtered.length} awards)` : '');
+    filterLabel.textContent = activeAward === 'all' ? '' : ` · ${activeAward}`;
+
+    // ── Render person cards ───────────────────────────────────────────
     let html = '';
-    allGroups.forEach(awardName => {
-        const group = filtered.filter(a => a.award === awardName);
-        if (group.length === 0) return;
+    persons.forEach(person => {
+        const initials = person.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+        const photoEl  = person.photo
+            ? `<img class="award-member-photo" src="${person.photo}" alt="${person.name}"
+                    onerror="this.outerHTML='<div class=award-member-initials>${initials}</div>'">`
+            : `<div class="award-member-initials">${initials}</div>`;
 
-        const badge = getBadgeInfo(awardName);
+        const awardCountPill = person.awards.length > 1
+            ? `<span class="award-count-pill">${person.awards.length} awards</span>`
+            : '';
 
-        html += `<div class="col-12">
-            <div class="section-group-head">
-                <span>${badge.icon} ${awardName}</span>
-                <span class="group-count">${group.length}</span>
-            </div>
-        </div>`;
+        // Award lines — one per award
+        const awardLines = person.awards.map(aw => {
+            const badge = getBadgeInfo(aw.award);
+            const meta  = [
+                aw.year        ? aw.year : '',
+                aw.presentedBy ? aw.presentedBy : ''
+            ].filter(Boolean).join(' · ');
 
-        group.forEach(a => {
-            const initials  = a.name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
-            const photoEl   = a.photo
-                ? `<img class="award-member-photo" src="${a.photo}" alt="${a.name}"
-                        onerror="this.outerHTML='<div class=award-member-initials>${initials}</div>'">`
-                : `<div class="award-member-initials">${initials}</div>`;
-
-            const citationEl = a.citation
-                ? `<p class="small text-muted mt-2 mb-0 fst-italic">"${a.citation}"</p>` : '';
-            const presEl = a.presentedBy
-                ? `<div class="small text-muted mt-1"><i class="fa fa-user-tie me-1" style="color:var(--gold);font-size:.7rem;"></i>${a.presentedBy}</div>` : '';
-
-            html += `<div class="col-12 col-sm-6 col-lg-4">
-                <div class="award-card">
-                    <div class="d-flex align-items-start gap-3">
-                        ${photoEl}
-                        <div style="flex:1;min-width:0;">
-                            <div class="fw-bold" style="color:var(--dark);font-size:.95rem;line-height:1.3;">${a.name}</div>
-                            <div class="small" style="color:var(--primary);font-weight:600;">${a.rank}</div>
-                            <div class="small text-muted">${a.trade}</div>
-                        </div>
+            return `<div class="award-line">
+                <div class="award-line-dot"></div>
+                <div style="flex:1;min-width:0;">
+                    <div class="award-line-name">
+                        <span class="award-badge ${badge.cls}" style="margin-bottom:0;font-size:.62rem;">
+                            ${badge.icon} ${aw.award}
+                        </span>
                     </div>
-                    <div class="mt-2">
-                        <span class="award-badge ${badge.cls}">${badge.icon} ${a.award}</span>
-                        ${a.year ? `<span class="ms-2 small text-muted">${a.year}</span>` : ''}
-                    </div>
-                    ${presEl}
-                    ${citationEl}
+                    ${meta ? `<div class="award-line-meta">${meta}</div>` : ''}
+                    ${aw.citation ? `<div class="award-line-citation">"${aw.citation}"</div>` : ''}
                 </div>
             </div>`;
-        });
+        }).join('');
+
+        html += `<div class="col-12 col-sm-6 col-lg-4">
+            <div class="person-card">
+                <div class="person-header">
+                    ${photoEl}
+                    <div style="flex:1;min-width:0;">
+                        <div class="person-name">${person.name} ${awardCountPill}</div>
+                        <div class="person-rank">${person.rank}</div>
+                        <div class="person-trade">${person.trade}</div>
+                    </div>
+                </div>
+                <div class="awards-list">
+                    ${awardLines}
+                </div>
+            </div>
+        </div>`;
     });
 
     grid.innerHTML = html;
