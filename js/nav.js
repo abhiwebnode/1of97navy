@@ -25,7 +25,7 @@
         var map = {
             home:         ['/', '/index.html'],
             about:        ['/about.html', '/history.html', '/timeline.html', '/ships.html'],
-            members:      ['/directory.html', '/profile.html'],
+            members:      ['/directory.html', '/shipmates.html', '/profile.html'],
             memories:     ['/gallery.html'],
             achievements: ['/achievements.html', '/service-awards.html', '/spotlight.html', '/postservice.html', '/socialwork.html'],
             reunions:     ['/reunions.html'],
