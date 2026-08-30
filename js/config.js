@@ -8,7 +8,7 @@ var SITE_CONFIG = {
     // ── Maintenance Mode ─────────────────────────────────────────────
     // true  = site shows maintenance page to all visitors
     // false = site is live for everyone
-    maintenance: true,
+    maintenance: false,
 
     // ── Preview Bypass Key ───────────────────────────────────────────
     // While maintenance is true, YOU can still access the site by
