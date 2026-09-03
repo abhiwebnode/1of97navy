@@ -345,7 +345,7 @@ async function renderAlbums() {
     grid.innerHTML = ALBUMS.map(album => `
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="album-card" id="card-${album.id}"
-                 onclick="openAlbum('${album.id}')">
+                 onclick="navigateToAlbum('${album.id}')">
                 <div class="album-thumb-placeholder" id="thumb-${album.id}">
                     <i class="fa ${album.icon}"></i>
                 </div>
@@ -387,6 +387,11 @@ async function renderAlbums() {
     }));
 }
 
+function navigateToAlbum(albumId) {
+    history.pushState({ album: albumId }, '', `?album=${albumId}`);
+    openAlbum(albumId);
+}
+
 async function openAlbum(albumId) {
     const config = ALBUMS.find(a => a.id === albumId);
     if (!config) return;
@@ -424,6 +429,19 @@ async function openAlbum(albumId) {
     }
 }
 
+function showAllAlbumsView() {
+    document.getElementById('view-photos').style.display = 'none';
+    document.getElementById('view-albums').style.display = '';
+    document.getElementById('breadcrumb-label').textContent = 'Gallery';
+    currentAlbum = null;
+
+    // Load album list if it was never loaded on initial page hit
+    const grid = document.getElementById('albums-grid');
+    if (!grid.children.length) {
+        renderAlbums();
+    }
+}
+
 function renderPhotoGrid(resources) {
     const grid = document.getElementById('photos-grid');
 
@@ -448,12 +466,21 @@ function renderPhotoGrid(resources) {
     ).join('');
 }
 
+// Back to All Albums Button
 document.getElementById('back-btn').addEventListener('click', () => {
-    document.getElementById('view-photos').style.display = 'none';
-    document.getElementById('view-albums').style.display = '';
-    document.getElementById('breadcrumb-label').textContent = 'Gallery';
-    currentAlbum = null;
     history.pushState({}, '', window.location.pathname);
+    showAllAlbumsView();
+});
+
+// Handle Browser Back / Forward buttons
+window.addEventListener('popstate', () => {
+    const params = new URLSearchParams(window.location.search);
+    const album = params.get('album');
+    if (album && ALBUMS.find(a => a.id === album)) {
+        openAlbum(album);
+    } else {
+        showAllAlbumsView();
+    }
 });
 
 function openLightbox(index) {
@@ -510,6 +537,7 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape')     closeLightbox();
 });
 
+// Initialization
 const urlParams = new URLSearchParams(window.location.search);
 const directAlbum = urlParams.get('album');
 if (directAlbum && ALBUMS.find(a => a.id === directAlbum)) {
