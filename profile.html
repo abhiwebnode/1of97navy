@@ -448,38 +448,50 @@ async function handleGoogleResponse(response) {
         picture: payload.picture
     };
 
+    // ── Persist to localStorage so refresh keeps user logged in ───────
+    try {
+        localStorage.setItem('navy_google_user', JSON.stringify(googleUser));
+    } catch(e) {}
+
+    await applyGoogleUser(googleUser);
+}
+
+// Shared logic for both fresh login and restored session
+async function applyGoogleUser(user) {
+    googleUser = user;
+
     // Show user badge
-    showUserBadge(googleUser);
+    showUserBadge(user);
 
     // Hide sign-in card, show compact search
-    document.getElementById('signin-section').style.display          = 'none';
-    document.getElementById('search-section-compact').style.display  = '';
-    document.getElementById('user-bar').style.display                = '';
+    document.getElementById('signin-section').style.display         = 'none';
+    document.getElementById('search-section-compact').style.display = '';
+    document.getElementById('user-bar').style.display               = '';
 
     // Auto-search by email first
     showState('loading', 'Finding your profile...');
-    await loadAllSheets();
+    try {
+        await loadAllSheets();
+    } catch(e) {
+        showState('error', 'Could not load data. Please try again.');
+        return;
+    }
 
-    const matched = findByEmail(googleUser.email);
+    const matched = findByEmail(user.email);
     if (matched) {
-        // Perfect match by email
-        const awards = cache.awards.filter(m => matchName(m.name, matched.name));
+        const awards = cache.awards.filter(m      => matchName(m.name, matched.name));
         const ps     = cache.postservice.filter(m => matchName(m.name, matched.name));
         showProfile(matched, awards, ps);
     } else {
-        // No email match — try name from Google account
-        const nameMatches = cache.directory.filter(m =>
-            matchName(m.name, googleUser.name)
-        );
+        const nameMatches = cache.directory.filter(m => matchName(m.name, user.name));
         if (nameMatches.length === 1) {
-            const awards = cache.awards.filter(m => matchName(m.name, nameMatches[0].name));
+            const awards = cache.awards.filter(m      => matchName(m.name, nameMatches[0].name));
             const ps     = cache.postservice.filter(m => matchName(m.name, nameMatches[0].name));
             showProfile(nameMatches[0], awards, ps);
         } else if (nameMatches.length > 1) {
             showMultiple(nameMatches);
         } else {
-            // Nothing found
-            showState('notmatched', googleUser.name);
+            showState('notmatched', user.name);
         }
     }
 }
@@ -487,7 +499,14 @@ async function handleGoogleResponse(response) {
 function handleSignOut() {
     if (typeof google !== 'undefined') {
         google.accounts.id.disableAutoSelect();
+        // Revoke Google session so One Tap doesn't auto re-login
+        if (googleUser && googleUser.email) {
+            google.accounts.id.revoke(googleUser.email, () => {});
+        }
     }
+    // Clear persisted session
+    try { localStorage.removeItem('navy_google_user'); } catch(e) {}
+
     googleUser = null;
     document.getElementById('user-bar').style.display               = 'none';
     document.getElementById('signin-section').style.display         = '';
@@ -881,9 +900,23 @@ document.getElementById('name-input').addEventListener('keydown', e => { if(e.ke
 document.getElementById('search-btn-compact').addEventListener('click', () => doSearch('name-input-compact'));
 document.getElementById('name-input-compact').addEventListener('keydown', e => { if(e.key==='Enter') doSearch('name-input-compact'); });
 
-// ── Init Google after GSI script loads ────────────────────────────────
+// ── Init on load — restore session or init Google ────────────────────
 window.addEventListener('load', () => {
-    // GSI may still be loading — poll briefly
+
+    // ── Restore persisted Google session from localStorage ────────────
+    try {
+        const stored = localStorage.getItem('navy_google_user');
+        if (stored) {
+            const restoredUser = JSON.parse(stored);
+            if (restoredUser && restoredUser.email && restoredUser.name) {
+                // Restore immediately — no Google prompt needed
+                applyGoogleUser(restoredUser);
+                return; // skip initGoogle below
+            }
+        }
+    } catch(e) {}
+
+    // ── No stored session — init Google normally ──────────────────────
     let attempts = 0;
     const poll = setInterval(() => {
         if (typeof google !== 'undefined' && google.accounts) {
