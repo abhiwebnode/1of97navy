@@ -182,7 +182,7 @@
 
 <body data-page="about">
 
-<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+<div id="spinner" class="bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center" style="display:none;">
     <div class="spinner-grow text-primary" role="status"></div>
 </div>
 
@@ -271,10 +271,10 @@
 <script src="js/main.js"></script>
 
 <script>
+// Web App URL for deployment logging
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec';
 
-// ── Fleet & Unit Data ───────────────────────────────────────────────────
-// Fully restored to include all 245+ ships and shore establishments. 
+// ── Complete Fleet & Unit Data (100% of units preserved) ─────────────────
 const SHIPS_DATA = [
     // Headquarters
     { id: 'ihqmod', name: 'IHQ Mod(Navy)', type: 'Establishment', icon: 'fa-anchor' },
@@ -284,7 +284,7 @@ const SHIPS_DATA = [
     { id: 'anc', name: 'HQANC', type: 'Establishment', icon: 'fa-anchor' },
     { id: 'cabs', name: 'CABS', type: 'Establishment', icon: 'fa-anchor' },
     { id: 'ndc', name: 'NDC', type: 'Establishment', icon: 'fa-anchor' },
-    
+	
     // Aircraft Carriers
     { id: 'viraat', name: 'INS Viraat (R22)', type: 'Carrier', icon: 'fa-ship' },
     { id: 'vikramaditya', name: 'INS Vikramaditya (R33)', type: 'Carrier', icon: 'fa-ship' },
@@ -300,6 +300,11 @@ const SHIPS_DATA = [
     { id: 'ranvijay', name: 'INS Ranvijay (D55)', type: 'Destroyer', icon: 'fa-ship' },
     { id: 'kolkata', name: 'INS Kolkata (D63)', type: 'Destroyer', icon: 'fa-ship' },
     { id: 'kochi', name: 'INS Kochi (D64)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'chennai', name: 'INS Chennai (D65)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'visakhapatnam', name: 'INS Visakhapatnam (D66)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'mormugao', name: 'INS Mormugao (D67)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'imphal', name: 'INS Imphal (D68)', type: 'Destroyer', icon: 'fa-ship' },
+    { id: 'surat', name: 'INS Surat (D69)', type: 'Destroyer', icon: 'fa-ship' },
 
     // Frigates
     { id: 'talwar', name: 'INS Talwar (F40)', type: 'Frigate', icon: 'fa-ship' },
@@ -314,6 +319,17 @@ const SHIPS_DATA = [
     { id: 'brahmaputra', name: 'INS Brahmaputra (F31)', type: 'Frigate', icon: 'fa-ship' },
     { id: 'betwa', name: 'INS Betwa (F39)', type: 'Frigate', icon: 'fa-ship' },
     { id: 'beas', name: 'INS Beas (F37)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'teg', name: 'INS Teg (F45)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tarkash', name: 'INS Tarkash (F50)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'trikand', name: 'INS Trikand (F51)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tushil', name: 'INS Tushil (F70)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'tamal', name: 'INS Tamal (F71)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'nilgiri', name: 'INS Nilgiri (F33)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'himgiri', name: 'INS Himgiri (F34)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'udaygiri', name: 'INS Udaygiri (F35)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'taragiri', name: 'INS Taragiri (F41)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'dunagiri', name: 'INS Dunagiri (F36)', type: 'Frigate', icon: 'fa-ship' },
+    { id: 'mahendragiri', name: 'INS Mahendragiri (F38)', type: 'Frigate', icon: 'fa-ship' },
 
     // Corvettes & Patrol Vessels
     { id: 'kora', name: 'INS Kora (P61)', type: 'Corvette', icon: 'fa-ship' },
@@ -324,6 +340,25 @@ const SHIPS_DATA = [
     { id: 'kuthar', name: 'INS Kuthar (P46)', type: 'Corvette', icon: 'fa-ship' },
     { id: 'sukanya', name: 'INS Sukanya (P54)', type: 'Corvette', icon: 'fa-ship' },
     { id: 'subhadra', name: 'INS Subhadra (P51)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kamorta', name: 'INS Kamorta (P28)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kadmatt', name: 'INS Kadmatt (P29)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kiltan', name: 'INS Kiltan (P30)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'kavaratti', name: 'INS Kavaratti (P31)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'khanjar', name: 'INS Khanjar (P47)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vibhuti', name: 'INS Vibhuti (K45)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vipul', name: 'INS Vipul (K46)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vinash', name: 'INS Vinash (K47)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'vidyut', name: 'INS Vidyut (K48)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'nashak', name: 'INS Nashak (K83)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'pralaya', name: 'INS Pralaya (K91)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'prabal', name: 'INS Prabal (K92)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'arnala', name: 'INS Arnala (P68)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'androth', name: 'INS Androth (P69)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'anjadip', name: 'INS Anjadip (P73)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'agray', name: 'INS Agray (P36)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'akshay', name: 'INS Akshay', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'mahe', name: 'INS Mahe (P80)', type: 'Corvette', icon: 'fa-ship' },
+    { id: 'malwan', name: 'INS Malwan (P81)', type: 'Corvette', icon: 'fa-ship' },
 
     // Submarines
     { id: 'sindhughosh', name: 'INS Sindhughosh (S55)', type: 'Submarine', icon: 'fa-water' },
@@ -333,6 +368,19 @@ const SHIPS_DATA = [
     { id: 'shishumar', name: 'INS Shishumar (S44)', type: 'Submarine', icon: 'fa-water' },
     { id: 'shankush', name: 'INS Shankush (S45)', type: 'Submarine', icon: 'fa-water' },
     { id: 'arihant', name: 'INS Arihant (S2)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'arighaat', name: 'INS Arighaat (S3)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'aridhaman', name: 'INS Aridhaman (S4)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'kalvari', name: 'INS Kalvari (S21)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'khanderi', name: 'INS Khanderi (S22)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'karanj', name: 'INS Karanj (S23)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'vela', name: 'INS Vela (S24)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'vagir', name: 'INS Vagir (S25)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'vagsheer', name: 'INS Vagsheer (S26)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhukirti', name: 'INS Sindhukirti (S61)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhuvijay', name: 'INS Sindhuvijay (S62)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'sindhurashtra', name: 'INS Sindhurashtra (S65)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'shalki', name: 'INS Shalki (S46)', type: 'Submarine', icon: 'fa-water' },
+    { id: 'shankul', name: 'INS Shankul (S47)', type: 'Submarine', icon: 'fa-water' },
 
     // Amphibious & Fleet Tankers
     { id: 'jalashwa', name: 'INS Jalashwa (L41)', type: 'Amphibious', icon: 'fa-ship' },
@@ -340,6 +388,9 @@ const SHIPS_DATA = [
     { id: 'gharial', name: 'INS Gharial (L23)', type: 'Amphibious', icon: 'fa-ship' },
     { id: 'jyoti', name: 'INS Jyoti (A58)', type: 'Amphibious', icon: 'fa-ship' },
     { id: 'aditya', name: 'INS Aditya (A59)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'shardul', name: 'INS Shardul (L16)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'kesari', name: 'INS Kesari (L15)', type: 'Amphibious', icon: 'fa-ship' },
+    { id: 'airavat', name: 'INS Airavat (L24)', type: 'Amphibious', icon: 'fa-ship' },
 
     // Coast Guard Ships
     { id: 'bhikajicama', name: 'CGS Bhikaji Cama', type: 'Coast Guard Ship', icon: 'fa-ship' },
@@ -361,67 +412,6 @@ const SHIPS_DATA = [
     { id: 'perandu', name: 'INS Perandu (Air Station)', type: 'Establishment', icon: 'fa-plane' },
     { id: 'shikra', name: 'INS Shikra (Air Station)', type: 'Establishment', icon: 'fa-plane' },
     { id: 'kadamba', name: 'INS Kadamba (Karwar Base)', type: 'Establishment', icon: 'fa-shield-alt' },
-    
-    // Additional Destroyers
-    { id: 'chennai', name: 'INS Chennai (D65)', type: 'Destroyer', icon: 'fa-ship' },
-    { id: 'visakhapatnam', name: 'INS Visakhapatnam (D66)', type: 'Destroyer', icon: 'fa-ship' },
-    { id: 'mormugao', name: 'INS Mormugao (D67)', type: 'Destroyer', icon: 'fa-ship' },
-    { id: 'imphal', name: 'INS Imphal (D68)', type: 'Destroyer', icon: 'fa-ship' },
-    { id: 'surat', name: 'INS Surat (D69)', type: 'Destroyer', icon: 'fa-ship' },
-
-    // Additional Frigates
-    { id: 'teg', name: 'INS Teg (F45)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'tarkash', name: 'INS Tarkash (F50)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'trikand', name: 'INS Trikand (F51)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'tushil', name: 'INS Tushil (F70)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'tamal', name: 'INS Tamal (F71)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'nilgiri', name: 'INS Nilgiri (F33)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'himgiri', name: 'INS Himgiri (F34)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'udaygiri', name: 'INS Udaygiri (F35)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'taragiri', name: 'INS Taragiri (F41)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'dunagiri', name: 'INS Dunagiri (F36)', type: 'Frigate', icon: 'fa-ship' },
-    { id: 'mahendragiri', name: 'INS Mahendragiri (F38)', type: 'Frigate', icon: 'fa-ship' },
-
-    // Additional Corvettes
-    { id: 'kamorta', name: 'INS Kamorta (P28)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'kadmatt', name: 'INS Kadmatt (P29)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'kiltan', name: 'INS Kiltan (P30)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'kavaratti', name: 'INS Kavaratti (P31)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'khanjar', name: 'INS Khanjar (P47)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'vibhuti', name: 'INS Vibhuti (K45)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'vipul', name: 'INS Vipul (K46)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'vinash', name: 'INS Vinash (K47)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'vidyut', name: 'INS Vidyut (K48)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'nashak', name: 'INS Nashak (K83)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'pralaya', name: 'INS Pralaya (K91)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'prabal', name: 'INS Prabal (K92)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'arnala', name: 'INS Arnala (P68)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'androth', name: 'INS Androth (P69)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'anjadip', name: 'INS Anjadip (P73)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'agray', name: 'INS Agray (P36)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'akshay', name: 'INS Akshay', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'mahe', name: 'INS Mahe (P80)', type: 'Corvette', icon: 'fa-ship' },
-    { id: 'malwan', name: 'INS Malwan (P81)', type: 'Corvette', icon: 'fa-ship' },
-
-    // Additional Submarines
-    { id: 'arighaat', name: 'INS Arighaat (S3)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'aridhaman', name: 'INS Aridhaman (S4)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'kalvari', name: 'INS Kalvari (S21)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'khanderi', name: 'INS Khanderi (S22)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'karanj', name: 'INS Karanj (S23)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'vela', name: 'INS Vela (S24)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'vagir', name: 'INS Vagir (S25)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'vagsheer', name: 'INS Vagsheer (S26)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'sindhukirti', name: 'INS Sindhukirti (S61)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'sindhuvijay', name: 'INS Sindhuvijay (S62)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'sindhurashtra', name: 'INS Sindhurashtra (S65)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'shalki', name: 'INS Shalki (S46)', type: 'Submarine', icon: 'fa-water' },
-    { id: 'shankul', name: 'INS Shankul (S47)', type: 'Submarine', icon: 'fa-water' },
-
-    // Additional Amphibious Ships
-    { id: 'shardul', name: 'INS Shardul (L16)', type: 'Amphibious', icon: 'fa-ship' },
-    { id: 'kesari', name: 'INS Kesari (L15)', type: 'Amphibious', icon: 'fa-ship' },
-    { id: 'airavat', name: 'INS Airavat (L24)', type: 'Amphibious', icon: 'fa-ship' },
 
     // Additional Landing Craft
     { id: 'lcu51', name: 'INS LCU 51 (L51)', type: 'Landing Craft', icon: 'fa-ship' },
@@ -537,9 +527,7 @@ const SHIPS_DATA = [
     { id: 'navdet_bitra', name: 'NavDet Bitra (Forward Operating Base)', type: 'Establishment', icon: 'fa-anchor' },
     { id: 'navdet_paradip', name: 'NavDet Paradip (Forward Operating Base)', type: 'Establishment', icon: 'fa-anchor' },
 
-    // ============================================================
-    // HISTORICAL INDIAN NAVY SHIPS
-    // ============================================================
+    // Historical Indian Navy Ships
     { id: 'ranjit_historical', name: 'INS Ranjit (D53) [Historical]', type: 'Destroyer', icon: 'fa-ship' },
     { id: 'himgiri_1974', name: 'INS Himgiri (F34) [1974–2005]', type: 'Frigate', icon: 'fa-ship' },
     { id: 'udaygiri_1976', name: 'INS Udaygiri (F35) [1976–2007]', type: 'Frigate', icon: 'fa-ship' },
@@ -594,11 +582,12 @@ const SHIPS_DATA = [
     { id: 'ina_ezhimala', name: 'Indian Naval Academy, Ezhimala', type: 'Establishment', icon: 'fa-graduation-cap' }
 ];
 
-const STORAGE_KEY = 'navy_ship_members';
+// Renamed key to prevent collisions with auth.js
+const SHIP_STORAGE_KEY = 'navy_ship_members';
 
 function loadShipData() {
     try {
-        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        const stored = JSON.parse(localStorage.getItem(SHIP_STORAGE_KEY) || '{}');
         return (typeof stored === 'object' && stored !== null) ? stored : {};
     } catch(e) {
         return {};
@@ -606,7 +595,7 @@ function loadShipData() {
 }
 
 function saveShipData(data) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+    try { localStorage.setItem(SHIP_STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
 }
 
 let shipData = loadShipData();
@@ -684,8 +673,8 @@ function buildTooltip(names) {
 
 function renderShips() {
     const grid = document.getElementById('ships-grid');
-    if (!grid) return; // Wait for DOM load if missing
-    
+    if (!grid) return;
+
     const searchEl = document.getElementById('ship-search');
     const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
     const activeBtn = document.querySelector('.ship-filter-btn.active');
@@ -766,10 +755,7 @@ function renderShips() {
     updateTotalCounter();
 }
 
-// ── INIT & EVENT LISTENERS ──────────────────────────────────────────
-
-// Wrap the initial execution in DOMContentLoaded to prevent early firing
-document.addEventListener('DOMContentLoaded', function() {
+function initPage() {
     renderShips();
 
     // Attach Search Filter
@@ -787,16 +773,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Dismiss spinner safely
-    var sp = document.getElementById('spinner');
-    if (sp) sp.classList.remove('show');
-});
+    // Dismiss full-screen spinner
+    const sp = document.getElementById('spinner');
+    if (sp) {
+        sp.classList.remove('show');
+        sp.style.display = 'none';
+    }
+}
 
-// Auth Listeners (re-render UI states upon login/logout)
+// Ensure execution whether DOM is already interactive or still loading
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPage);
+} else {
+    initPage();
+}
+
+// Auth State Listeners
 document.addEventListener('navauth:ready', renderShips);
 document.addEventListener('navauth:login', renderShips);
 document.addEventListener('navauth:signout', renderShips);
-
 </script>
 </body>
 </html>
