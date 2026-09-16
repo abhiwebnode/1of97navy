@@ -52,16 +52,471 @@
     </div>
 </div>
 
-<!-- Content -->
-<div class="container py-5 my-3 text-center">
-    <i class="fa fa-monument fa-4x mb-4" style="color: var(--primary);"></i>
-    <h2 class="mb-3" style="color: var(--dark);">Memorial Wall</h2>
-    <p class="text-muted mb-4" style="max-width:560px;margin:0 auto;">In memory of batchmates who have sailed beyond the horizon. Their service lives on in us.</p>
-    <span class="badge px-3 py-2" style="background: var(--gold); color: var(--dark); font-size:.85rem;">Content coming soon — this page is under construction</span>
-    <div class="mt-4">
-        <a href="index.html" class="btn btn-outline-primary py-2 px-4">← Back to Home</a>
+<style>
+    /* ── Memorial page overrides ── */
+    .memorial-page { background: #07111F; min-height: 60vh; }
+
+    /* ── Intro verse ── */
+    .memorial-intro {
+        background: linear-gradient(180deg, #0B1E3D 0%, #07111F 100%);
+        padding: 3rem 1.5rem 2rem;
+        text-align: center;
+    }
+    .flame { font-size: 2.5rem; display: block; margin-bottom: 1rem; animation: flicker 2.5s ease-in-out infinite; }
+    @keyframes flicker {
+        0%,100% { opacity:1; transform:scale(1) translateY(0); }
+        25%      { opacity:.85; transform:scale(.97) translateY(-2px); }
+        50%      { opacity:1; transform:scale(1.03) translateY(-1px); }
+        75%      { opacity:.9; transform:scale(.98) translateY(-3px); }
+    }
+    .verse {
+        font-family: 'Saira', sans-serif;
+        font-size: 1.05rem;
+        font-style: italic;
+        color: rgba(255,255,255,.7);
+        max-width: 560px;
+        margin: 0 auto 1rem;
+        line-height: 1.8;
+    }
+    .verse-attr {
+        font-size: .75rem;
+        color: var(--gold, #C9A84C);
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+    .memorial-divider {
+        width: 1px;
+        height: 60px;
+        background: linear-gradient(to bottom, var(--gold, #C9A84C), transparent);
+        margin: 2rem auto 0;
+    }
+
+    /* ── Year group ── */
+    .year-group { padding: 2.5rem 0 1rem; }
+    .year-label {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .year-label::before, .year-label::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(201,168,76,.3), transparent);
+    }
+    .year-num {
+        font-family: 'Saira', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--gold, #C9A84C);
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        padding: .3rem .9rem;
+        border: 1px solid rgba(201,168,76,.3);
+        border-radius: 20px;
+        background: rgba(201,168,76,.05);
+    }
+
+    /* ── Memorial card ── */
+    .mem-card {
+        background: rgba(255,255,255,.03);
+        border: 1px solid rgba(201,168,76,.15);
+        border-radius: 10px;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        transition: .3s;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    .mem-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(to right, transparent, var(--gold, #C9A84C), transparent);
+        opacity: 0;
+        transition: .3s;
+    }
+    .mem-card:hover { background: rgba(201,168,76,.06); border-color: rgba(201,168,76,.35); }
+    .mem-card:hover::before { opacity: 1; }
+
+    /* Photo with garland */
+    .mem-photo-wrap {
+        position: relative;
+        width: 96px; height: 96px;
+        margin: 0 auto 1rem;
+    }
+
+    /* Outer garland ring — marigold orange/gold gradient dots */
+    .mem-photo-wrap::before {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        background: conic-gradient(
+            #E8A020 0deg,   #F5C842 15deg,
+            #E8A020 30deg,  #C97B1A 45deg,
+            #F5C842 60deg,  #E8A020 75deg,
+            #C97B1A 90deg,  #F5C842 105deg,
+            #E8A020 120deg, #C97B1A 135deg,
+            #F5C842 150deg, #E8A020 165deg,
+            #C97B1A 180deg, #F5C842 195deg,
+            #E8A020 210deg, #C97B1A 225deg,
+            #F5C842 240deg, #E8A020 255deg,
+            #C97B1A 270deg, #F5C842 285deg,
+            #E8A020 300deg, #C97B1A 315deg,
+            #F5C842 330deg, #E8A020 345deg,
+            #C97B1A 360deg
+        );
+        animation: garland-spin 12s linear infinite;
+        z-index: 0;
+    }
+
+    /* Inner white gap between garland and photo */
+    .mem-photo-wrap::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        background: #111d2e;
+        z-index: 1;
+    }
+
+    @keyframes garland-spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+
+    /* Photo circle */
+    .mem-photo {
+        width: 80px; height: 80px;
+        border-radius: 50%;
+        margin: 8px auto 0;
+        background: rgba(255,255,255,.05);
+        display: flex; align-items: center; justify-content: center;
+        position: relative;
+        overflow: hidden;
+        z-index: 2;
+    }
+    .mem-photo img {
+        width: 100%; height: 100%;
+        object-fit: cover; border-radius: 50%;
+    }
+    .mem-photo-placeholder {
+        color: rgba(255,255,255,.2);
+        font-size: 2rem;
+    }
+
+    /* Tiny flower petals on garland using box-shadow dots */
+    .mem-garland-dots {
+        position: absolute;
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        top: 50%; left: 50%;
+        z-index: 3;
+        pointer-events: none;
+    }
+
+    /* Candle under photo */
+    .mem-candle {
+        font-size: .95rem;
+        display: block;
+        margin-bottom: .6rem;
+        opacity: .85;
+    }
+
+    .mem-name {
+        font-family: 'Saira', sans-serif;
+        font-weight: 700;
+        font-size: .95rem;
+        color: #fff;
+        margin-bottom: .3rem;
+        line-height: 1.3;
+    }
+    .mem-rank {
+        font-size: .75rem;
+        color: var(--gold, #C9A84C);
+        font-weight: 600;
+        margin-bottom: .2rem;
+    }
+    .mem-division {
+        font-size: .72rem;
+        color: rgba(255,255,255,.4);
+        letter-spacing: .04em;
+    }
+
+    /* ── Closing tribute ── */
+    .closing-tribute {
+        text-align: center;
+        padding: 3rem 1.5rem 2rem;
+        border-top: 1px solid rgba(201,168,76,.1);
+        margin-top: 2rem;
+    }
+    .closing-anchor {
+        font-size: 2rem;
+        display: block;
+        color: rgba(201,168,76,.4);
+        margin-bottom: 1rem;
+    }
+    .closing-text {
+        font-size: .85rem;
+        color: rgba(255,255,255,.35);
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        line-height: 2;
+    }
+    .closing-motto {
+        font-family: 'Saira', sans-serif;
+        font-size: 1rem;
+        color: rgba(201,168,76,.6);
+        font-style: italic;
+        margin-top: .5rem;
+    }
+
+    /* ── Submit notice ── */
+    .submit-notice {
+        background: rgba(255,255,255,.03);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        text-align: center;
+        max-width: 560px;
+        margin: 1.5rem auto 0;
+    }
+    .submit-notice p { font-size: .8rem; color: rgba(255,255,255,.4); margin: 0; line-height: 1.7; }
+    .submit-notice a { color: var(--gold, #C9A84C); text-decoration: none; }
+    .submit-notice a:hover { text-decoration: underline; }
+
+    /* ── Total count ── */
+    .mem-count-strip {
+        text-align: center;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .mem-count-num {
+        font-family: 'Saira', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--gold, #C9A84C);
+        display: block;
+        line-height: 1;
+    }
+    .mem-count-label {
+        font-size: .72rem;
+        text-transform: uppercase;
+        letter-spacing: .15em;
+        color: rgba(255,255,255,.4);
+        margin-top: .25rem;
+        display: block;
+    }
+</style>
+
+<!-- Memorial Content -->
+<div class="memorial-page">
+
+    <!-- Intro -->
+    <div class="memorial-intro">
+        <span class="flame">🕯️</span>
+        <p class="verse" style="font-size:1.2rem;letter-spacing:.03em;">
+            अमर जवान
+        </p>
+        <p class="verse">
+            "शहीदों की चिताओं पर जुड़ेंगे हर बरस मेले,<br>
+            वतन पर मिटने वालों का यही बाकी निशाँ होगा।"
+        </p>
+        <p class="verse" style="font-size:.88rem;color:rgba(255,255,255,.5);margin-top:-.5rem;">
+            "Fairs will be held every year on the pyres of martyrs —<br>
+            this will be the lasting mark of those who gave themselves for the nation."
+        </p>
+        <span class="verse-attr">— Inscription, National War Memorial · New Delhi</span>
+        <div class="memorial-divider"></div>
+    </div>
+
+    <div class="container pb-5">
+
+        <!-- Total count -->
+        <div class="mem-count-strip">
+            <span class="mem-count-num" id="mem-total"><!--TOTAL--></span>
+            <span class="mem-count-label">Shipmates We Remember</span>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════
+             MEMORIAL ENTRIES
+             To add a name:
+               1. Copy one .mem-card block
+               2. Update name, rank, division, year
+               3. Place it in the correct year section
+               4. Replace placeholder image when photo is available
+             ════════════════════════════════════════════════════════════ -->
+
+        <!-- ── YEAR 2024 ───────────────────────────────────────────── -->
+        <div class="year-group">
+            <div class="year-label"><span class="year-num">⚓ 2024</span></div>
+            <div class="row g-3">
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <!-- Replace src below with actual photo when available -->
+                                <!-- <img src="img/memorial/name.jpg" alt="Name"> -->
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Name of Shipmate</div>
+                        <div class="mem-rank">Petty Officer</div>
+                        <div class="mem-division">Alpha Division · INS Chilka</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Name of Shipmate</div>
+                        <div class="mem-rank">Leading Seaman</div>
+                        <div class="mem-division">Bravo Division · INS Chilka</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── YEAR 2023 ───────────────────────────────────────────── -->
+        <div class="year-group">
+            <div class="year-label"><span class="year-num">⚓ 2023</span></div>
+            <div class="row g-3">
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Name of Shipmate</div>
+                        <div class="mem-rank">Chief Petty Officer</div>
+                        <div class="mem-division">Charlie Division · INS Chilka</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ── YEAR 2022 ───────────────────────────────────────────── -->
+        <div class="year-group">
+            <div class="year-label"><span class="year-num">⚓ 2022</span></div>
+            <div class="row g-3">
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Name of Shipmate</div>
+                        <div class="mem-rank">Petty Officer</div>
+                        <div class="mem-division">Delta Division · INS Chilka</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Name of Shipmate</div>
+                        <div class="mem-rank">Master Chief Petty Officer</div>
+                        <div class="mem-division">Echo Division · INS Chilka</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Name of Shipmate</div>
+                        <div class="mem-rank">Leading Seaman</div>
+                        <div class="mem-division">Alpha Division · INS Chilka</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════
+             ADD MORE YEAR GROUPS ABOVE THIS LINE
+             Copy this block for each new year:
+
+        <div class="year-group">
+            <div class="year-label"><span class="year-num">⚓ YYYY</span></div>
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="mem-card">
+                        <div class="mem-photo-wrap">
+                            <div class="mem-photo">
+                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="mem-candle">🕯️</span>
+                        <div class="mem-name">Full Name</div>
+                        <div class="mem-rank">Rank</div>
+                        <div class="mem-division">Division · INS Chilka</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+             ════════════════════════════════════════════════════════════ -->
+
+        <!-- Closing tribute -->
+        <div class="closing-tribute">
+            <span class="closing-anchor"><i class="fa fa-anchor"></i></span>
+            <div class="closing-text">
+                Enrolled together at INS Chilka · January 1997<br>
+                Served with honour · Remembered with love
+            </div>
+            <div class="closing-motto">"Together in Service. Together for Life."</div>
+        </div>
+
+        <!-- How to submit a name -->
+        <div class="submit-notice">
+            <p>
+                To add a shipmate to the Memorial Wall, please contact the batch admin at
+                <a href="mailto:contact@1of97navy.in">contact@1of97navy.in</a><br>
+                with the member's name, rank, division and year of passing.
+                All entries are verified before being added.
+            </p>
+        </div>
+
     </div>
 </div>
+
+<script>
+// Count total memorial entries and update the number
+document.addEventListener('DOMContentLoaded', function() {
+    const total = document.querySelectorAll('.mem-card').length;
+    const el    = document.getElementById('mem-total');
+    if (el) el.textContent = total;
+});
+</script>
 
 <!-- Footer -->
 <div id="footer-placeholder"></div>
