@@ -281,8 +281,8 @@ const SHIPS_DATA = [
 	{ id: 'enc', name: 'HQENC', type: 'Establishment', icon: 'fa-anchor' },
 	{ id: 'snc', name: 'HQSNC', type: 'Establishment', icon: 'fa-anchor' },
 	{ id: 'anc', name: 'HQANC', type: 'Establishment', icon: 'fa-anchor' },
-	{ id: 'wnc', name: 'CABS', type: 'Establishment', icon: 'fa-anchor' },
-	{ id: 'ihqmod', name: 'NDC', type: 'Establishment', icon: 'fa-anchor' },
+	{ id: 'cabs', name: 'CABS', type: 'Establishment', icon: 'fa-anchor' },
+	{ id: 'ndc', name: 'NDC', type: 'Establishment', icon: 'fa-anchor' },
 	
 	// Aircraft Carriers
     { id: 'viraat', name: 'INS Viraat (R22)', type: 'Carrier', icon: 'fa-ship' },
@@ -637,15 +637,17 @@ const SHIPS_DATA = [
     { id: 'ina_ezhimala', name: 'Indian Naval Academy, Ezhimala', type: 'Establishment', icon: 'fa-graduation-cap' }
 ];
 
-// ══════════════════════════════════════════════════════════════════════
-// STORAGE — ship data stored as { shipId: [name1, name2, ...] }
-// Key: navy_ship_members
-// ══════════════════════════════════════════════════════════════════════
 const STORAGE_KEY = 'navy_ship_members';
 
 function loadShipData() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+    try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        return (typeof stored === 'object' && stored !== null) ? stored : {};
+    } catch(e) {
+        return {};
+    }
 }
+
 function saveShipData(data) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
 }
@@ -654,14 +656,15 @@ let shipData = loadShipData();
 let updatingShip = null;
 
 function getNamesForShip(shipId) {
-    return shipData[shipId] || [];
+    const data = shipData[shipId];
+    return Array.isArray(data) ? data : [];
 }
 
 function hasCurrentUserServed(shipId) {
     const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
     if (!user || !user.name) return false;
     const names = getNamesForShip(shipId);
-    return names.some(n => n.toLowerCase() === user.name.toLowerCase());
+    return names.some(n => typeof n === 'string' && n.toLowerCase() === user.name.toLowerCase());
 }
 
 function toggleServe(shipId) {
@@ -674,15 +677,15 @@ function toggleServe(shipId) {
     if (updatingShip) return;
     updatingShip = shipId;
 
-    const names   = getNamesForShip(shipId);
-    const myName  = user.name;
-    const alreadyIn = names.some(n => n.toLowerCase() === myName.toLowerCase());
+    const names = getNamesForShip(shipId);
+    const myName = user.name;
+    const alreadyIn = names.some(n => typeof n === 'string' && n.toLowerCase() === myName.toLowerCase());
 
     if (alreadyIn) {
-        shipData[shipId] = names.filter(n => n.toLowerCase() !== myName.toLowerCase());
+        shipData[shipId] = names.filter(n => typeof n === 'string' && n.toLowerCase() !== myName.toLowerCase());
         if (shipData[shipId].length === 0) delete shipData[shipId];
     } else {
-        if (!shipData[shipId]) shipData[shipId] = [];
+        if (!Array.isArray(shipData[shipId])) shipData[shipId] = [];
         shipData[shipId].push(myName);
     }
 
@@ -698,17 +701,19 @@ function toggleServe(shipId) {
 }
 
 function updateTotalCounter() {
-    const total = Object.values(shipData).reduce((acc, names) => acc + names.length, 0);
+    const total = Object.values(shipData).reduce((acc, names) => {
+        return acc + (Array.isArray(names) ? names.length : 0);
+    }, 0);
     const counter = document.getElementById('total-served-counter');
     if (counter) counter.textContent = total.toLocaleString();
 }
 
 function buildTooltip(names) {
-    if (!names || names.length === 0) return '';
-    const SHOW_MAX  = 8;
+    if (!names || !names.length) return '';
+    const SHOW_MAX = 8;
     const displayed = names.slice(0, SHOW_MAX);
-    const extra     = names.length - SHOW_MAX;
-    const nameRows  = displayed.map(n => `<div class="batchmate-name">${n}</div>`).join('');
+    const extra = names.length - SHOW_MAX;
+    const nameRows = displayed.map(n => `<div class="batchmate-name">${n}</div>`).join('');
     const moreRow = extra > 0 ? `<div class="batchmate-more">+${extra} more batchmate${extra > 1 ? 's' : ''}</div>` : '';
     return `
         <div class="batchmate-tooltip">
@@ -723,14 +728,14 @@ function buildTooltip(names) {
 function renderShips() {
     const grid = document.getElementById('ships-grid');
     if (!grid) return;
-    const searchEl    = document.getElementById('ship-search');
-    const query       = searchEl ? searchEl.value.toLowerCase().trim() : '';
-    const activeBtn   = document.querySelector('.ship-filter-btn.active');
+    const searchEl = document.getElementById('ship-search');
+    const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
+    const activeBtn = document.querySelector('.ship-filter-btn.active');
     const activeFilter = activeBtn ? activeBtn.dataset.filter : 'all';
-    const user        = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
+    const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
 
     const filtered = SHIPS_DATA.filter(ship => {
-        const matchesQuery  = !query || ship.name.toLowerCase().includes(query) || ship.type.toLowerCase().includes(query);
+        const matchesQuery = !query || ship.name.toLowerCase().includes(query) || ship.type.toLowerCase().includes(query);
         const matchesFilter = activeFilter === 'all' || ship.type === activeFilter;
         return matchesQuery && matchesFilter;
     });
@@ -746,11 +751,11 @@ function renderShips() {
     }
 
     grid.innerHTML = filtered.map(ship => {
-        const names      = getNamesForShip(ship.id);
-        const count      = names.length;
-        const iServed    = hasCurrentUserServed(ship.id);
-        const isBusy     = updatingShip === ship.id;
-        const tooltip    = buildTooltip(names);
+        const names = getNamesForShip(ship.id);
+        const count = names.length;
+        const iServed = hasCurrentUserServed(ship.id);
+        const isBusy = updatingShip === ship.id;
+        const tooltip = buildTooltip(names);
 
         let btnClass = 'serve-btn';
         let btnText;
@@ -760,12 +765,12 @@ function renderShips() {
             btnText = '<i class="fa fa-sign-in-alt"></i> Sign in to Mark';
         } else if (iServed) {
             btnClass += ' served';
-            btnText  = '<i class="fa fa-check"></i> You Served Here';
+            btnText = '<i class="fa fa-check"></i> You Served Here';
         } else {
-            btnText  = '<i class="fa fa-plus"></i> I Served Here';
+            btnText = '<i class="fa fa-plus"></i> I Served Here';
         }
 
-        const myPill    = iServed ? '<span class="your-ship-pill">You</span>' : '';
+        const myPill = iServed ? '<span class="your-ship-pill">You</span>' : '';
         const countText = count === 0
             ? '<span class="text-muted">No records yet — be the first!</span>'
             : `${count} batchmate${count > 1 ? 's' : ''} served${myPill}`;
@@ -803,33 +808,34 @@ function renderShips() {
     updateTotalCounter();
 }
 
-document.getElementById('ship-search').addEventListener('input', renderShips);
+// Attach Search Filter
+const searchInput = document.getElementById('ship-search');
+if (searchInput) {
+    searchInput.addEventListener('input', renderShips);
+}
 
+// Attach Category Buttons
 document.querySelectorAll('.ship-filter-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         document.querySelectorAll('.ship-filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
+        e.currentTarget.classList.add('active');
         renderShips();
     });
 });
 
-document.addEventListener('navauth:ready', function() {
-    renderShips();
-});
+// Auth Listeners
+document.addEventListener('navauth:ready', renderShips);
+document.addEventListener('navauth:login', renderShips);
+document.addEventListener('navauth:signout', renderShips);
 
-document.addEventListener('navauth:login', function() {
-    renderShips();
-});
+// Dismiss spinner safely in case external lib lags
+setTimeout(function() {
+    var sp = document.getElementById('spinner');
+    if (sp) sp.classList.remove('show');
+}, 350);
 
-document.addEventListener('navauth:signout', function() {
-    renderShips();
-});
-
-(function() {
-    if (typeof NavAuth !== 'undefined') {
-        renderShips();
-    }
-})();
+// UNCONDITIONAL INITIAL CALL: Ships will always display immediately on parse
+renderShips();
 </script>
 </body>
 </html>
