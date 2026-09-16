@@ -752,8 +752,11 @@ function buildTooltip(names) {
 // ── Render all ship cards ─────────────────────────────────────────────
 function renderShips() {
     const grid        = document.getElementById('ships-grid');
-    const query       = document.getElementById('ship-search').value.toLowerCase().trim();
-    const activeFilter = document.querySelector('.ship-filter-btn.active').dataset.filter;
+    if (!grid) return; // DOM not ready yet
+    const searchEl    = document.getElementById('ship-search');
+    const query       = searchEl ? searchEl.value.toLowerCase().trim() : '';
+    const activeBtn   = document.querySelector('.ship-filter-btn.active');
+    const activeFilter = activeBtn ? activeBtn.dataset.filter : 'all';
     const user        = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
 
     const filtered = SHIPS_DATA.filter(ship => {
@@ -845,13 +848,15 @@ document.querySelectorAll('.ship-filter-btn').forEach(btn => {
 
 // ── Wait for auth.js to be ready then render ──────────────────────────
 // auth.js is auto-loaded by nav.js — poll until NavAuth is available
-(function waitForAuth() {
-    if (typeof NavAuth !== 'undefined') {
+// Hard timeout at 3s — render anyway even if auth never loads
+(function waitForAuth(attempts) {
+    attempts = attempts || 0;
+    if (typeof NavAuth !== 'undefined' || attempts > 30) {
         renderShips();
     } else {
-        setTimeout(waitForAuth, 100);
+        setTimeout(function() { waitForAuth(attempts + 1); }, 100);
     }
-})();
+})(0);
 </script>
 </body>
 </html>
