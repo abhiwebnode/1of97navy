@@ -415,11 +415,11 @@ let googleUser = null; // { name, email, picture }
 function initGoogle() {
     if (typeof google === 'undefined') return;
     google.accounts.id.initialize({
-        client_id:  GOOGLE_CLIENT_ID,
-        callback:   handleGoogleResponse,
-        auto_select: true // auto sign-in if previously signed in
+        client_id:   NavAuth.clientId,
+        callback:    handleGoogleResponse,
+        auto_select: true
     });
-    google.accounts.id.prompt(); // show One Tap if available
+    google.accounts.id.prompt();
 }
 
 function triggerGoogleSignIn() {
@@ -439,21 +439,11 @@ function parseJwt(token) {
 }
 
 async function handleGoogleResponse(response) {
-    const payload = parseJwt(response.credential);
-    if (!payload) return;
-
-    googleUser = {
-        name:    payload.name,
-        email:   payload.email,
-        picture: payload.picture
-    };
-
-    // ── Persist to localStorage so refresh keeps user logged in ───────
-    try {
-        localStorage.setItem('navy_google_user', JSON.stringify(googleUser));
-    } catch(e) {}
-
-    await applyGoogleUser(googleUser);
+    // Let auth.js handle storage + navbar update across all pages
+    NavAuth.handleCredential(response, null);
+    // Then apply locally on this profile page
+    googleUser = NavAuth.getUser();
+    if (googleUser) await applyGoogleUser(googleUser);
 }
 
 // Shared logic for both fresh login and restored session
@@ -497,22 +487,8 @@ async function applyGoogleUser(user) {
 }
 
 function handleSignOut() {
-    if (typeof google !== 'undefined') {
-        google.accounts.id.disableAutoSelect();
-        // Revoke Google session so One Tap doesn't auto re-login
-        if (googleUser && googleUser.email) {
-            google.accounts.id.revoke(googleUser.email, () => {});
-        }
-    }
-    // Clear persisted session
-    try { localStorage.removeItem('navy_google_user'); } catch(e) {}
-
-    googleUser = null;
-    document.getElementById('user-bar').style.display               = 'none';
-    document.getElementById('signin-section').style.display         = '';
-    document.getElementById('search-section-compact').style.display = 'none';
-    document.getElementById('result-area').innerHTML                 = '';
-    document.getElementById('not-found-cta').style.display          = 'none';
+    // auth.js handles Google revoke + localStorage clear + page reload
+    NavAuth.signOut();
 }
 
 function showUserBadge(user) {
@@ -903,20 +879,14 @@ document.getElementById('name-input-compact').addEventListener('keydown', e => {
 // ── Init on load — restore session or init Google ────────────────────
 window.addEventListener('load', () => {
 
-    // ── Restore persisted Google session from localStorage ────────────
-    try {
-        const stored = localStorage.getItem('navy_google_user');
-        if (stored) {
-            const restoredUser = JSON.parse(stored);
-            if (restoredUser && restoredUser.email && restoredUser.name) {
-                // Restore immediately — no Google prompt needed
-                applyGoogleUser(restoredUser);
-                return; // skip initGoogle below
-            }
-        }
-    } catch(e) {}
+    // ── Restore session via auth.js ───────────────────────────────────
+    const restoredUser = NavAuth.getUser();
+    if (restoredUser) {
+        applyGoogleUser(restoredUser);
+        return; // skip Google prompt
+    }
 
-    // ── No stored session — init Google normally ──────────────────────
+    // ── No stored session — init Google prompt ────────────────────────
     let attempts = 0;
     const poll = setInterval(() => {
         if (typeof google !== 'undefined' && google.accounts) {

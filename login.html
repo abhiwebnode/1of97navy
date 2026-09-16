@@ -4,28 +4,124 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Login — Indian Navy 1/97 Batch</title>
-    <meta name="description" content="Member portal login for verified Indian Navy 1/97 Batch veterans. Access the full member directory, private forums, and reunion planning.">
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
-    <meta property="og:title" content="Member Login — Indian Navy 1/97 Batch">
-    <meta property="og:description" content="Member portal login for verified Indian Navy 1/97 Batch veterans. Access the full member directory, private forums, and reunion planning.">
-    <meta property="og:image" content="https://www.1of97navy.in/img/og-image.jpg">
-    <meta property="og:locale" content="en_IN">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@1of97navy">
-    <meta name="twitter:title" content="Member Login — Indian Navy 1/97 Batch">
-    <meta name="twitter:description" content="Member portal login for verified Indian Navy 1/97 Batch veterans. Access the full member directory, private forums, and reunion planning.">
-    <meta name="twitter:image" content="https://www.1of97navy.in/img/og-image.jpg">
-
-    <!-- Consolidated Stylesheet -->
+    <meta name="description" content="Member portal login for verified Indian Navy 1/97 Batch veterans.">
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="1/97 Batch — Indian Navy Veterans">
+    <meta property="og:title"       content="Member Login — Indian Navy 1/97 Batch">
+    <meta property="og:description" content="Sign in to access the full 1/97 Batch member community.">
+    <meta property="og:image"       content="https://www.1of97navy.in/img/og-image.jpg">
+    <meta property="og:locale"      content="en_IN">
     <link href="css/all.css" rel="stylesheet">
-
-    <!-- Global Head Injector -->
     <script src="js/header.js"></script>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        .login-card {
+            max-width: 460px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 14px;
+            border-top: 4px solid var(--gold);
+            box-shadow: 0 6px 40px rgba(27,58,107,.12);
+            overflow: hidden;
+        }
+        .login-card-header {
+            background: linear-gradient(135deg, var(--primary), #1a3d7c);
+            padding: 2rem 1.5rem 1.5rem;
+            text-align: center;
+        }
+        .login-anchor {
+            width: 72px; height: 72px; border-radius: 50%;
+            border: 2px solid var(--gold);
+            background: rgba(201,168,76,.1);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem; font-size: 1.8rem; color: var(--gold);
+        }
+        .login-card-header h2 {
+            color: #fff; font-family: 'Saira', sans-serif;
+            font-size: 1.3rem; margin-bottom: .25rem;
+        }
+        .login-card-header p {
+            color: rgba(255,255,255,.6); font-size: .82rem; margin: 0;
+        }
+        .login-card-body { padding: 2rem 2rem 1.5rem; }
+
+        /* Google button */
+        .google-signin-btn {
+            width: 100%;
+            display: flex; align-items: center; justify-content: center;
+            gap: .75rem;
+            background: #fff;
+            border: 2px solid #dde3ef;
+            border-radius: 8px;
+            padding: .85rem 1.25rem;
+            font-size: .95rem; font-weight: 600; color: #444;
+            cursor: pointer; transition: .2s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            margin-bottom: 1.25rem;
+        }
+        .google-signin-btn:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 16px rgba(27,58,107,.12);
+        }
+        .google-signin-btn img { width: 22px; height: 22px; }
+
+        /* Benefits list */
+        .benefit-item {
+            display: flex; align-items: center; gap: .75rem;
+            padding: .5rem 0; font-size: .82rem; color: #666;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .benefit-item:last-child { border-bottom: none; }
+        .benefit-icon {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--secondary);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .benefit-icon i { color: var(--primary); font-size: .72rem; }
+
+        /* Already logged in state */
+        .logged-in-card {
+            max-width: 460px; margin: 0 auto;
+            background: #fff; border-radius: 14px;
+            border-top: 4px solid var(--gold);
+            box-shadow: 0 6px 40px rgba(27,58,107,.12);
+            padding: 2.5rem 2rem; text-align: center;
+        }
+        .logged-in-avatar {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 3px solid var(--gold); margin: 0 auto 1rem;
+            display: block; object-fit: cover;
+        }
+        .logged-in-avatar-placeholder {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 3px solid var(--gold);
+            background: var(--secondary);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-family: 'Saira', sans-serif; font-size: 1.8rem;
+            font-weight: 700; color: var(--primary);
+        }
+        .quick-links { margin-top: 1.5rem; }
+        .quick-link-btn {
+            display: flex; align-items: center; gap: .75rem;
+            padding: .75rem 1rem; border-radius: 8px;
+            background: var(--secondary); border: none;
+            text-decoration: none; color: var(--dark);
+            font-size: .85rem; font-weight: 600;
+            margin-bottom: .5rem; transition: .2s; width: 100%;
+        }
+        .quick-link-btn:hover { background: #dde8fa; color: var(--primary); }
+        .quick-link-btn i { color: var(--gold); width: 20px; text-align: center; }
+
+        .privacy-note {
+            font-size: .72rem; color: #aaa;
+            text-align: center; margin-top: 1.25rem; line-height: 1.6;
+        }
+        .privacy-note i { color: var(--gold); }
+    </style>
 </head>
 
 <body data-page="login">
@@ -34,7 +130,6 @@
     <div class="spinner-grow text-primary" role="status"></div>
 </div>
 
-<!-- Navbar -->
 <div id="nav-placeholder"></div>
 <script src="js/nav.js"></script>
 
@@ -53,21 +148,103 @@
 </div>
 
 <!-- Content -->
-<div class="container py-5 my-3 text-center">
-    <i class="fa fa-lock fa-4x mb-4" style="color: var(--primary);"></i>
-    <h2 class="mb-3" style="color: var(--dark);">Member Login</h2>
-    <p class="text-muted mb-4" style="max-width:520px;margin:0 auto;">Log in with your verified 1/97 Batch credentials to access the full member community.</p>
-    <span class="badge px-3 py-2" style="background: var(--gold); color: var(--dark); font-size:.85rem;">Content coming soon — this page is under construction</span>
-    <div class="mt-4">
-        <a href="index.html" class="btn btn-outline-primary py-2 px-4">← Back to Home</a>
+<div class="container py-5">
+
+    <!-- Login card — shown when NOT logged in -->
+    <div id="login-section">
+        <div class="login-card">
+            <div class="login-card-header">
+                <div class="login-anchor">⚓</div>
+                <h2>1/97 Batch Members</h2>
+                <p>Sign in to access the full member community</p>
+            </div>
+            <div class="login-card-body">
+
+                <!-- Google Sign-in button -->
+                <button class="google-signin-btn" id="google-btn" onclick="triggerSignIn()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                    Sign in with Google
+                </button>
+
+                <!-- What you get access to -->
+                <p class="text-muted small mb-3 fw-semibold" style="color:#aaa !important;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;">
+                    Once signed in you can access:
+                </p>
+                <div class="mb-3">
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fa fa-users"></i></div>
+                        <span>Full Member Directory with contact details</span>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fa fa-user-circle"></i></div>
+                        <span>Your personal profile page</span>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fa fa-images"></i></div>
+                        <span>Complete photo gallery and archives</span>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fa fa-medal"></i></div>
+                        <span>Service awards and achievements</span>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fa fa-rocket"></i></div>
+                        <span>Post-service careers directory</span>
+                    </div>
+                </div>
+
+                <div class="privacy-note">
+                    <i class="fa fa-shield-alt me-1"></i>
+                    We only read your name, email and profile photo from Google.
+                    Your Google account password is never shared with us.
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Logged-in card — shown when already signed in -->
+    <div id="loggedin-section" style="display:none;">
+        <div class="logged-in-card">
+            <div id="li-avatar-wrap"></div>
+            <h4 id="li-welcome" style="font-family:'Saira',sans-serif;color:var(--dark);margin-bottom:.25rem;"></h4>
+            <p class="text-muted small mb-0">You are signed in as a 1/97 Batch member</p>
+            <span class="badge mt-2 mb-4 px-3 py-2" style="background:var(--gold);color:var(--dark);font-size:.72rem;">
+                ✓ Verified Session Active
+            </span>
+
+            <!-- Quick links -->
+            <div class="quick-links">
+                <p class="text-muted small mb-2 text-start fw-semibold" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa !important;">
+                    Quick Access
+                </p>
+                <a href="profile.html" class="quick-link-btn">
+                    <i class="fa fa-user-circle"></i> My Profile
+                </a>
+                <a href="directory.html" class="quick-link-btn">
+                    <i class="fa fa-users"></i> Member Directory
+                </a>
+                <a href="gallery.html" class="quick-link-btn">
+                    <i class="fa fa-images"></i> Photo Gallery
+                </a>
+                <a href="achievements.html" class="quick-link-btn">
+                    <i class="fa fa-medal"></i> Achievements
+                </a>
+            </div>
+
+            <hr class="my-3">
+            <button onclick="NavAuth.signOut()"
+                    class="btn btn-outline-danger btn-sm py-1 px-3">
+                <i class="fa fa-sign-out-alt me-1"></i> Sign Out
+            </button>
+        </div>
+    </div>
+
 </div>
 
 <!-- Footer -->
 <div id="footer-placeholder"></div>
 <script src="js/footer.js"></script>
 
-<!-- Scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="lib/wow/wow.js"></script>
@@ -76,5 +253,68 @@
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
 
+<script>
+// ── If already logged in — show logged-in state immediately ───────────
+document.addEventListener('DOMContentLoaded', function () {
+    var user = NavAuth.getUser();
+    if (user) {
+        showLoggedIn(user);
+    }
+});
+
+// ── Google callback ───────────────────────────────────────────────────
+function onGoogleSignIn(response) {
+    // Let auth.js handle storage + navbar update
+    NavAuth.handleCredential(response, null);
+    // Then show logged-in state on this page
+    var user = NavAuth.getUser();
+    if (user) showLoggedIn(user);
+}
+
+function triggerSignIn() {
+    if (typeof google === 'undefined') {
+        alert('Google Sign-In not loaded. Please refresh the page.');
+        return;
+    }
+    google.accounts.id.prompt();
+}
+
+function showLoggedIn(user) {
+    document.getElementById('login-section').style.display    = 'none';
+    document.getElementById('loggedin-section').style.display = '';
+
+    // Avatar
+    var initials = user.name.split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();
+    var avatarWrap = document.getElementById('li-avatar-wrap');
+    if (user.picture) {
+        avatarWrap.innerHTML =
+            '<img src="' + user.picture + '" alt="' + user.name + '" class="logged-in-avatar"' +
+            ' onerror="this.outerHTML=\'<div class=logged-in-avatar-placeholder>' + initials + '</div>\'">';
+    } else {
+        avatarWrap.innerHTML = '<div class="logged-in-avatar-placeholder">' + initials + '</div>';
+    }
+
+    document.getElementById('li-welcome').textContent = 'Welcome back, ' + user.name.split(' ')[0] + '!';
+}
+
+// ── Init Google Identity Services ─────────────────────────────────────
+window.addEventListener('load', function () {
+    var attempts = 0;
+    var poll = setInterval(function () {
+        if (typeof google !== 'undefined' && google.accounts) {
+            clearInterval(poll);
+            // Only init Google prompt if not already logged in
+            if (!NavAuth.isLoggedIn()) {
+                google.accounts.id.initialize({
+                    client_id: NavAuth.clientId,
+                    callback:  onGoogleSignIn,
+                    auto_select: false
+                });
+            }
+        }
+        if (++attempts > 20) clearInterval(poll);
+    }, 300);
+});
+</script>
 </body>
 </html>

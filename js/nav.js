@@ -125,3 +125,22 @@ var html = '\
     }
 
 })();
+
+// ── Load auth.js after navbar is injected ────────────────────────────
+// This gives every page SSO awareness without adding a separate script tag
+(function () {
+    if (typeof NavAuth !== 'undefined') return; // already loaded
+    var script    = document.createElement('script');
+    script.src    = (function () {
+        // Detect base path — works whether site is at root or subdirectory
+        var scripts = document.getElementsByTagName('script');
+        for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i].src && scripts[i].src.indexOf('nav.js') !== -1) {
+                return scripts[i].src.replace('nav.js', 'auth.js');
+            }
+        }
+        return 'js/auth.js'; // fallback
+    })();
+    script.defer  = true;
+    document.head.appendChild(script);
+})();
