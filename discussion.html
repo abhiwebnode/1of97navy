@@ -52,14 +52,153 @@
     </div>
 </div>
 
+<style>
+    .wa-card {
+        background: #fff;
+        border-radius: 14px;
+        border-top: 4px solid var(--gold);
+        box-shadow: 0 4px 32px rgba(27,58,107,.09);
+        padding: 2.5rem 2rem;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+    .wa-icon-wrap {
+        width: 80px; height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 6px 20px rgba(37,211,102,.3);
+    }
+    .wa-icon-wrap i { color: #fff; font-size: 2rem; }
+
+    .feature-row {
+        display: flex; align-items: flex-start;
+        gap: 1rem; padding: .85rem 0;
+        border-bottom: 1px solid #f0f3fa;
+        text-align: left;
+    }
+    .feature-row:last-child { border-bottom: none; }
+    .feature-dot {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: var(--secondary);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; margin-top: 2px;
+    }
+    .feature-dot i { color: var(--primary); font-size: .85rem; }
+    .feature-title { font-weight: 700; font-size: .92rem; color: var(--dark); margin-bottom: .15rem; }
+    .feature-desc  { font-size: .82rem; color: #777; line-height: 1.5; }
+
+    .notice-box {
+        background: linear-gradient(135deg, var(--primary), #1a3d7c);
+        border-radius: 10px;
+        padding: 1.25rem 1.5rem;
+        color: #fff;
+        display: flex; align-items: flex-start; gap: 1rem;
+        text-align: left; margin-top: 1.5rem;
+    }
+    .notice-box i { color: var(--gold); font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .notice-box p { font-size: .83rem; color: rgba(255,255,255,.85); line-height: 1.6; margin: 0; }
+    .notice-box strong { color: #fff; }
+</style>
+
 <!-- Content -->
-<div class="container py-5 my-3 text-center">
-    <i class="fa fa-comments fa-4x mb-4" style="color: var(--primary);"></i>
-    <h2 class="mb-3" style="color: var(--dark);">Discussion</h2>
-    <p class="text-muted mb-4" style="max-width:520px;margin:0 auto;">Batch conversations — memories, welfare, reunion planning, and everything in between.</p>
-    <span class="badge px-3 py-2" style="background: var(--gold); color: var(--dark); font-size:.85rem;">Content coming soon — this page is under construction</span>
-    <div class="mt-4">
-        <a href="index.html" class="btn btn-outline-primary py-2 px-4">← Back to Home</a>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <span class="section-eyebrow">Batch Conversations</span>
+        <h2 class="section-title display-6 mb-3">Where the 1/97 Batch Talks</h2>
+        <div class="section-divider mb-4"></div>
+        <p class="text-muted" style="max-width:580px;margin:0 auto !important;">
+            Our batch never stopped talking — we just moved from the messdecks
+            to our phones. The 1/97 Batch runs an active community of discussion
+            groups on WhatsApp, where shipmates connect every single day.
+        </p>
+    </div>
+
+    <div class="wa-card">
+
+        <!-- WhatsApp icon -->
+        <div class="wa-icon-wrap">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+
+        <h3 style="font-family:'Saira',sans-serif;color:var(--dark);text-align:center;margin-bottom:.4rem;">
+            Our Discussion Lives on WhatsApp
+        </h3>
+        <p class="text-muted small text-center mb-4" style="max-width:420px;margin:0 auto;">
+            The 1/97 Batch maintains multiple active WhatsApp groups covering
+            every topic that matters to our community.
+        </p>
+
+        <!-- What happens in the groups -->
+        <div class="mb-3">
+            <div class="feature-row">
+                <div class="feature-dot"><i class="fa fa-anchor"></i></div>
+                <div>
+                    <div class="feature-title">Batch Memories</div>
+                    <div class="feature-desc">Reliving the days at INS Chilka, ships we served on, shipmates we remember — stories that never get old.</div>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="feature-dot"><i class="fa fa-hands-helping"></i></div>
+                <div>
+                    <div class="feature-title">Welfare & Support</div>
+                    <div class="feature-desc">Helping batchmates and their families navigate veterans' benefits, medical support, employment and more.</div>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="feature-dot"><i class="fa fa-calendar-alt"></i></div>
+                <div>
+                    <div class="feature-title">Reunion Planning</div>
+                    <div class="feature-desc">Coordinating the next time we get together — venue, dates, logistics and the excitement of seeing old faces.</div>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="feature-dot"><i class="fa fa-ship"></i></div>
+                <div>
+                    <div class="feature-title">Ships & Units</div>
+                    <div class="feature-desc">Conversations by ship — those who served together on the same vessel, reliving those specific memories.</div>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="feature-dot"><i class="fa fa-star"></i></div>
+                <div>
+                    <div class="feature-title">General & Everything Else</div>
+                    <div class="feature-desc">News, achievements, humour, life updates — the full breadth of what makes this batch a family.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to join notice -->
+        <div class="notice-box">
+            <i class="fa fa-shield-alt"></i>
+            <p>
+                <strong>How to join our WhatsApp groups</strong><br>
+                Our groups are <strong>private and verified</strong> — open only to confirmed
+                1/97 Batch members. To be added, reach out to any existing group member
+                or contact the batch admin directly. You will be verified and added to the
+                relevant group based on your service details.<br><br>
+                <span style="color:var(--gold-light,#F0D080);">
+                    <i class="fa fa-lock me-1"></i>
+                    No public links are shared to protect our members' privacy.
+                </span>
+            </p>
+        </div>
+
+        <!-- Contact admin -->
+        <div class="text-center mt-4">
+            <p class="text-muted small mb-3">
+                Already a verified batch member and not in any group yet?
+            </p>
+            <a href="mailto:contact@1of97navy.in?subject=WhatsApp Group Request — 1/97 Batch"
+               class="btn btn-primary py-2 px-4 me-2">
+                <i class="fa fa-envelope me-1"></i> Request via Email
+            </a>
+            <a href="index.html" class="btn btn-outline-primary py-2 px-4">
+                ← Back to Home
+            </a>
+        </div>
+
     </div>
 </div>
 
