@@ -104,84 +104,6 @@
             gap: .35rem;
         }
         .served-count-badge i { color: var(--gold); font-size: .85rem; }
-
-        /* ── Batchmate tooltip ── */
-        .ship-card { position: relative; }
-        .batchmate-tooltip {
-            display: none;
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%; transform: translateX(-50%);
-            background: #0B1E3D;
-            border: 1px solid rgba(201,168,76,.35);
-            border-radius: 8px;
-            padding: .65rem .85rem;
-            min-width: 180px;
-            max-width: 240px;
-            z-index: 999;
-            box-shadow: 0 6px 24px rgba(0,0,0,.25);
-            pointer-events: none;
-        }
-        .batchmate-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%; left: 50%; transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: rgba(201,168,76,.35);
-        }
-        .batchmate-tooltip-title {
-            font-size: .65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .1em;
-            color: var(--gold, #C9A84C);
-            margin-bottom: .4rem;
-        }
-        .batchmate-name {
-            font-size: .75rem;
-            color: rgba(255,255,255,.85);
-            padding: .15rem 0;
-            border-bottom: 1px solid rgba(255,255,255,.06);
-            display: flex;
-            align-items: center;
-            gap: .4rem;
-        }
-        .batchmate-name:last-child { border-bottom: none; }
-        .batchmate-name::before {
-            content: '⚓';
-            font-size: .6rem;
-            opacity: .5;
-        }
-        .batchmate-more {
-            font-size: .7rem;
-            color: rgba(255,255,255,.4);
-            margin-top: .3rem;
-            font-style: italic;
-        }
-        .ship-card:hover .batchmate-tooltip { display: block; }
-
-        /* ── Login prompt ── */
-        .login-prompt {
-            font-size: .72rem;
-            color: #888;
-            text-align: center;
-            margin-top: .5rem;
-        }
-        .login-prompt a { color: var(--primary); font-weight: 600; text-decoration: none; }
-        .login-prompt a:hover { text-decoration: underline; }
-
-        /* ── Your ship pill ── */
-        .your-ship-pill {
-            display: inline-block;
-            background: rgba(27,58,107,.08);
-            color: var(--primary);
-            font-size: .62rem;
-            font-weight: 700;
-            padding: .1rem .45rem;
-            border-radius: 8px;
-            margin-left: .3rem;
-            vertical-align: middle;
-        }
     </style>
 
     <!-- Global Head Injector -->
@@ -653,111 +575,74 @@ const SHIPS_DATA = [
     { id: 'ina_ezhimala', name: 'Indian Naval Academy, Ezhimala', type: 'Establishment', icon: 'fa-graduation-cap' }
 ];
 
-// ══════════════════════════════════════════════════════════════════════
-// STORAGE — ship data stored as { shipId: [name1, name2, ...] }
-// Key: navy_ship_members
-// ══════════════════════════════════════════════════════════════════════
-const STORAGE_KEY = 'navy_ship_members';
-
-function loadShipData() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
-}
-function saveShipData(data) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
-}
-
-let shipData    = loadShipData(); // { shipId: ['Name1', 'Name2'] }
+// ── State Management ──────────────────────────────────────────────────
+let serverCounts = {};
+let userServed = JSON.parse(localStorage.getItem('navy_user_served_ships') || '{}');
 let updatingShip = null;
 
-// ── Get names for a ship ──────────────────────────────────────────────
-function getNamesForShip(shipId) {
-    return shipData[shipId] || [];
-}
-
-// ── Check if current user already marked this ship ────────────────────
-function hasCurrentUserServed(shipId) {
-    const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
-    if (!user) return false;
-    const names = getNamesForShip(shipId);
-    return names.some(n => n.toLowerCase() === user.name.toLowerCase());
-}
-
-// ── Toggle serve ──────────────────────────────────────────────────────
-function toggleServe(shipId) {
-    // Must be logged in
-    const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
-    if (!user) {
-        // Redirect to login
-        window.location.href = 'login.html';
+async function fetchCounts() {
+    if (!APPS_SCRIPT_URL) {
+        renderShips();
         return;
     }
-
-    if (updatingShip) return;
-    updatingShip = shipId;
-
-    const names   = getNamesForShip(shipId);
-    const myName  = user.name;
-    const alreadyIn = names.some(n => n.toLowerCase() === myName.toLowerCase());
-
-    if (alreadyIn) {
-        // Remove
-        shipData[shipId] = names.filter(n => n.toLowerCase() !== myName.toLowerCase());
-        if (shipData[shipId].length === 0) delete shipData[shipId];
-    } else {
-        // Add
-        if (!shipData[shipId]) shipData[shipId] = [];
-        shipData[shipId].push(myName);
+    try {
+        const res = await fetch(APPS_SCRIPT_URL);
+        serverCounts = await res.json();
+    } catch (err) {
+        console.error('Failed to load counts:', err);
     }
-
-    saveShipData(shipData);
-    updatingShip = null;
     renderShips();
-
-    // Sync to Google Sheets if URL set
-    if (APPS_SCRIPT_URL) {
-        const action = alreadyIn ? 'remove' : 'add';
-        const url = `${APPS_SCRIPT_URL}?shipId=${encodeURIComponent(shipId)}&action=${action}&name=${encodeURIComponent(myName)}`;
-        fetch(url, { mode: 'no-cors' }).catch(() => {});
-    }
 }
 
-// ── Total deployments counter ─────────────────────────────────────────
+async function toggleServe(shipId) {
+    if (updatingShip) return;
+    updatingShip = shipId;
+    renderShips();
+
+    const isCurrentlyServed = !!userServed[shipId];
+    const action = isCurrentlyServed ? 'remove' : 'add';
+
+    // Optimistic UI update
+    if (isCurrentlyServed) {
+        delete userServed[shipId];
+        serverCounts[shipId] = Math.max(0, (serverCounts[shipId] || 1) - 1);
+    } else {
+        userServed[shipId] = true;
+        serverCounts[shipId] = (serverCounts[shipId] || 0) + 1;
+    }
+    localStorage.setItem('navy_user_served_ships', JSON.stringify(userServed));
+    renderShips();
+
+    // Trigger update in Google Sheets
+    if (APPS_SCRIPT_URL) {
+        try {
+            const url = `${APPS_SCRIPT_URL}?shipId=${encodeURIComponent(shipId)}&action=${action}`;
+            await fetch(url, { mode: 'no-cors' });
+        } catch (err) {
+            console.error('Failed to sync with Google Sheets:', err);
+        }
+    }
+
+    updatingShip = null;
+    renderShips();
+}
+
+function getCount(shipId) {
+    return serverCounts[shipId] || 0;
+}
+
 function updateTotalCounter() {
-    const total = Object.values(shipData).reduce((acc, names) => acc + names.length, 0);
+    const total = SHIPS_DATA.reduce((acc, ship) => acc + getCount(ship.id), 0);
     document.getElementById('total-served-counter').textContent = total.toLocaleString();
 }
 
-// ── Build tooltip HTML ────────────────────────────────────────────────
-function buildTooltip(names) {
-    if (!names || names.length === 0) return '';
-    const SHOW_MAX  = 8;
-    const displayed = names.slice(0, SHOW_MAX);
-    const extra     = names.length - SHOW_MAX;
-    const nameRows  = displayed.map(n =>
-        `<div class="batchmate-name">${n}</div>`
-    ).join('');
-    const moreRow = extra > 0
-        ? `<div class="batchmate-more">+${extra} more batchmate${extra > 1 ? 's' : ''}</div>`
-        : '';
-    return `
-        <div class="batchmate-tooltip">
-            <div class="batchmate-tooltip-title">
-                <i class="fa fa-users me-1"></i>${names.length} Batchmate${names.length > 1 ? 's' : ''} Served
-            </div>
-            ${nameRows}
-            ${moreRow}
-        </div>`;
-}
-
-// ── Render all ship cards ─────────────────────────────────────────────
 function renderShips() {
-    const grid        = document.getElementById('ships-grid');
-    const query       = document.getElementById('ship-search').value.toLowerCase().trim();
+    const grid = document.getElementById('ships-grid');
+    const query = document.getElementById('ship-search').value.toLowerCase().trim();
     const activeFilter = document.querySelector('.ship-filter-btn.active').dataset.filter;
-    const user        = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
 
     const filtered = SHIPS_DATA.filter(ship => {
-        const matchesQuery  = !query || ship.name.toLowerCase().includes(query) || ship.type.toLowerCase().includes(query);
+        const matchesQuery = !query || ship.name.toLowerCase().includes(query) || ship.type.toLowerCase().includes(query);
         const matchesFilter = activeFilter === 'all' || ship.type === activeFilter;
         return matchesQuery && matchesFilter;
     });
@@ -773,36 +658,17 @@ function renderShips() {
     }
 
     grid.innerHTML = filtered.map(ship => {
-        const names      = getNamesForShip(ship.id);
-        const count      = names.length;
-        const iServed    = hasCurrentUserServed(ship.id);
-        const isBusy     = updatingShip === ship.id;
-        const tooltip    = buildTooltip(names);
-
-        // Button state
-        let btnClass = 'serve-btn';
-        let btnText;
-        if (isBusy) {
-            btnText = '<i class="fa fa-spinner fa-spin"></i> Updating...';
-        } else if (!user) {
-            btnText = '<i class="fa fa-sign-in-alt"></i> Sign in to Mark';
-        } else if (iServed) {
-            btnClass += ' served';
-            btnText  = '<i class="fa fa-check"></i> You Served Here';
-        } else {
-            btnText  = '<i class="fa fa-plus"></i> I Served Here';
-        }
-
-        // Count label
-        const myPill    = iServed ? '<span class="your-ship-pill">You</span>' : '';
-        const countText = count === 0
-            ? '<span class="text-muted">No records yet — be the first!</span>'
-            : `${count} batchmate${count > 1 ? 's' : ''} served${myPill}`;
+        const hasServed = !!userServed[ship.id];
+        const count = getCount(ship.id);
+        const isBusy = updatingShip === ship.id;
+        const btnClass = hasServed ? 'serve-btn served' : 'serve-btn';
+        const btnText = isBusy 
+            ? '<i class="fa fa-spinner fa-spin"></i> Updating...' 
+            : (hasServed ? '<i class="fa fa-check"></i> I Served Here' : '<i class="fa fa-plus"></i> I Served Here');
 
         return `
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <div class="ship-card">
-                ${tooltip}
                 <div>
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="ship-type-badge">${ship.type}</span>
@@ -811,19 +677,16 @@ function renderShips() {
                             <span>${count}</span>
                         </div>
                     </div>
-                    <h5 class="fw-bold mb-1" style="color:var(--dark);font-size:1.05rem;">${ship.name}</h5>
-                    <div class="small mb-3" style="color:#888;">
+                    <h5 class="fw-bold mb-1" style="color:var(--dark); font-size:1.05rem;">${ship.name}</h5>
+                    <div class="small text-muted mb-3">
                         <i class="fa ${ship.icon} me-1" style="color:var(--gold);"></i>
-                        ${countText}
+                        ${count === 1 ? '1 batchmate served' : `${count} batchmates served`}
                     </div>
                 </div>
                 <div>
-                    <button class="${btnClass}"
-                            onclick="toggleServe('${ship.id}')"
-                            ${isBusy ? 'disabled' : ''}>
+                    <button class="${btnClass}" onclick="toggleServe('${ship.id}')" ${isBusy ? 'disabled' : ''}>
                         ${btnText}
                     </button>
-                    ${!user ? '<div class="login-prompt mt-2"><a href="login.html">Sign in</a> to mark your service</div>' : ''}
                 </div>
             </div>
         </div>`;
@@ -843,15 +706,7 @@ document.querySelectorAll('.ship-filter-btn').forEach(btn => {
     });
 });
 
-// ── Wait for auth.js to be ready then render ──────────────────────────
-// auth.js is auto-loaded by nav.js — poll until NavAuth is available
-(function waitForAuth() {
-    if (typeof NavAuth !== 'undefined') {
-        renderShips();
-    } else {
-        setTimeout(waitForAuth, 100);
-    }
-})();
+fetchCounts();
 </script>
 </body>
 </html>
