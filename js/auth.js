@@ -1,25 +1,13 @@
 // ════════════════════════════════════════════════════════════════════
 // auth.js — 1/97 Batch Website · Shared Google Auth State
 // ════════════════════════════════════════════════════════════════════
-// Include on every page that should reflect login state:
-//   <script src="js/auth.js"></script>   (after nav.js)
-//
-// What it does:
-//   • Reads saved Google user from localStorage
-//   • Updates the navbar "Member Login" button to show
-//     user avatar + name when logged in
-//   • Provides NavAuth.getUser() for any page to read
-//   • Handles sign-out from anywhere
-// ════════════════════════════════════════════════════════════════════
 
 const GOOGLE_CLIENT_ID = '500661556440-th99atls21okui7ilhggf06dulkcrnua.apps.googleusercontent.com';
 const STORAGE_KEY      = 'navy_google_user';
 
 var NavAuth = (function () {
-
     var _user = null; // { name, email, picture }
 
-    // ── Read saved session ────────────────────────────────────────────
     function _loadFromStorage() {
         try {
             var stored = localStorage.getItem(STORAGE_KEY);
@@ -34,29 +22,34 @@ var NavAuth = (function () {
         return false;
     }
 
-    // ── Save session ──────────────────────────────────────────────────
     function _saveToStorage(user) {
-        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); } catch(e) {}
+        try { 
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); 
+        } catch(e) {}
     }
 
-    // ── Clear session ─────────────────────────────────────────────────
     function _clearStorage() {
-        try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+        try { 
+            localStorage.removeItem(STORAGE_KEY); 
+        } catch(e) {}
     }
 
-    // ── Update navbar button ──────────────────────────────────────────
     function _updateNavbar(user) {
-        // Wait for nav to be injected by nav.js
         var attempts = 0;
         var poll = setInterval(function () {
             var loginBtn = document.querySelector('.btn-login');
-            if (loginBtn) {
-                clearInterval(poll);
-                if (user) {
-                    // Replace login button with user badge
+            var existingBadge = document.getElementById('nav-user-badge');
+
+            if (user) {
+                if (existingBadge) {
+                    clearInterval(poll);
+                    return;
+                }
+                if (loginBtn) {
+                    clearInterval(poll);
                     loginBtn.outerHTML =
                         '<div class="nav-user-badge" id="nav-user-badge">' +
-                            '<img src="' + user.picture + '" alt="' + user.name + '" ' +
+                            '<img src="' + (user.picture || '') + '" alt="' + user.name + '" ' +
                                  'onerror="this.src=\'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=1B3A6B&color=C9A84C&size=32\'">' +
                             '<span class="nav-user-name">' + user.name.split(' ')[0] + '</span>' +
                             '<button class="nav-signout-btn" onclick="NavAuth.signOut()" title="Sign Out">' +
@@ -64,7 +57,6 @@ var NavAuth = (function () {
                             '</button>' +
                         '</div>';
 
-                    // Inject nav user badge styles if not already present
                     if (!document.getElementById('nav-auth-style')) {
                         var style = document.createElement('style');
                         style.id  = 'nav-auth-style';
@@ -84,40 +76,54 @@ var NavAuth = (function () {
                         document.head.appendChild(style);
                     }
                 }
-                // If not logged in — leave the "Member Login" button as-is
+            } else {
+                if (existingBadge) {
+                    existingBadge.outerHTML = '<a href="/login.html" class="btn-login">Member Login</a>';
+                }
+                if (loginBtn) {
+                    clearInterval(poll);
+                }
             }
-            if (++attempts > 30) clearInterval(poll);
+            if (++attempts > 35) clearInterval(poll);
         }, 100);
     }
 
-    // ── Parse JWT from Google ─────────────────────────────────────────
     function _parseJwt(token) {
         try {
             var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-            return JSON.parse(atob(base64));
-        } catch(e) { return null; }
+            return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
+        } catch(e) { 
+            try {
+                var base64Alt = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+                return JSON.parse(atob(base64Alt));
+            } catch(err) {
+                return null;
+            }
+        }
     }
 
-    // ── Public API ────────────────────────────────────────────────────
-    return {
+    // Immediately restore memory cache from localStorage on load
+    _loadFromStorage();
 
-        // Call on every page — initialises auth state
+    return {
         init: function (onLogin) {
             if (_loadFromStorage()) {
                 _updateNavbar(_user);
                 if (typeof onLogin === 'function') onLogin(_user);
+                return _user;
             } else {
                 _updateNavbar(null);
+                return null;
             }
         },
 
-        // Called when Google returns credentials (from any page)
         handleCredential: function (response, redirectTo) {
+            if (!response || !response.credential) return;
             var payload = _parseJwt(response.credential);
             if (!payload) return;
 
             _user = {
-                name:    payload.name,
+                name:    payload.name || payload.given_name || 'Member',
                 email:   payload.email,
                 picture: payload.picture
             };
@@ -125,10 +131,8 @@ var NavAuth = (function () {
             _saveToStorage(_user);
             _updateNavbar(_user);
 
-            // Fire event so any page listening can react immediately
             document.dispatchEvent(new CustomEvent('navauth:login', { detail: { user: _user } }));
 
-            // Redirect after login if specified
             if (redirectTo) {
                 window.location.href = redirectTo;
             } else if (typeof window._onNavAuthLogin === 'function') {
@@ -136,9 +140,8 @@ var NavAuth = (function () {
             }
         },
 
-        // Sign out from any page
         signOut: function () {
-            if (typeof google !== 'undefined' && _user) {
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id && _user) {
                 try {
                     google.accounts.id.disableAutoSelect();
                     google.accounts.id.revoke(_user.email, function() {});
@@ -147,34 +150,47 @@ var NavAuth = (function () {
             _clearStorage();
             _user = null;
 
-            // Fire signout event before reload
             document.dispatchEvent(new CustomEvent('navauth:signout', { detail: {} }));
-
             window.location.reload();
         },
 
-        // Get current user (null if not logged in)
-        getUser: function () { return _user; },
+        getUser: function () { 
+            if (!_user) _loadFromStorage();
+            return _user; 
+        },
 
-        // Check if logged in
-        isLoggedIn: function () { return _user !== null; },
+        isLoggedIn: function () { 
+            if (!_user) _loadFromStorage();
+            return _user !== null; 
+        },
 
-        // Client ID for use on login/profile pages
         clientId: GOOGLE_CLIENT_ID
     };
-
 })();
 
-// ── Auto-init on every page ───────────────────────────────────────────
-// Fires 'navauth:ready' event so any page can react to auth state
-document.addEventListener('DOMContentLoaded', function () {
-    NavAuth.init(function(user) {
-        // User is logged in — fire ready event with user
-        document.dispatchEvent(new CustomEvent('navauth:ready', { detail: { user: user } }));
-    });
-
-    // Also fire ready event if NOT logged in — pages still need to render
-    if (!NavAuth.isLoggedIn()) {
-        document.dispatchEvent(new CustomEvent('navauth:ready', { detail: { user: null } }));
+// Cross-tab synchronization
+window.addEventListener('storage', function(e) {
+    if (e.key === STORAGE_KEY) {
+        if (e.newValue) {
+            NavAuth.init(function(u) {
+                document.dispatchEvent(new CustomEvent('navauth:login', { detail: { user: u } }));
+            });
+        } else {
+            NavAuth.init();
+            document.dispatchEvent(new CustomEvent('navauth:signout', { detail: {} }));
+        }
     }
 });
+
+// Broadcast readiness
+(function() {
+    function fireReady() {
+        var user = NavAuth.init();
+        document.dispatchEvent(new CustomEvent('navauth:ready', { detail: { user: user } }));
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fireReady);
+    } else {
+        fireReady();
+    }
+})();

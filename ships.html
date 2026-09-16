@@ -6,7 +6,6 @@
     <title>Ships &amp; Units — Indian Navy 1/97 Batch</title>
     <meta name="description" content="Warships, submarines, air squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
     <meta property="og:title" content="Ships &amp; Units — Indian Navy 1/97 Batch">
@@ -14,17 +13,14 @@
     <meta property="og:image" content="https://www.1of97navy.in/img/og-image.jpg">
     <meta property="og:locale" content="en_IN">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@1of97navy">
     <meta name="twitter:title" content="Ships &amp; Units — Indian Navy 1/97 Batch">
     <meta name="twitter:description" content="Warships, submarines, air squadrons, and shore establishments where sailors of the Indian Navy 1/97 Batch served across India's maritime domain.">
     <meta name="twitter:image" content="https://www.1of97navy.in/img/og-image.jpg">
 
-    <!-- Consolidated Stylesheet -->
     <link href="css/all.css" rel="stylesheet">
 
-    <!-- Page-Specific Styles -->
     <style>
         .ship-filter-btn {
             padding: .4rem 1rem;
@@ -105,7 +101,6 @@
         }
         .served-count-badge i { color: var(--gold); font-size: .85rem; }
 
-        /* ── Batchmate tooltip ── */
         .ship-card { position: relative; }
         .batchmate-tooltip {
             display: none;
@@ -160,7 +155,6 @@
         }
         .ship-card:hover .batchmate-tooltip { display: block; }
 
-        /* ── Login prompt ── */
         .login-prompt {
             font-size: .72rem;
             color: #888;
@@ -170,7 +164,6 @@
         .login-prompt a { color: var(--primary); font-weight: 600; text-decoration: none; }
         .login-prompt a:hover { text-decoration: underline; }
 
-        /* ── Your ship pill ── */
         .your-ship-pill {
             display: inline-block;
             background: rgba(27,58,107,.08);
@@ -184,7 +177,6 @@
         }
     </style>
 
-    <!-- Global Head Injector -->
     <script src="js/header.js"></script>
 </head>
 
@@ -194,11 +186,10 @@
     <div class="spinner-grow text-primary" role="status"></div>
 </div>
 
-<!-- Navbar -->
 <div id="nav-placeholder"></div>
 <script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
 
-<!-- Page Header -->
 <div class="page-header text-center text-white">
     <div class="container">
         <span class="hero-badge">Indian Navy · 1/97 Batch</span>
@@ -213,10 +204,7 @@
     </div>
 </div>
 
-<!-- Main Section -->
 <div class="container py-5">
-
-    <!-- Image Showcase Banner -->
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5 bg-white p-3 text-center">
         <img src="./img/ship_served.png" alt="Ships and Units where 1/97 Batch members served" class="img-fluid rounded-3 mx-auto" style="max-height: 480px; object-fit: contain;">
         <div class="p-3">
@@ -227,11 +215,10 @@
         </div>
     </div>
 
-    <!-- Live Interactive Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h2 class="h4 fw-bold mb-1" style="color: var(--dark);">Ships &amp; Establishments Directory</h2>
-            <p class="text-muted small mb-0">Click <strong>"I Served Here"</strong> on any Ships or Establishemnt to mark your service and increment the batch count permanently.</p>
+            <p class="text-muted small mb-0">Click <strong>"I Served Here"</strong> on any Ships or Establishment to mark your service and increment the batch count permanently.</p>
         </div>
         <div class="text-md-end">
             <span class="hero-badge" style="border-color:var(--primary);color:var(--primary);">
@@ -240,7 +227,6 @@
         </div>
     </div>
 
-    <!-- Search and Category Filters -->
     <div class="bg-white p-3 rounded-3 shadow-sm mb-4">
         <div class="row g-3 align-items-center">
             <div class="col-12 col-md-4">
@@ -265,7 +251,6 @@
         </div>
     </div>
 
-    <!-- Ships Grid -->
     <div class="row g-4" id="ships-grid"></div>
 
     <div class="text-center mt-5">
@@ -274,11 +259,9 @@
     </div>
 </div>
 
-<!-- Footer -->
 <div id="footer-placeholder"></div>
 <script src="js/footer.js"></script>
 
-<!-- Scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="lib/wow/wow.js"></script>
@@ -288,7 +271,6 @@
 <script src="js/main.js"></script>
 
 <script>
-// Paste your Web App URL here
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec';
 
 // ── Fleet & Unit Data ───────────────────────────────────────────────────
@@ -299,6 +281,8 @@ const SHIPS_DATA = [
 	{ id: 'enc', name: 'HQENC', type: 'Establishment', icon: 'fa-anchor' },
 	{ id: 'snc', name: 'HQSNC', type: 'Establishment', icon: 'fa-anchor' },
 	{ id: 'anc', name: 'HQANC', type: 'Establishment', icon: 'fa-anchor' },
+	{ id: 'wnc', name: 'CABS', type: 'Establishment', icon: 'fa-anchor' },
+	{ id: 'ihqmod', name: 'NDC', type: 'Establishment', icon: 'fa-anchor' },
 	
 	// Aircraft Carriers
     { id: 'viraat', name: 'INS Viraat (R22)', type: 'Carrier', icon: 'fa-ship' },
@@ -666,28 +650,23 @@ function saveShipData(data) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
 }
 
-let shipData    = loadShipData(); // { shipId: ['Name1', 'Name2'] }
+let shipData = loadShipData();
 let updatingShip = null;
 
-// ── Get names for a ship ──────────────────────────────────────────────
 function getNamesForShip(shipId) {
     return shipData[shipId] || [];
 }
 
-// ── Check if current user already marked this ship ────────────────────
 function hasCurrentUserServed(shipId) {
     const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
-    if (!user) return false;
+    if (!user || !user.name) return false;
     const names = getNamesForShip(shipId);
     return names.some(n => n.toLowerCase() === user.name.toLowerCase());
 }
 
-// ── Toggle serve ──────────────────────────────────────────────────────
 function toggleServe(shipId) {
-    // Must be logged in
     const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
     if (!user) {
-        // Redirect to login
         window.location.href = 'login.html';
         return;
     }
@@ -700,11 +679,9 @@ function toggleServe(shipId) {
     const alreadyIn = names.some(n => n.toLowerCase() === myName.toLowerCase());
 
     if (alreadyIn) {
-        // Remove
         shipData[shipId] = names.filter(n => n.toLowerCase() !== myName.toLowerCase());
         if (shipData[shipId].length === 0) delete shipData[shipId];
     } else {
-        // Add
         if (!shipData[shipId]) shipData[shipId] = [];
         shipData[shipId].push(myName);
     }
@@ -713,7 +690,6 @@ function toggleServe(shipId) {
     updatingShip = null;
     renderShips();
 
-    // Sync to Google Sheets if URL set
     if (APPS_SCRIPT_URL) {
         const action = alreadyIn ? 'remove' : 'add';
         const url = `${APPS_SCRIPT_URL}?shipId=${encodeURIComponent(shipId)}&action=${action}&name=${encodeURIComponent(myName)}`;
@@ -721,24 +697,19 @@ function toggleServe(shipId) {
     }
 }
 
-// ── Total deployments counter ─────────────────────────────────────────
 function updateTotalCounter() {
     const total = Object.values(shipData).reduce((acc, names) => acc + names.length, 0);
-    document.getElementById('total-served-counter').textContent = total.toLocaleString();
+    const counter = document.getElementById('total-served-counter');
+    if (counter) counter.textContent = total.toLocaleString();
 }
 
-// ── Build tooltip HTML ────────────────────────────────────────────────
 function buildTooltip(names) {
     if (!names || names.length === 0) return '';
     const SHOW_MAX  = 8;
     const displayed = names.slice(0, SHOW_MAX);
     const extra     = names.length - SHOW_MAX;
-    const nameRows  = displayed.map(n =>
-        `<div class="batchmate-name">${n}</div>`
-    ).join('');
-    const moreRow = extra > 0
-        ? `<div class="batchmate-more">+${extra} more batchmate${extra > 1 ? 's' : ''}</div>`
-        : '';
+    const nameRows  = displayed.map(n => `<div class="batchmate-name">${n}</div>`).join('');
+    const moreRow = extra > 0 ? `<div class="batchmate-more">+${extra} more batchmate${extra > 1 ? 's' : ''}</div>` : '';
     return `
         <div class="batchmate-tooltip">
             <div class="batchmate-tooltip-title">
@@ -749,10 +720,9 @@ function buildTooltip(names) {
         </div>`;
 }
 
-// ── Render all ship cards ─────────────────────────────────────────────
 function renderShips() {
-    const grid        = document.getElementById('ships-grid');
-    if (!grid) return; // DOM not ready yet
+    const grid = document.getElementById('ships-grid');
+    if (!grid) return;
     const searchEl    = document.getElementById('ship-search');
     const query       = searchEl ? searchEl.value.toLowerCase().trim() : '';
     const activeBtn   = document.querySelector('.ship-filter-btn.active');
@@ -782,7 +752,6 @@ function renderShips() {
         const isBusy     = updatingShip === ship.id;
         const tooltip    = buildTooltip(names);
 
-        // Button state
         let btnClass = 'serve-btn';
         let btnText;
         if (isBusy) {
@@ -796,7 +765,6 @@ function renderShips() {
             btnText  = '<i class="fa fa-plus"></i> I Served Here';
         }
 
-        // Count label
         const myPill    = iServed ? '<span class="your-ship-pill">You</span>' : '';
         const countText = count === 0
             ? '<span class="text-muted">No records yet — be the first!</span>'
@@ -835,7 +803,6 @@ function renderShips() {
     updateTotalCounter();
 }
 
-// ── Event Listeners ───────────────────────────────────────────────────
 document.getElementById('ship-search').addEventListener('input', renderShips);
 
 document.querySelectorAll('.ship-filter-btn').forEach(btn => {
@@ -846,22 +813,23 @@ document.querySelectorAll('.ship-filter-btn').forEach(btn => {
     });
 });
 
-// ── React to auth state ───────────────────────────────────────────────
-// Listen for auth.js ready event — fires whether logged in or not
 document.addEventListener('navauth:ready', function() {
     renderShips();
 });
 
-// Re-render if user logs in from another tab or same page
 document.addEventListener('navauth:login', function() {
     renderShips();
 });
 
-// Fallback — if auth.js already fired before this script ran
-// (can happen if scripts load out of order)
-if (typeof NavAuth !== 'undefined') {
+document.addEventListener('navauth:signout', function() {
     renderShips();
-}
+});
+
+(function() {
+    if (typeof NavAuth !== 'undefined') {
+        renderShips();
+    }
+})();
 </script>
 </body>
 </html>
