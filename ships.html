@@ -846,17 +846,22 @@ document.querySelectorAll('.ship-filter-btn').forEach(btn => {
     });
 });
 
-// ── Wait for auth.js to be ready then render ──────────────────────────
-// auth.js is auto-loaded by nav.js — poll until NavAuth is available
-// Hard timeout at 3s — render anyway even if auth never loads
-(function waitForAuth(attempts) {
-    attempts = attempts || 0;
-    if (typeof NavAuth !== 'undefined' || attempts > 30) {
-        renderShips();
-    } else {
-        setTimeout(function() { waitForAuth(attempts + 1); }, 100);
-    }
-})(0);
+// ── React to auth state ───────────────────────────────────────────────
+// Listen for auth.js ready event — fires whether logged in or not
+document.addEventListener('navauth:ready', function() {
+    renderShips();
+});
+
+// Re-render if user logs in from another tab or same page
+document.addEventListener('navauth:login', function() {
+    renderShips();
+});
+
+// Fallback — if auth.js already fired before this script ran
+// (can happen if scripts load out of order)
+if (typeof NavAuth !== 'undefined') {
+    renderShips();
+}
 </script>
 </body>
 </html>

@@ -132,6 +132,7 @@
 
 <div id="nav-placeholder"></div>
 <script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
 
 <!-- Page Header -->
 <div class="page-header text-center text-white">
@@ -254,19 +255,26 @@
 <script src="js/main.js"></script>
 
 <script>
-// ── If already logged in — show logged-in state immediately ───────────
-document.addEventListener('DOMContentLoaded', function () {
-    var user = NavAuth.getUser();
+// ── React to auth state via events ───────────────────────────────────
+document.addEventListener('navauth:ready', function(e) {
+    var user = e.detail && e.detail.user;
     if (user) {
         showLoggedIn(user);
+    } else {
+        // Not logged in — init Google prompt
+        initGooglePrompt();
     }
+});
+
+// Fires when user completes Google sign-in (on this page or another)
+document.addEventListener('navauth:login', function(e) {
+    var user = e.detail && e.detail.user;
+    if (user) showLoggedIn(user);
 });
 
 // ── Google callback ───────────────────────────────────────────────────
 function onGoogleSignIn(response) {
-    // Let auth.js handle storage + navbar update
     NavAuth.handleCredential(response, null);
-    // Then show logged-in state on this page
     var user = NavAuth.getUser();
     if (user) showLoggedIn(user);
 }
@@ -278,6 +286,31 @@ function triggerSignIn() {
     }
     google.accounts.id.prompt();
 }
+
+function initGooglePrompt() {
+    var attempts = 0;
+    var poll = setInterval(function() {
+        if (typeof google !== 'undefined' && google.accounts) {
+            clearInterval(poll);
+            if (!NavAuth.isLoggedIn()) {
+                google.accounts.id.initialize({
+                    client_id:   NavAuth.clientId,
+                    callback:    onGoogleSignIn,
+                    auto_select: false
+                });
+            }
+        }
+        if (++attempts > 20) clearInterval(poll);
+    }, 300);
+}
+
+// Fallback if auth.js already fired before listener was added
+window.addEventListener('load', function() {
+    if (typeof NavAuth !== 'undefined') {
+        var user = NavAuth.getUser();
+        if (user) showLoggedIn(user);
+    }
+});
 
 function showLoggedIn(user) {
     document.getElementById('login-section').style.display    = 'none';
@@ -297,24 +330,7 @@ function showLoggedIn(user) {
     document.getElementById('li-welcome').textContent = 'Welcome back, ' + user.name.split(' ')[0] + '!';
 }
 
-// ── Init Google Identity Services ─────────────────────────────────────
-window.addEventListener('load', function () {
-    var attempts = 0;
-    var poll = setInterval(function () {
-        if (typeof google !== 'undefined' && google.accounts) {
-            clearInterval(poll);
-            // Only init Google prompt if not already logged in
-            if (!NavAuth.isLoggedIn()) {
-                google.accounts.id.initialize({
-                    client_id: NavAuth.clientId,
-                    callback:  onGoogleSignIn,
-                    auto_select: false
-                });
-            }
-        }
-        if (++attempts > 20) clearInterval(poll);
-    }, 300);
-});
+
 </script>
 </body>
 </html>

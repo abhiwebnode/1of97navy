@@ -255,6 +255,7 @@
 
 <div id="nav-placeholder"></div>
 <script src="js/nav.js"></script>
+<script src="js/auth.js"></script>
 
 <div class="page-header text-center text-white">
     <div class="container">
@@ -877,25 +878,47 @@ document.getElementById('search-btn-compact').addEventListener('click', () => do
 document.getElementById('name-input-compact').addEventListener('keydown', e => { if(e.key==='Enter') doSearch('name-input-compact'); });
 
 // ── Init on load — restore session or init Google ────────────────────
-window.addEventListener('load', () => {
-
-    // ── Restore session via auth.js ───────────────────────────────────
-    const restoredUser = NavAuth.getUser();
-    if (restoredUser) {
-        applyGoogleUser(restoredUser);
-        return; // skip Google prompt
+// ── React to auth state via events ───────────────────────────────────
+// navauth:ready fires when auth.js has checked localStorage
+document.addEventListener('navauth:ready', function(e) {
+    const user = e.detail && e.detail.user;
+    if (user) {
+        // Already logged in — show profile automatically
+        applyGoogleUser(user);
+    } else {
+        // Not logged in — show sign-in card, init Google prompt
+        initGooglePrompt();
     }
+});
 
-    // ── No stored session — init Google prompt ────────────────────────
+// navauth:login fires when user signs in from any page (incl. login.html)
+document.addEventListener('navauth:login', function(e) {
+    const user = e.detail && e.detail.user;
+    if (user) applyGoogleUser(user);
+});
+
+// Fallback if auth.js already ran before this listener was added
+window.addEventListener('load', function() {
+    if (typeof NavAuth !== 'undefined') {
+        const user = NavAuth.getUser();
+        if (user) {
+            applyGoogleUser(user);
+        } else {
+            initGooglePrompt();
+        }
+    }
+});
+
+function initGooglePrompt() {
     let attempts = 0;
-    const poll = setInterval(() => {
+    const poll = setInterval(function() {
         if (typeof google !== 'undefined' && google.accounts) {
             clearInterval(poll);
             initGoogle();
         }
         if (++attempts > 20) clearInterval(poll);
     }, 300);
-});
+}
 
 // ?name= URL param
 const urlName = new URLSearchParams(window.location.search).get('name');

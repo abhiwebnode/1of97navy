@@ -125,6 +125,9 @@ var NavAuth = (function () {
             _saveToStorage(_user);
             _updateNavbar(_user);
 
+            // Fire event so any page listening can react immediately
+            document.dispatchEvent(new CustomEvent('navauth:login', { detail: { user: _user } }));
+
             // Redirect after login if specified
             if (redirectTo) {
                 window.location.href = redirectTo;
@@ -144,14 +147,10 @@ var NavAuth = (function () {
             _clearStorage();
             _user = null;
 
-            // Redirect to login page or refresh
-            var isLoginPage = window.location.pathname.indexOf('login.html') !== -1;
-            if (isLoginPage) {
-                window.location.reload();
-            } else {
-                // Refresh current page — navbar will revert to login button
-                window.location.reload();
-            }
+            // Fire signout event before reload
+            document.dispatchEvent(new CustomEvent('navauth:signout', { detail: {} }));
+
+            window.location.reload();
         },
 
         // Get current user (null if not logged in)
@@ -167,6 +166,15 @@ var NavAuth = (function () {
 })();
 
 // ── Auto-init on every page ───────────────────────────────────────────
+// Fires 'navauth:ready' event so any page can react to auth state
 document.addEventListener('DOMContentLoaded', function () {
-    NavAuth.init();
+    NavAuth.init(function(user) {
+        // User is logged in — fire ready event with user
+        document.dispatchEvent(new CustomEvent('navauth:ready', { detail: { user: user } }));
+    });
+
+    // Also fire ready event if NOT logged in — pages still need to render
+    if (!NavAuth.isLoggedIn()) {
+        document.dispatchEvent(new CustomEvent('navauth:ready', { detail: { user: null } }));
+    }
 });
