@@ -424,9 +424,8 @@ function triggerGoogleSignIn() {
 }
 
 async function handleGoogleResponse(response) {
+    // Pass to NavAuth; it will trigger the navauth:login or navauth:rejected events asynchronously
     NavAuth.handleCredential(response, null);
-    googleUser = NavAuth.getUser();
-    if (googleUser) await applyGoogleUser(googleUser);
 }
 
 async function applyGoogleUser(user) {
@@ -665,8 +664,7 @@ function showProfile(dir, awards, postservice) {
             <div class="award-item">
                 <div class="award-dot"></div>
                 <div>
-                    <div class="award-name">${getIcon(a.award)} ${a.award}</div>
-                    ${[a.year,a.presentedBy].filter(Boolean).length ? `<div class="award-meta">${[a.year,a.presentedBy].filter(Boolean).join(' · ')}</div>` : ''}
+                    <div class="award-name">${getIcon(a.award)} ${a.award}</div>${[a.year,a.presentedBy].filter(Boolean).length ? `<div class="award-meta">${[a.year,a.presentedBy].filter(Boolean).join(' · ')}</div>` : ''}
                     ${a.citation ? `<div class="award-citation">"${a.citation}"</div>` : ''}
                 </div>
             </div>`).join('')}
@@ -699,8 +697,7 @@ function showProfile(dir, awards, postservice) {
                 <div class="ps-sector">${p.sector || 'Post-Service'}</div>
                 <div class="ps-org">${p.org || ''}</div>
                 <div class="ps-role">${p.role || ''}</div>
-                <div class="ps-loc"><i class="fa fa-map-marker-alt me-1" style="color:var(--gold);font-size:.65rem;"></i>${[p.city,p.state].filter(Boolean).join(', ')}</div>
-                ${p.brief ? `<div class="ps-brief">${p.brief}</div>` : ''}
+                <div class="ps-loc"><i class="fa fa-map-marker-alt me-1" style="color:var(--gold);font-size:.65rem;"></i>${[p.city,p.state].filter(Boolean).join(', ')}</div>${p.brief ? `<div class="ps-brief">${p.brief}</div>` : ''}
             </div>`).join('')}
         </div>
         <div class="update-strip">
@@ -786,7 +783,7 @@ function showMultiple(dirMatches) {
                 ${photoEl}
                 <div style="flex:1;min-width:0;">
                     <div class="fw-bold" style="color:var(--dark);">${m.name}</div>
-                    <div class="small text-muted">${m.rank} · ${m.trade}</div>
+                    <div class="small text-muted">${m.rank} ·${m.trade}</div>
                     <div class="small text-muted">${[m.city,m.state].filter(Boolean).join(', ')}</div>
                 </div>
                 <i class="fa fa-chevron-right" style="color:var(--gold);font-size:.8rem;"></i>
