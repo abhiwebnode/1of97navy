@@ -188,7 +188,6 @@
 
 <div id="nav-placeholder"></div>
 <script src="js/nav.js"></script>
-<script src="js/auth.js"></script>
 
 <div class="page-header text-center text-white">
     <div class="container">
@@ -587,7 +586,7 @@ const SHIPS_DATA = [
 // Deploy: Extensions → Apps Script → Deploy → New Deployment
 //   Execute as: Me | Who has access: Anyone
 // ══════════════════════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpv2k_D-fCq6F1ihJfUGkSUOkCMb3HC-EnCbSgNRKSu313eO6SnT06tVLJKkhf-LDD7w/exec';
 
 // ── Local cache key ───────────────────────────────────────────────────
 const SHIP_STORAGE_KEY = 'navy_ship_members_v2';
@@ -614,7 +613,7 @@ function saveToCache() {
 
 // ── Fetch all records from Google Sheet via Apps Script ───────────────
 async function fetchFromSheet() {
-    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwpv2k_D-fCq6F1ihJfUGkSUOkCMb3HC-EnCbSgNRKSu313eO6SnT06tVLJKkhf-LDD7w/exec') {
         loadFromCache(); // fallback to cache if no URL set
         dataLoaded = true;
         renderShips();
@@ -685,7 +684,7 @@ async function toggleServe(shipId) {
     renderShips();
 
     // ── Sync to Google Sheet ──────────────────────────────────────────
-    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbwpv2k_D-fCq6F1ihJfUGkSUOkCMb3HC-EnCbSgNRKSu313eO6SnT06tVLJKkhf-LDD7w/exec') {
         try {
             await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
