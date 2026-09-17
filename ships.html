@@ -188,7 +188,6 @@
 
 <div id="nav-placeholder"></div>
 <script src="js/nav.js"></script>
-<script src="js/auth.js"></script>
 
 <div class="page-header text-center text-white">
     <div class="container">
@@ -271,8 +270,11 @@
 <script src="js/main.js"></script>
 
 <script>
-// Web App URL for deployment logging
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhNeTgOeqLkqtxemb9xHGcnSkDWatkGXk_LszC81xr0nshhQ1Ozf613qtg_U9lTPs9/exec';
+// ══════════════════════════════════════════════════════════════════════
+// APPS SCRIPT URL — paste your deployed Web App URL here
+// Execute as: Me | Who has access: Anyone
+// ══════════════════════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwpv2k_D-fCq6F1ihJfUGkSUOkCMb3HC-EnCbSgNRKSu313eO6SnT06tVLJKkhf-LDD7w/exec';
 
 // ── Complete Fleet & Unit Data (100% of units preserved) ─────────────────
 const SHIPS_DATA = [
@@ -582,24 +584,55 @@ const SHIPS_DATA = [
     { id: 'ina_ezhimala', name: 'Indian Naval Academy, Ezhimala', type: 'Establishment', icon: 'fa-graduation-cap' }
 ];
 
-// Renamed key to prevent collisions with auth.js
-const SHIP_STORAGE_KEY = 'navy_ship_members';
+// ── Local cache key ───────────────────────────────────────────────────
+const SHIP_STORAGE_KEY = 'navy_ship_members_v2';
 
-function loadShipData() {
+// ── In-memory ship data: { shipId: ['Name1', 'Name2'] } ──────────────
+let shipData     = {};
+let updatingShip = null;
+let dataLoaded   = false;
+
+// ── Load from localStorage cache ──────────────────────────────────────
+function loadFromCache() {
     try {
         const stored = JSON.parse(localStorage.getItem(SHIP_STORAGE_KEY) || '{}');
-        return (typeof stored === 'object' && stored !== null) ? stored : {};
+        if (typeof stored === 'object' && stored !== null) {
+            shipData = stored;
+        }
+    } catch(e) {}
+}
+
+// ── Save to localStorage cache ────────────────────────────────────────
+function saveToCache() {
+    try { localStorage.setItem(SHIP_STORAGE_KEY, JSON.stringify(shipData)); } catch(e) {}
+}
+
+// ── Fetch all records from Google Sheet via Apps Script ───────────────
+async function fetchFromSheet() {
+    loadFromCache();
+    renderShips();
+
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+        dataLoaded = true;
+        return;
+    }
+
+    try {
+        const res = await fetch(APPS_SCRIPT_URL + '?action=getAll');
+        const data = await res.json();
+        if (typeof data === 'object' && data !== null && !data.error) {
+            shipData   = data;
+            dataLoaded = true;
+            saveToCache();
+            renderShips();
+        } else {
+            dataLoaded = true;
+        }
     } catch(e) {
-        return {};
+        dataLoaded = true;
+        console.warn('Ships sheet fetch failed, using cache:', e);
     }
 }
-
-function saveShipData(data) {
-    try { localStorage.setItem(SHIP_STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
-}
-
-let shipData = loadShipData();
-let updatingShip = null;
 
 function getNamesForShip(shipId) {
     const data = shipData[shipId];
@@ -608,41 +641,61 @@ function getNamesForShip(shipId) {
 
 function hasCurrentUserServed(shipId) {
     const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
-    if (!user || !user.name) return false;
+    if (!user || !user.email) return false;
     const names = getNamesForShip(shipId);
-    return names.some(n => typeof n === 'string' && n.toLowerCase() === user.name.toLowerCase());
+    return names.some(n => typeof n === 'string' &&
+        n.toLowerCase() === (user.name || '').toLowerCase());
 }
 
-function toggleServe(shipId) {
+async function toggleServe(shipId) {
     const user = (typeof NavAuth !== 'undefined') ? NavAuth.getUser() : null;
     if (!user) {
         window.location.href = 'login.html';
         return;
     }
-
     if (updatingShip) return;
     updatingShip = shipId;
+    renderShips(); // show spinner state
 
-    const names = getNamesForShip(shipId);
-    const myName = user.name;
-    const alreadyIn = names.some(n => typeof n === 'string' && n.toLowerCase() === myName.toLowerCase());
+    const names    = getNamesForShip(shipId);
+    const myName   = user.name;
+    const myEmail  = user.email;
+    const alreadyIn = names.some(n =>
+        typeof n === 'string' && n.toLowerCase() === myName.toLowerCase()
+    );
+    const action = alreadyIn ? 'remove' : 'add';
 
+    // ── Optimistic UI update ──────────────────────────────────────────
     if (alreadyIn) {
-        shipData[shipId] = names.filter(n => typeof n === 'string' && n.toLowerCase() !== myName.toLowerCase());
+        shipData[shipId] = names.filter(n =>
+            typeof n === 'string' && n.toLowerCase() !== myName.toLowerCase()
+        );
         if (shipData[shipId].length === 0) delete shipData[shipId];
     } else {
         if (!Array.isArray(shipData[shipId])) shipData[shipId] = [];
         shipData[shipId].push(myName);
     }
-
-    saveShipData(shipData);
+    saveToCache();
     updatingShip = null;
     renderShips();
 
-    if (APPS_SCRIPT_URL) {
-        const action = alreadyIn ? 'remove' : 'add';
-        const url = `${APPS_SCRIPT_URL}?shipId=${encodeURIComponent(shipId)}&action=${action}&name=${encodeURIComponent(myName)}`;
-        fetch(url, { mode: 'no-cors' }).catch(() => {});
+    // ── Sync to Google Sheet (Bypassing CORS preflight using text/plain) ──
+    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
+        try {
+            await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action:  action,
+                    shipId:  shipId,
+                    name:    myName,
+                    email:   myEmail
+                }),
+                mode: 'no-cors'
+            });
+        } catch(e) {
+            console.warn('Sheet sync failed — data saved locally:', e);
+        }
     }
 }
 
@@ -757,14 +810,13 @@ function renderShips() {
 
 function initPage() {
     renderShips();
+    fetchFromSheet();
 
-    // Attach Search Filter
     const searchInput = document.getElementById('ship-search');
     if (searchInput) {
         searchInput.addEventListener('input', renderShips);
     }
 
-    // Attach Category Buttons
     document.querySelectorAll('.ship-filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             document.querySelectorAll('.ship-filter-btn').forEach(b => b.classList.remove('active'));
@@ -773,7 +825,6 @@ function initPage() {
         });
     });
 
-    // Dismiss full-screen spinner
     const sp = document.getElementById('spinner');
     if (sp) {
         sp.classList.remove('show');
@@ -781,14 +832,12 @@ function initPage() {
     }
 }
 
-// Ensure execution whether DOM is already interactive or still loading
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initPage);
 } else {
     initPage();
 }
 
-// Auth State Listeners
 document.addEventListener('navauth:ready', renderShips);
 document.addEventListener('navauth:login', renderShips);
 document.addEventListener('navauth:signout', renderShips);
