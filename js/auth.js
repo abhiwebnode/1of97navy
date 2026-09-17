@@ -80,9 +80,7 @@ var NavAuth = (function () {
                 if (existingBadge) {
                     existingBadge.outerHTML = '<a href="/login.html" class="btn-login">Member Login</a>';
                 }
-                if (loginBtn) {
-                    clearInterval(poll);
-                }
+                clearInterval(poll); // always stop — nothing more to do
             }
             if (++attempts > 35) clearInterval(poll);
         }, 100);
@@ -91,14 +89,18 @@ var NavAuth = (function () {
     function _parseJwt(token) {
         try {
             var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-            return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
-        } catch(e) { 
-            try {
-                var base64Alt = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-                return JSON.parse(atob(base64Alt));
-            } catch(err) {
-                return null;
-            }
+            // Pad base64 to correct length
+            while (base64.length % 4) base64 += '=';
+            var decoded = atob(base64);
+            // Modern UTF-8 safe decode — no deprecated escape()
+            var utf8 = decodeURIComponent(
+                decoded.split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join('')
+            );
+            return JSON.parse(utf8);
+        } catch(e) {
+            return null;
         }
     }
 
@@ -107,7 +109,8 @@ var NavAuth = (function () {
 
     return {
         init: function (onLogin) {
-            if (_loadFromStorage()) {
+            // _user already loaded eagerly at module init — no need to re-read storage
+            if (_user) {
                 _updateNavbar(_user);
                 if (typeof onLogin === 'function') onLogin(_user);
                 return _user;
