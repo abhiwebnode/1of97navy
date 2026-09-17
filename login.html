@@ -145,6 +145,7 @@
 </div>
 
 <div class="container py-5">
+    <!-- Default Login Section -->
     <div id="login-section">
         <div class="login-card">
             <div class="login-card-header">
@@ -220,7 +221,7 @@
                         </div>
                     </div>
 
-                    <!-- Warning statement — not a button -->
+                    <!-- Warning statement -->
                     <div style="background:#fffbf0;border:1.5px solid #f0d080;border-radius:8px;
                                 padding:.85rem 1rem;margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;">
                         <i class="fa fa-exclamation-triangle"
@@ -232,8 +233,8 @@
                         </p>
                     </div>
 
-                    <!-- Action buttons -->
-                    <button onclick="showLoggedOut()"
+                    <!-- Action buttons (Changed to perform a clean page refresh) -->
+                    <button onclick="window.location.href='login.html'"
                             class="btn btn-primary py-2 px-4 w-100 mb-2">
                         <i class="fa fa-user-circle me-2"></i>Try a Different Google Account
                     </button>
@@ -252,11 +253,13 @@
 							contact@1of97navy.in
 						</a>
 					</div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Logged in state -->
     <div id="loggedin-section" style="display:none;">
         <div class="logged-in-card">
             <div id="li-avatar-wrap"></div>
@@ -300,6 +303,7 @@ var googleInitDone = false;
 
 function showLoggedIn(user) {
     document.getElementById('login-section').style.display    = 'none';
+    document.getElementById('rejected-section').style.display = 'none';
     document.getElementById('loggedin-section').style.display = '';
 
     var initials = (user.name || 'Veteran').split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();
@@ -317,11 +321,11 @@ function showLoggedIn(user) {
 function showLoggedOut() {
     document.getElementById('login-section').style.display    = '';
     document.getElementById('loggedin-section').style.display = 'none';
+    document.getElementById('rejected-section').style.display = 'none';
     initGooglePrompt();
 }
 
 function onGoogleSignIn(response) {
-    // Pass to NavAuth; it will trigger the navauth:login or navauth:rejected events asynchronously
     NavAuth.handleCredential(response, null);
 }
 
@@ -395,7 +399,6 @@ function showRejected(email) {
     document.getElementById('rejected-section').style.display = '';
     var el = document.getElementById('rejected-email-addr');
     if (el) el.textContent = email || 'Your Google account';
-    // Scroll to top of card
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -412,17 +415,13 @@ document.addEventListener('navauth:rejected', function(e) {
     var email    = params.get('email') || '';
 
     if (rejected === '1') {
-        // Show rejection card immediately — don't wait for navauth:ready
-        // Small delay to let DOM fully render first
         setTimeout(function() {
             showRejected(decodeURIComponent(email));
         }, 100);
-        // Clean URL so refreshing doesn't re-show rejection
         history.replaceState({}, '', 'login.html');
         return;
     }
 
-    // Normal page load — check if already logged in
     if (typeof NavAuth !== 'undefined' && NavAuth.isLoggedIn()) {
         showLoggedIn(NavAuth.getUser());
     }
