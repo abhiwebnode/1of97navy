@@ -80,7 +80,9 @@ var NavAuth = (function () {
                 if (existingBadge) {
                     existingBadge.outerHTML = '<a href="/login.html" class="btn-login">Member Login</a>';
                 }
-                clearInterval(poll); // always stop — nothing more to do
+                if (loginBtn) {
+                    clearInterval(poll);
+                }
             }
             if (++attempts > 35) clearInterval(poll);
         }, 100);
@@ -89,19 +91,75 @@ var NavAuth = (function () {
     function _parseJwt(token) {
         try {
             var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-            // Pad base64 to correct length
-            while (base64.length % 4) base64 += '=';
-            var decoded = atob(base64);
-            // Modern UTF-8 safe decode — no deprecated escape()
-            var utf8 = decodeURIComponent(
-                decoded.split('').map(function(c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join('')
-            );
-            return JSON.parse(utf8);
-        } catch(e) {
-            return null;
+            return JSON.parse(decodeURIComponent(escape(window.atob(base64))));
+        } catch(e) { 
+            try {
+                var base64Alt = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+                return JSON.parse(atob(base64Alt));
+            } catch(err) {
+                return null;
+            }
         }
+    }
+
+    // ── Directory CSV URL for email verification ──────────────────────
+    var DIRECTORY_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbYF4OsWbMY0NfKvUYTyM0soo2ZZlD9OtC3w77RlINBT7BfyRHv7EK4iVTcqdwzPjfH9epRa8rEeWQ/pub?gid=1459106869&single=true&output=csv';
+
+    // Cache verified emails for this session so CSV is only fetched once
+    var _verifiedCache = null; // null = not fetched, Set = fetched
+
+    function _verifyEmailInDirectory(email, callback) {
+        // If already fetched this session, check from cache
+        if (_verifiedCache !== null) {
+            callback(_verifiedCache.has(email.toLowerCase()));
+            return;
+        }
+
+        // Fetch directory CSV
+        fetch(DIRECTORY_CSV)
+            .then(function(res) { return res.text(); })
+            .then(function(text) {
+                var lines   = text.trim().split('
+');
+                var headers = _parseCSVLine(lines[0]);
+                // Find email column — matches the directory sheet header
+                var emailCol = -1;
+                for (var i = 0; i < headers.length; i++) {
+                    if (headers[i].toLowerCase().indexOf('email') !== -1) {
+                        emailCol = i;
+                        break;
+                    }
+                }
+
+                _verifiedCache = new Set();
+                if (emailCol >= 0) {
+                    for (var j = 1; j < lines.length; j++) {
+                        var cols  = _parseCSVLine(lines[j]);
+                        var eml   = (cols[emailCol] || '').trim().toLowerCase();
+                        if (eml) _verifiedCache.add(eml);
+                    }
+                }
+
+                callback(_verifiedCache.has(email.toLowerCase()));
+            })
+            .catch(function() {
+                // CSV fetch failed — fail open (allow login) so network issues
+                // don't lock out legitimate members
+                console.warn('NavAuth: Directory verification failed — allowing login');
+                callback(true);
+            });
+    }
+
+    function _parseCSVLine(line) {
+        var result = [], cur = '', inQ = false;
+        for (var i = 0; i < line.length; i++) {
+            var ch = line[i];
+            if (ch === '"') { inQ = !inQ; }
+            else if (ch === ',' && !inQ) { result.push(cur); cur = ''; }
+            else { cur += ch; }
+        }
+        result.push(cur);
+        return result;
     }
 
     // Immediately restore memory cache from localStorage on load
@@ -109,8 +167,7 @@ var NavAuth = (function () {
 
     return {
         init: function (onLogin) {
-            // _user already loaded eagerly at module init — no need to re-read storage
-            if (_user) {
+            if (_loadFromStorage()) {
                 _updateNavbar(_user);
                 if (typeof onLogin === 'function') onLogin(_user);
                 return _user;
@@ -125,22 +182,35 @@ var NavAuth = (function () {
             var payload = _parseJwt(response.credential);
             if (!payload) return;
 
-            _user = {
+            var pendingUser = {
                 name:    payload.name || payload.given_name || 'Member',
                 email:   payload.email,
                 picture: payload.picture
             };
 
-            _saveToStorage(_user);
-            _updateNavbar(_user);
+            // ── Verify email against directory before allowing login ────
+            _verifyEmailInDirectory(pendingUser.email, function(isVerified) {
+                if (!isVerified) {
+                    // Not in directory — fire rejected event, do not save session
+                    document.dispatchEvent(new CustomEvent('navauth:rejected', {
+                        detail: { email: pendingUser.email }
+                    }));
+                    return;
+                }
 
-            document.dispatchEvent(new CustomEvent('navauth:login', { detail: { user: _user } }));
+                // Verified — save session and proceed
+                _user = pendingUser;
+                _saveToStorage(_user);
+                _updateNavbar(_user);
 
-            if (redirectTo) {
-                window.location.href = redirectTo;
-            } else if (typeof window._onNavAuthLogin === 'function') {
-                window._onNavAuthLogin(_user);
-            }
+                document.dispatchEvent(new CustomEvent('navauth:login', { detail: { user: _user } }));
+
+                if (redirectTo) {
+                    window.location.href = redirectTo;
+                } else if (typeof window._onNavAuthLogin === 'function') {
+                    window._onNavAuthLogin(_user);
+                }
+            });
         },
 
         signOut: function () {
@@ -170,6 +240,17 @@ var NavAuth = (function () {
         clientId: GOOGLE_CLIENT_ID
     };
 })();
+
+// ── Global rejection handler ──────────────────────────────────────────
+// On any page except login.html — redirect to login with rejected param
+// On login.html — the page handles it locally via navauth:rejected event
+document.addEventListener('navauth:rejected', function(e) {
+    var isLoginPage = window.location.pathname.indexOf('login.html') !== -1;
+    if (!isLoginPage) {
+        var email = (e.detail && e.detail.email) ? e.detail.email : '';
+        window.location.href = 'login.html?rejected=1&email=' + encodeURIComponent(email);
+    }
+});
 
 // Cross-tab synchronization
 window.addEventListener('storage', function(e) {

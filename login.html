@@ -196,6 +196,69 @@
         </div>
     </div>
 
+    <!-- Rejection card — shown when email not in directory -->
+    <div id="rejected-section" style="display:none;">
+        <div style="max-width:460px;margin:0 auto;">
+            <div class="login-card">
+                <div class="login-card-header" style="background:linear-gradient(135deg,#6b1a1a,#8b2020);">
+                    <div class="login-anchor" style="border-color:rgba(255,200,200,.4);background:rgba(255,255,255,.08);">
+                        <i class="fa fa-ban" style="font-size:1.6rem;color:#ff9999;"></i>
+                    </div>
+                    <h2 style="color:#fff;">Access Restricted</h2>
+                    <p style="color:rgba(255,200,200,.75);">This email is not in our member directory</p>
+                </div>
+                <div class="login-card-body">
+
+                    <!-- Email display -->
+                    <div style="background:#fff5f5;border:1.5px solid #fcc;border-radius:8px;
+                                padding:.85rem 1rem;margin-bottom:1.25rem;text-align:center;">
+                        <code id="rejected-email-addr"
+                              style="font-size:.88rem;color:#c0392b;font-weight:700;word-break:break-all;">
+                        </code>
+                        <div style="font-size:.78rem;color:#888;margin-top:.3rem;">
+                            is not registered in the 1/97 Batch directory.
+                        </div>
+                    </div>
+
+                    <!-- Warning statement — not a button -->
+                    <div style="background:#fffbf0;border:1.5px solid #f0d080;border-radius:8px;
+                                padding:.85rem 1rem;margin-bottom:1.5rem;display:flex;gap:.75rem;align-items:flex-start;">
+                        <i class="fa fa-exclamation-triangle"
+                           style="color:#c9a84c;font-size:1rem;margin-top:.15rem;flex-shrink:0;"></i>
+                        <p style="font-size:.82rem;color:#666;line-height:1.7;margin:0;">
+                            <strong style="color:#444;">Do not attempt to log in if you are not from the 1/97 Batch.</strong><br>
+                            This portal is exclusively for verified Indian Navy 1/97 Batch veterans.
+                            Unauthorised access attempts are logged.
+                        </p>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <button onclick="showLoggedOut()"
+                            class="btn btn-primary py-2 px-4 w-100 mb-2">
+                        <i class="fa fa-user-circle me-2"></i>Try a Different Google Account
+                    </button>
+
+                    <a href="index.html"
+                       class="btn btn-outline-secondary py-2 px-4 w-100">
+                        <i class="fa fa-home me-2"></i>Back to Home
+                    </a>
+
+                    <!-- Contact note -->
+                    <div class="privacy-note mt-3">
+                        <i class="fa fa-anchor me-1"></i>
+                        Are you a 1/97 Batch member? Add your email to the directory first —
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScYryCeRfNKNB2w4SrFzJbjQvI4JeBfpDGwBDWF4aZvbYWFuA/viewform?usp=header"
+                           target="_blank" style="color:var(--primary);font-weight:600;">
+                            Update my details
+                        </a>
+                        — then try signing in again.
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="loggedin-section" style="display:none;">
         <div class="logged-in-card">
             <div id="li-avatar-wrap"></div>
@@ -328,8 +391,41 @@ document.addEventListener('navauth:login', function(e) {
     if (user) showLoggedIn(user);
 });
 
-// Immediate check on script load
+// ── Show rejection screen ─────────────────────────────────────────────
+function showRejected(email) {
+    document.getElementById('login-section').style.display    = 'none';
+    document.getElementById('loggedin-section').style.display = 'none';
+    document.getElementById('rejected-section').style.display = '';
+    var el = document.getElementById('rejected-email-addr');
+    if (el) el.textContent = email || 'Your Google account';
+    // Scroll to top of card
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Listen for rejection event from auth.js
+document.addEventListener('navauth:rejected', function(e) {
+    var email = e.detail && e.detail.email ? e.detail.email : 'Your account';
+    showRejected(email);
+});
+
+// ── Check for ?rejected=1 redirect from ships/profile pages ──────────
 (function() {
+    var params  = new URLSearchParams(window.location.search);
+    var rejected = params.get('rejected');
+    var email    = params.get('email') || '';
+
+    if (rejected === '1') {
+        // Show rejection card immediately — don't wait for navauth:ready
+        // Small delay to let DOM fully render first
+        setTimeout(function() {
+            showRejected(decodeURIComponent(email));
+        }, 100);
+        // Clean URL so refreshing doesn't re-show rejection
+        history.replaceState({}, '', 'login.html');
+        return;
+    }
+
+    // Normal page load — check if already logged in
     if (typeof NavAuth !== 'undefined' && NavAuth.isLoggedIn()) {
         showLoggedIn(NavAuth.getUser());
     }
