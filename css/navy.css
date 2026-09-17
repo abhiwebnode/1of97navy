@@ -167,3 +167,19 @@ footer .footer-motto { color: rgba(255,255,255,.5); font-size: .82rem; font-styl
     z-index: 1030 !important;
     background-color: var(--dark);
 }
+/* ── Navbar layout fix ── */
+/* Force: Logo | gap | Menu items | [auto push] | Login button */
+@media (min-width: 992px) {
+    #navbarCollapse {
+        display: flex !important;
+        align-items: center !important;
+    }
+    #navbarCollapse .navbar-nav {
+        margin-left: 1.5rem !important;  /* gap after logo */
+        margin-right: 0 !important;       /* cancel template auto margin */
+        flex-direction: row !important;
+    }
+    #navbarCollapse > .d-flex {
+        margin-left: auto !important;     /* push login to far right */
+    }
+}
