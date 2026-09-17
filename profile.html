@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile — Indian Navy 1/97 Batch</title>
-    <meta name="description" content="Sign in with Google to view your 1/97 Batch profile — directory, service awards and post-service career in one place.">
+    <meta name="description" content="Sign in to view your 1/97 Batch profile — directory, service awards and post-service career in one place.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
     <meta property="og:title" content="My Profile — Indian Navy 1/97 Batch">
@@ -12,9 +12,6 @@
     <meta property="og:locale" content="en_IN">
     <link href="css/all.css" rel="stylesheet">
     <script src="js/header.js"></script>
-
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <style>
         .signin-card {
@@ -30,6 +27,7 @@
         .google-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: .75rem;
             background: #fff;
             border: 2px solid #dde3ef;
@@ -42,9 +40,11 @@
             transition: .2s;
             font-family: 'Inter', sans-serif;
             box-shadow: 0 2px 8px rgba(0,0,0,.06);
+            text-decoration: none;
+            width: 100%;
         }
-        .google-btn:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(27,58,107,.12); }
-        .google-btn img { width: 22px; height: 22px; }
+        .google-btn:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(27,58,107,.12); color: var(--primary); }
+        .google-btn i { font-size: 1.2rem; color: var(--primary); }
         .divider-text {
             display: flex; align-items: center; gap: 1rem;
             color: #bbb; font-size: .8rem; margin: 1.5rem 0;
@@ -262,6 +262,7 @@
 </div>
 
 <div class="container py-5">
+    <!-- Logged in top bar -->
     <div id="user-bar" class="text-center mb-4" style="display:none;">
         <div class="user-badge" id="user-badge-el">
             <img id="user-avatar" src="" alt="">
@@ -272,6 +273,7 @@
         </div>
     </div>
 
+    <!-- Sign-in prompt section -->
     <div id="signin-section">
         <div class="signin-card">
             <div class="mb-3">
@@ -280,16 +282,15 @@
             <span class="section-eyebrow">Member Lookup</span>
             <h4 class="mt-1 mb-2" style="color:var(--dark);font-family:'Saira',sans-serif;">Find Your Profile</h4>
             <p class="text-muted small mb-4">
-                Sign in with your Google account to automatically find your profile,
-                or search by name below.
+                Sign in securely to automatically find your profile,
+                or search the directory manually by name below.
             </p>
 
             <div id="profile-google-btn-wrap" style="display:flex; justify-content:center; margin-bottom:1.5rem;">
-                <button class="google-btn" id="google-signin-btn" onclick="triggerGoogleSignIn()">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                    Sign in with Google
-                </button>
-                <div id="g-profile-official-btn" style="display:none; width:100%; justify-content:center;"></div>
+                <a href="login.html" class="google-btn">
+                    <i class="fa fa-user-circle"></i>
+                    Sign in to Member Portal
+                </a>
             </div>
 
             <div class="divider-text">or search manually</div>
@@ -309,6 +310,7 @@
         </div>
     </div>
 
+    <!-- Compact Search for logged in users -->
     <div id="search-section-compact" style="display:none;" class="text-center mb-4">
         <div class="d-inline-flex gap-2" style="max-width:440px;width:100%;">
             <div class="search-wrap flex-grow-1">
@@ -385,48 +387,6 @@ const PS_FIELDS = {
 
 const cache = {};
 let googleUser = null;
-let googleInitProfileDone = false;
-
-function initGoogle() {
-    if (googleInitProfileDone || typeof google === 'undefined' || !google.accounts) return;
-    googleInitProfileDone = true;
-    google.accounts.id.initialize({
-        client_id:   NavAuth.clientId,
-        callback:    handleGoogleResponse,
-        auto_select: false
-    });
-
-    var officialBtn = document.getElementById('g-profile-official-btn');
-    if (officialBtn) {
-        google.accounts.id.renderButton(officialBtn, {
-            theme: 'outline',
-            size: 'large',
-            text: 'signin_with'
-        });
-    }
-    triggerGoogleSignIn();
-}
-
-function triggerGoogleSignIn() {
-    if (typeof google === 'undefined' || !google.accounts) {
-        return;
-    }
-    google.accounts.id.prompt(function(notification) {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            var officialBtn = document.getElementById('g-profile-official-btn');
-            var customBtn = document.getElementById('google-signin-btn');
-            if (officialBtn && customBtn) {
-                officialBtn.style.display = 'flex';
-                customBtn.style.display = 'none';
-            }
-        }
-    });
-}
-
-async function handleGoogleResponse(response) {
-    // Pass to NavAuth; it will trigger the navauth:login or navauth:rejected events asynchronously
-    NavAuth.handleCredential(response, null);
-}
 
 async function applyGoogleUser(user) {
     if (!user) return;
@@ -835,13 +795,11 @@ document.getElementById('name-input').addEventListener('keydown', e => { if(e.ke
 document.getElementById('search-btn-compact').addEventListener('click', () => doSearch('name-input-compact'));
 document.getElementById('name-input-compact').addEventListener('keydown', e => { if(e.key==='Enter') doSearch('name-input-compact'); });
 
+// Global auth listeners
 document.addEventListener('navauth:ready', function(e) {
     const user = e.detail && e.detail.user;
-    if (user) {
-        applyGoogleUser(user);
-    } else {
-        initGooglePrompt();
-    }
+    if (user) applyGoogleUser(user);
+    // If no user, default #signin-section HTML link handles login routing
 });
 
 document.addEventListener('navauth:login', function(e) {
@@ -849,18 +807,7 @@ document.addEventListener('navauth:login', function(e) {
     if (user) applyGoogleUser(user);
 });
 
-function initGooglePrompt() {
-    let attempts = 0;
-    const poll = setInterval(function() {
-        if (typeof google !== 'undefined' && google.accounts) {
-            clearInterval(poll);
-            initGoogle();
-        }
-        if (++attempts > 40) clearInterval(poll);
-    }, 200);
-}
-
-// Immediate run
+// Immediate execution check on load
 (function() {
     if (typeof NavAuth !== 'undefined') {
         const u = NavAuth.getUser();
