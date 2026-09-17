@@ -63,7 +63,7 @@ var html = '\
             <span class="navbar-toggler-icon"></span>\
         </button>\
         <div class="collapse navbar-collapse" id="navbarCollapse">\
-            <div class="navbar-nav ms-4 p-4 p-lg-0">\
+            <div class="navbar-nav ms-auto p-4 p-lg-0">\
                 <a href="/index.html" class="nav-item nav-link' + activeClass('home') + '">Home</a>\
                 <div class="nav-item dropdown">\
                     <a href="#" class="nav-link dropdown-toggle' + activeClass('about') + '" data-bs-toggle="dropdown">About</a>\
@@ -106,7 +106,7 @@ var html = '\
                 <a href="/discussion.html" class="nav-item nav-link' + activeClass('discussion') + '">Discussion</a>\
                 <a href="/memorial.html"  class="nav-item nav-link' + activeClass('memorial')   + '">Memorial</a>\
             </div>\
-            <div class="d-flex align-items-center ms-auto p-4 p-lg-0">\
+            <div class="d-flex align-items-center ms-2 p-4 p-lg-0">\
                 <a href="/login.html" class="btn-login">Member Login</a>\
             </div>\
         </div>\
@@ -122,6 +122,22 @@ var html = '\
         var wrapper = document.createElement('div');
         wrapper.innerHTML = html;
         document.body.insertBefore(wrapper, document.body.firstChild);
+    }
+
+    // ── Inject navbar layout CSS ──────────────────────────────────────
+    // Injected here so it works regardless of which CSS file is loaded
+    // Goal: Logo | gap | Menu items ............ | Login button (far right)
+    if (!document.getElementById('nav-layout-style')) {
+        var navStyle = document.createElement('style');
+        navStyle.id = 'nav-layout-style';
+        navStyle.textContent = [
+            '@media (min-width: 992px) {',
+            '  #navbarCollapse { display: flex !important; align-items: center !important; }',
+            '  #navbarCollapse .navbar-nav { margin-left: 1.5rem !important; margin-right: 0 !important; flex-direction: row !important; }',
+            '  #navbarCollapse > .d-flex { margin-left: auto !important; }',
+            '}'
+        ].join('');
+        document.head.appendChild(navStyle);
     }
 
 })();
