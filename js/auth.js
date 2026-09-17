@@ -23,15 +23,11 @@ var NavAuth = (function () {
     }
 
     function _saveToStorage(user) {
-        try { 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); 
-        } catch(e) {}
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(user)); } catch(e) {}
     }
 
     function _clearStorage() {
-        try { 
-            localStorage.removeItem(STORAGE_KEY); 
-        } catch(e) {}
+        try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
     }
 
     function _updateNavbar(user) {
@@ -41,10 +37,7 @@ var NavAuth = (function () {
             var existingBadge = document.getElementById('nav-user-badge');
 
             if (user) {
-                if (existingBadge) {
-                    clearInterval(poll);
-                    return;
-                }
+                if (existingBadge) { clearInterval(poll); return; }
                 if (loginBtn) {
                     clearInterval(poll);
                     loginBtn.outerHTML =
@@ -80,9 +73,7 @@ var NavAuth = (function () {
                 if (existingBadge) {
                     existingBadge.outerHTML = '<a href="/login.html" class="btn-login">Member Login</a>';
                 }
-                if (loginBtn) {
-                    clearInterval(poll);
-                }
+                if (loginBtn) { clearInterval(poll); }
             }
             if (++attempts > 35) clearInterval(poll);
         }, 100);
@@ -96,34 +87,29 @@ var NavAuth = (function () {
             try {
                 var base64Alt = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
                 return JSON.parse(atob(base64Alt));
-            } catch(err) {
-                return null;
-            }
+            } catch(err) { return null; }
         }
     }
 
     // ── Directory CSV URL for email verification ──────────────────────
     var DIRECTORY_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbYF4OsWbMY0NfKvUYTyM0soo2ZZlD9OtC3w77RlINBT7BfyRHv7EK4iVTcqdwzPjfH9epRa8rEeWQ/pub?gid=1459106869&single=true&output=csv';
 
-    // Cache verified emails for this session so CSV is only fetched once
-    var _verifiedCache = null; // null = not fetched, Set = fetched
+    var _verifiedCache = null;
 
     function _verifyEmailInDirectory(email, callback) {
-        // If already fetched this session, check from cache
         if (_verifiedCache !== null) {
             callback(_verifiedCache.has(email.toLowerCase()));
             return;
         }
 
-        // Fetch directory CSV
         fetch(DIRECTORY_CSV)
             .then(function(res) { return res.text(); })
             .then(function(text) {
-                var lines   = text.trim().split('
-');
+                // FIXED: Valid newline split
+                var lines = text.trim().split('\n');
                 var headers = _parseCSVLine(lines[0]);
-                // Find email column — matches the directory sheet header
                 var emailCol = -1;
+                
                 for (var i = 0; i < headers.length; i++) {
                     if (headers[i].toLowerCase().indexOf('email') !== -1) {
                         emailCol = i;
@@ -134,8 +120,8 @@ var NavAuth = (function () {
                 _verifiedCache = new Set();
                 if (emailCol >= 0) {
                     for (var j = 1; j < lines.length; j++) {
-                        var cols  = _parseCSVLine(lines[j]);
-                        var eml   = (cols[emailCol] || '').trim().toLowerCase();
+                        var cols = _parseCSVLine(lines[j]);
+                        var eml = (cols[emailCol] || '').trim().toLowerCase();
                         if (eml) _verifiedCache.add(eml);
                     }
                 }
@@ -143,8 +129,6 @@ var NavAuth = (function () {
                 callback(_verifiedCache.has(email.toLowerCase()));
             })
             .catch(function() {
-                // CSV fetch failed — fail open (allow login) so network issues
-                // don't lock out legitimate members
                 console.warn('NavAuth: Directory verification failed — allowing login');
                 callback(true);
             });
@@ -162,7 +146,6 @@ var NavAuth = (function () {
         return result;
     }
 
-    // Immediately restore memory cache from localStorage on load
     _loadFromStorage();
 
     return {
@@ -188,17 +171,14 @@ var NavAuth = (function () {
                 picture: payload.picture
             };
 
-            // ── Verify email against directory before allowing login ────
             _verifyEmailInDirectory(pendingUser.email, function(isVerified) {
                 if (!isVerified) {
-                    // Not in directory — fire rejected event, do not save session
                     document.dispatchEvent(new CustomEvent('navauth:rejected', {
                         detail: { email: pendingUser.email }
                     }));
                     return;
                 }
 
-                // Verified — save session and proceed
                 _user = pendingUser;
                 _saveToStorage(_user);
                 _updateNavbar(_user);
@@ -242,8 +222,6 @@ var NavAuth = (function () {
 })();
 
 // ── Global rejection handler ──────────────────────────────────────────
-// On any page except login.html — redirect to login with rejected param
-// On login.html — the page handles it locally via navauth:rejected event
 document.addEventListener('navauth:rejected', function(e) {
     var isLoginPage = window.location.pathname.indexOf('login.html') !== -1;
     if (!isLoginPage) {
@@ -252,7 +230,6 @@ document.addEventListener('navauth:rejected', function(e) {
     }
 });
 
-// Cross-tab synchronization
 window.addEventListener('storage', function(e) {
     if (e.key === STORAGE_KEY) {
         if (e.newValue) {
@@ -266,7 +243,6 @@ window.addEventListener('storage', function(e) {
     }
 });
 
-// Broadcast readiness
 (function() {
     function fireReady() {
         var user = NavAuth.init();
