@@ -323,9 +323,8 @@ function showLoggedOut() {
 }
 
 function onGoogleSignIn(response) {
+    // Pass to NavAuth; it will trigger the navauth:login or navauth:rejected events asynchronously
     NavAuth.handleCredential(response, null);
-    var user = NavAuth.getUser();
-    if (user) showLoggedIn(user);
 }
 
 function triggerSignIn() {
