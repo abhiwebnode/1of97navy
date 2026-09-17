@@ -613,26 +613,31 @@ function saveToCache() {
 
 // ── Fetch all records from Google Sheet via Apps Script ───────────────
 async function fetchFromSheet() {
-    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwpv2k_D-fCq6F1ihJfUGkSUOkCMb3HC-EnCbSgNRKSu313eO6SnT06tVLJKkhf-LDD7w/exec') {
-        loadFromCache(); // fallback to cache if no URL set
+    // Always load cache first so ships render immediately
+    loadFromCache();
+    renderShips();
+
+    // No URL configured — cache only
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
         dataLoaded = true;
-        renderShips();
         return;
     }
+
     try {
-        const res  = await fetch(APPS_SCRIPT_URL + '?action=getAll');
+        const res = await fetch(APPS_SCRIPT_URL + '?action=getAll');
         const data = await res.json();
         if (typeof data === 'object' && data !== null && !data.error) {
             shipData   = data;
             dataLoaded = true;
-            saveToCache(); // update local cache with fresh sheet data
-            renderShips();
+            saveToCache();
+            renderShips(); // re-render with fresh sheet data
+        } else {
+            dataLoaded = true;
         }
     } catch(e) {
-        // Sheet fetch failed — fall back to cache
-        loadFromCache();
+        // Sheet fetch failed — cache already loaded and rendered above
         dataLoaded = true;
-        renderShips();
+        console.warn('Ships sheet fetch failed, using cache:', e);
     }
 }
 
@@ -684,7 +689,7 @@ async function toggleServe(shipId) {
     renderShips();
 
     // ── Sync to Google Sheet ──────────────────────────────────────────
-    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbwpv2k_D-fCq6F1ihJfUGkSUOkCMb3HC-EnCbSgNRKSu313eO6SnT06tVLJKkhf-LDD7w/exec') {
+    if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') {
         try {
             await fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
