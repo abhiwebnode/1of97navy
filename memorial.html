@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memorial Wall — Indian Navy 1/97 Batch</title>
     <meta name="description" content="In honoured memory of the 1/97 Batch shipmates who have sailed beyond the horizon. Their service and brotherhood live on in us forever.">
-
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
@@ -13,18 +12,13 @@
     <meta property="og:description" content="In honoured memory of the 1/97 Batch shipmates who have sailed beyond the horizon. Their service and brotherhood live on in us forever.">
     <meta property="og:image" content="https://www.1of97navy.in/img/og-image.jpg">
     <meta property="og:locale" content="en_IN">
-
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@1of97navy">
     <meta name="twitter:title" content="Memorial Wall — Indian Navy 1/97 Batch">
     <meta name="twitter:description" content="In honoured memory of the 1/97 Batch shipmates who have sailed beyond the horizon. Their service and brotherhood live on in us forever.">
     <meta name="twitter:image" content="https://www.1of97navy.in/img/og-image.jpg">
-
-    <!-- Consolidated Stylesheet -->
     <link href="css/all.css" rel="stylesheet">
-
-    <!-- Global Head Injector -->
     <script src="js/header.js"></script>
 </head>
 
@@ -53,22 +47,52 @@
 </div>
 
 <style>
-    /* ── Memorial page overrides ── */
     .memorial-page { background: #07111F; min-height: 60vh; }
 
-    /* ── Intro verse ── */
+    /* ── Traditional Indian Memorial Diya / Flame ── */
     .memorial-intro {
         background: linear-gradient(180deg, #0B1E3D 0%, #07111F 100%);
         padding: 3rem 1.5rem 2rem;
         text-align: center;
     }
-    .flame { font-size: 2.5rem; display: block; margin-bottom: 1rem; animation: flicker 2.5s ease-in-out infinite; }
-    @keyframes flicker {
-        0%,100% { opacity:1; transform:scale(1) translateY(0); }
-        25%      { opacity:.85; transform:scale(.97) translateY(-2px); }
-        50%      { opacity:1; transform:scale(1.03) translateY(-1px); }
-        75%      { opacity:.9; transform:scale(.98) translateY(-3px); }
+    .diya-shrine {
+        position: relative;
+        width: 80px; height: 80px;
+        margin: 0 auto 1.5rem;
     }
+    .diya-flame {
+        position: absolute;
+        bottom: 25px; left: 50%;
+        transform: translateX(-50%);
+        width: 20px; height: 35px;
+        background: radial-gradient(ellipse at bottom, #fff 10%, #f1c40f 40%, #e67e22 80%, transparent 100%);
+        border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
+        animation: diya-flicker 0.8s infinite alternate;
+        box-shadow: 0 -10px 25px 8px rgba(241, 196, 15, 0.5);
+    }
+    .diya-base {
+        position: absolute;
+        bottom: 5px; left: 50%;
+        transform: translateX(-50%);
+        width: 50px; height: 18px;
+        background: linear-gradient(to right, #b8860b, #ffd700, #b8860b);
+        border-radius: 0 0 25px 25px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+    }
+    .diya-base::before {
+        content: '';
+        position: absolute;
+        top: -6px; left: 0;
+        width: 50px; height: 12px;
+        background: #8b6508;
+        border-radius: 50%;
+    }
+    @keyframes diya-flicker {
+        0% { transform: translateX(-50%) scale(1) skewX(2deg); opacity: 0.9; }
+        50% { transform: translateX(-50%) scale(1.05) skewX(-2deg); opacity: 1; }
+        100% { transform: translateX(-50%) scale(0.95) skewX(1deg); opacity: 0.8; }
+    }
+
     .verse {
         font-family: 'Saira', sans-serif;
         font-size: 1.05rem;
@@ -85,41 +109,28 @@
         text-transform: uppercase;
     }
     .memorial-divider {
-        width: 1px;
-        height: 60px;
+        width: 1px; height: 60px;
         background: linear-gradient(to bottom, var(--gold, #C9A84C), transparent);
         margin: 2rem auto 0;
     }
 
-    /* ── Year group ── */
+    /* ── Year Group ── */
     .year-group { padding: 2.5rem 0 1rem; }
     .year-label {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
+        display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
     }
     .year-label::before, .year-label::after {
-        content: '';
-        flex: 1;
-        height: 1px;
+        content: ''; flex: 1; height: 1px;
         background: linear-gradient(to right, transparent, rgba(201,168,76,.3), transparent);
     }
     .year-num {
-        font-family: 'Saira', sans-serif;
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--gold, #C9A84C);
-        letter-spacing: .2em;
-        text-transform: uppercase;
-        white-space: nowrap;
-        padding: .3rem .9rem;
-        border: 1px solid rgba(201,168,76,.3);
-        border-radius: 20px;
-        background: rgba(201,168,76,.05);
+        font-family: 'Saira', sans-serif; font-size: 1rem; font-weight: 700;
+        color: var(--gold, #C9A84C); letter-spacing: .2em; text-transform: uppercase;
+        white-space: nowrap; padding: .3rem .9rem; border: 1px solid rgba(201,168,76,.3);
+        border-radius: 20px; background: rgba(201,168,76,.05);
     }
 
-    /* ── Memorial card ── */
+    /* ── Memorial Card ── */
     .mem-card {
         background: rgba(255,255,255,.03);
         border: 1px solid rgba(201,168,76,.15);
@@ -129,189 +140,128 @@
         transition: .3s;
         height: 100%;
         position: relative;
-        overflow: hidden;
+        overflow: hidden; /* Contains falling petals */
+        cursor: pointer;
     }
     .mem-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 2px;
+        content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
         background: linear-gradient(to right, transparent, var(--gold, #C9A84C), transparent);
-        opacity: 0;
-        transition: .3s;
+        opacity: 0; transition: .3s;
     }
     .mem-card:hover { background: rgba(201,168,76,.06); border-color: rgba(201,168,76,.35); }
     .mem-card:hover::before { opacity: 1; }
 
-    /* Photo with garland */
+    /* Photo wrap & Authentic Marigold Garland */
     .mem-photo-wrap {
         position: relative;
-        width: 96px; height: 96px;
-        margin: 0 auto 1rem;
+        width: 100px; height: 100px;
+        margin: 0 auto 1.25rem;
     }
-
-    /* Outer garland ring — marigold orange/gold gradient dots */
-    .mem-photo-wrap::before {
-        content: '';
-        position: absolute;
-        inset: -6px;
-        border-radius: 50%;
-        background: conic-gradient(
-            #E8A020 0deg,   #F5C842 15deg,
-            #E8A020 30deg,  #C97B1A 45deg,
-            #F5C842 60deg,  #E8A020 75deg,
-            #C97B1A 90deg,  #F5C842 105deg,
-            #E8A020 120deg, #C97B1A 135deg,
-            #F5C842 150deg, #E8A020 165deg,
-            #C97B1A 180deg, #F5C842 195deg,
-            #E8A020 210deg, #C97B1A 225deg,
-            #F5C842 240deg, #E8A020 255deg,
-            #C97B1A 270deg, #F5C842 285deg,
-            #E8A020 300deg, #C97B1A 315deg,
-            #F5C842 330deg, #E8A020 345deg,
-            #C97B1A 360deg
-        );
-        animation: garland-spin 12s linear infinite;
-        z-index: 0;
-    }
-
-    /* Inner white gap between garland and photo */
-    .mem-photo-wrap::after {
-        content: '';
-        position: absolute;
-        inset: -2px;
-        border-radius: 50%;
-        background: #111d2e;
-        z-index: 1;
-    }
-
-    @keyframes garland-spin {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(360deg); }
-    }
-
-    /* Photo circle */
     .mem-photo {
-        width: 80px; height: 80px;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 76px; height: 76px;
         border-radius: 50%;
-        margin: 8px auto 0;
         background: rgba(255,255,255,.05);
         display: flex; align-items: center; justify-content: center;
-        position: relative;
         overflow: hidden;
         z-index: 2;
+        border: 2px solid #111d2e;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    .mem-photo img {
+    .mem-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    
+    /* Initials Styling */
+    .mem-initials {
+        font-family: 'Saira', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--gold, #C9A84C);
+        background: #0B1E3D;
         width: 100%; height: 100%;
-        object-fit: cover; border-radius: 50%;
-    }
-    .mem-photo-placeholder {
-        color: rgba(255,255,255,.2);
-        font-size: 2rem;
+        display: flex; align-items: center; justify-content: center;
+        text-transform: uppercase;
+        letter-spacing: .05em;
     }
 
-    /* Tiny flower petals on garland using box-shadow dots */
-    .mem-garland-dots {
+    /* Garland Ring CSS */
+    .garland-ring {
         position: absolute;
-        width: 8px; height: 8px;
-        border-radius: 50%;
         top: 50%; left: 50%;
+        width: 100%; height: 100%;
+        transform: translate(-50%, -50%);
         z-index: 3;
         pointer-events: none;
+        animation: garland-spin 25s linear infinite;
+    }
+    .marigold {
+        position: absolute;
+        font-size: 1.2rem;
+        top: 50%; left: 50%;
+        margin-top: -12px; margin-left: -12px;
+        filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+    }
+    @keyframes garland-spin {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to   { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    /* Candle under photo */
-    .mem-candle {
-        font-size: .95rem;
-        display: block;
-        margin-bottom: .6rem;
-        opacity: .85;
+    /* Candle and Rose */
+    .mem-tribute {
+        font-size: 1rem; display: block; margin-bottom: .6rem; opacity: .9;
     }
 
+    /* Typography */
     .mem-name {
-        font-family: 'Saira', sans-serif;
-        font-weight: 700;
-        font-size: .95rem;
-        color: #fff;
-        margin-bottom: .3rem;
-        line-height: 1.3;
+        font-family: 'Saira', sans-serif; font-weight: 700; font-size: .95rem;
+        color: #fff; margin-bottom: .3rem; line-height: 1.3;
     }
     .mem-rank {
-        font-size: .75rem;
-        color: var(--gold, #C9A84C);
-        font-weight: 600;
-        margin-bottom: .2rem;
+        font-size: .75rem; color: var(--gold, #C9A84C); font-weight: 600; margin-bottom: .2rem;
     }
     .mem-division {
-        font-size: .72rem;
-        color: rgba(255,255,255,.4);
-        letter-spacing: .04em;
+        font-size: .72rem; color: rgba(255,255,255,.4); letter-spacing: .04em;
     }
 
-    /* ── Closing tribute ── */
-    .closing-tribute {
-        text-align: center;
-        padding: 3rem 1.5rem 2rem;
-        border-top: 1px solid rgba(201,168,76,.1);
-        margin-top: 2rem;
+    /* ── Falling Rose Petals ── */
+    .petal-container {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; overflow: hidden; z-index: 10; border-radius: 10px;
     }
-    .closing-anchor {
-        font-size: 2rem;
-        display: block;
-        color: rgba(201,168,76,.4);
-        margin-bottom: 1rem;
+    .falling-petal {
+        position: absolute; top: -15px;
+        width: 12px; height: 12px;
+        background: #e74c3c;
+        border-radius: 15px 0 15px 0; /* Classic rose petal shape */
+        box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3);
+        opacity: 0;
+        animation: petal-fall 2.5s ease-in forwards;
     }
-    .closing-text {
-        font-size: .85rem;
-        color: rgba(255,255,255,.35);
-        letter-spacing: .1em;
-        text-transform: uppercase;
-        line-height: 2;
-    }
-    .closing-motto {
-        font-family: 'Saira', sans-serif;
-        font-size: 1rem;
-        color: rgba(201,168,76,.6);
-        font-style: italic;
-        margin-top: .5rem;
+    @keyframes petal-fall {
+        0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+        15% { opacity: 0.9; }
+        85% { opacity: 0.9; }
+        100% { transform: translateY(180px) rotate(270deg) scale(1.1); opacity: 0; }
     }
 
-    /* ── Submit notice ── */
+    /* ── Closing and Submits ── */
+    .closing-tribute { text-align: center; padding: 3rem 1.5rem 2rem; border-top: 1px solid rgba(201,168,76,.1); margin-top: 2rem; }
+    .closing-anchor { font-size: 2rem; display: block; color: rgba(201,168,76,.4); margin-bottom: 1rem; }
+    .closing-text { font-size: .85rem; color: rgba(255,255,255,.35); letter-spacing: .1em; text-transform: uppercase; line-height: 2; }
+    .closing-motto { font-family: 'Saira', sans-serif; font-size: 1rem; color: rgba(201,168,76,.6); font-style: italic; margin-top: .5rem; }
+
     .submit-notice {
-        background: rgba(255,255,255,.03);
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 8px;
-        padding: 1rem 1.25rem;
-        text-align: center;
-        max-width: 560px;
-        margin: 1.5rem auto 0;
+        background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+        border-radius: 8px; padding: 1rem 1.25rem; text-align: center; max-width: 560px; margin: 1.5rem auto 0;
     }
     .submit-notice p { font-size: .8rem; color: rgba(255,255,255,.4); margin: 0; line-height: 1.7; }
     .submit-notice a { color: var(--gold, #C9A84C); text-decoration: none; }
     .submit-notice a:hover { text-decoration: underline; }
 
-    /* ── Total count ── */
-    .mem-count-strip {
-        text-align: center;
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-    .mem-count-num {
-        font-family: 'Saira', sans-serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--gold, #C9A84C);
-        display: block;
-        line-height: 1;
-    }
-    .mem-count-label {
-        font-size: .72rem;
-        text-transform: uppercase;
-        letter-spacing: .15em;
-        color: rgba(255,255,255,.4);
-        margin-top: .25rem;
-        display: block;
-    }
+    .mem-count-strip { text-align: center; padding: 1rem; margin-bottom: 1rem; }
+    .mem-count-num { font-family: 'Saira', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--gold, #C9A84C); display: block; line-height: 1; }
+    .mem-count-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .15em; color: rgba(255,255,255,.4); margin-top: .25rem; display: block; }
 </style>
 
 <!-- Memorial Content -->
@@ -319,7 +269,12 @@
 
     <!-- Intro -->
     <div class="memorial-intro">
-        <span class="flame">🕯️</span>
+        <!-- Indian Memorial Diya -->
+        <div class="diya-shrine">
+            <div class="diya-flame"></div>
+            <div class="diya-base"></div>
+        </div>
+        
         <p class="verse" style="font-size:1.2rem;letter-spacing:.03em;">
             अमर जवान
         </p>
@@ -345,11 +300,6 @@
 
         <!-- ════════════════════════════════════════════════════════════
              MEMORIAL ENTRIES
-             To add a name:
-               1. Copy one .mem-card block
-               2. Update name, rank, division, year
-               3. Place it in the correct year section
-               4. Replace placeholder image when photo is available
              ════════════════════════════════════════════════════════════ -->
 
         <!-- ── YEAR 2024 ───────────────────────────────────────────── -->
@@ -361,15 +311,14 @@
                     <div class="mem-card">
                         <div class="mem-photo-wrap">
                             <div class="mem-photo">
-                                <!-- Replace src below with actual photo when available -->
-                                <!-- <img src="img/memorial/name.jpg" alt="Name"> -->
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                                <!-- Initials auto-generated if img missing -->
                             </div>
                         </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Name of Shipmate</div>
+                        <!-- Candle and Rose Petal -->
+                        <span class="mem-tribute">🕯️ <span style="font-size:.8rem; margin-left:2px;">🌹</span></span>
+                        <div class="mem-name">Amit Kumar</div>
                         <div class="mem-rank">Petty Officer</div>
-                        <div class="mem-division">Alpha Division · INS Chilka</div>
+                        <div class="mem-division">Angre</div>
                     </div>
                 </div>
 
@@ -377,13 +326,13 @@
                     <div class="mem-card">
                         <div class="mem-photo-wrap">
                             <div class="mem-photo">
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
+                                <!-- Initials auto-generated -->
                             </div>
                         </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Name of Shipmate</div>
+                        <span class="mem-tribute">🕯️ <span style="font-size:.8rem; margin-left:2px;">🌹</span></span>
+                        <div class="mem-name">Rakesh Sharma</div>
                         <div class="mem-rank">Leading Seaman</div>
-                        <div class="mem-division">Bravo Division · INS Chilka</div>
+                        <div class="mem-division">Abhimanyu</div>
                     </div>
                 </div>
 
@@ -399,13 +348,12 @@
                     <div class="mem-card">
                         <div class="mem-photo-wrap">
                             <div class="mem-photo">
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
                             </div>
                         </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Name of Shipmate</div>
+                        <span class="mem-tribute">🕯️ <span style="font-size:.8rem; margin-left:2px;">🌹</span></span>
+                        <div class="mem-name">Sanjay Singh</div>
                         <div class="mem-rank">Chief Petty Officer</div>
-                        <div class="mem-division">Charlie Division · INS Chilka</div>
+                        <div class="mem-division">Azad</div>
                     </div>
                 </div>
 
@@ -420,71 +368,41 @@
                 <div class="col-6 col-md-4 col-lg-3">
                     <div class="mem-card">
                         <div class="mem-photo-wrap">
-                            <div class="mem-photo">
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
-                            </div>
+                            <div class="mem-photo"></div>
                         </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Name of Shipmate</div>
+                        <span class="mem-tribute">🕯️ <span style="font-size:.8rem; margin-left:2px;">🌹</span></span>
+                        <div class="mem-name">Vikram Patel</div>
                         <div class="mem-rank">Petty Officer</div>
-                        <div class="mem-division">Delta Division · INS Chilka</div>
+                        <div class="mem-division">Akbar</div>
                     </div>
                 </div>
 
                 <div class="col-6 col-md-4 col-lg-3">
                     <div class="mem-card">
                         <div class="mem-photo-wrap">
-                            <div class="mem-photo">
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
-                            </div>
+                            <div class="mem-photo"></div>
                         </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Name of Shipmate</div>
+                        <span class="mem-tribute">🕯️ <span style="font-size:.8rem; margin-left:2px;">🌹</span></span>
+                        <div class="mem-name">Anil Yadav</div>
                         <div class="mem-rank">Master Chief Petty Officer</div>
-                        <div class="mem-division">Echo Division · INS Chilka</div>
+                        <div class="mem-division">Angre</div>
                     </div>
                 </div>
 
                 <div class="col-6 col-md-4 col-lg-3">
                     <div class="mem-card">
                         <div class="mem-photo-wrap">
-                            <div class="mem-photo">
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
-                            </div>
+                            <div class="mem-photo"></div>
                         </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Name of Shipmate</div>
+                        <span class="mem-tribute">🕯️ <span style="font-size:.8rem; margin-left:2px;">🌹</span></span>
+                        <div class="mem-name">Rajesh P</div>
                         <div class="mem-rank">Leading Seaman</div>
-                        <div class="mem-division">Alpha Division · INS Chilka</div>
+                        <div class="mem-division">Ashok</div>
                     </div>
                 </div>
 
             </div>
         </div>
-
-        <!-- ════════════════════════════════════════════════════════════
-             ADD MORE YEAR GROUPS ABOVE THIS LINE
-             Copy this block for each new year:
-
-        <div class="year-group">
-            <div class="year-label"><span class="year-num">⚓ YYYY</span></div>
-            <div class="row g-3">
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="mem-card">
-                        <div class="mem-photo-wrap">
-                            <div class="mem-photo">
-                                <span class="mem-photo-placeholder"><i class="fa fa-user"></i></span>
-                            </div>
-                        </div>
-                        <span class="mem-candle">🕯️</span>
-                        <div class="mem-name">Full Name</div>
-                        <div class="mem-rank">Rank</div>
-                        <div class="mem-division">Division · INS Chilka</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-             ════════════════════════════════════════════════════════════ -->
 
         <!-- Closing tribute -->
         <div class="closing-tribute">
@@ -510,11 +428,82 @@
 </div>
 
 <script>
-// Count total memorial entries and update the number
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. Update Total Count
     const total = document.querySelectorAll('.mem-card').length;
-    const el    = document.getElementById('mem-total');
+    const el = document.getElementById('mem-total');
     if (el) el.textContent = total;
+
+    // 2. Initialize Marigold Garland and Initials
+    document.querySelectorAll('.mem-card').forEach(card => {
+        // Initials Logic
+        const nameNode = card.querySelector('.mem-name');
+        const photoWrap = card.querySelector('.mem-photo-wrap');
+        const photoDiv = card.querySelector('.mem-photo');
+        
+        if (nameNode && photoDiv) {
+            const nameParts = nameNode.textContent.trim().split(' ');
+            let initials = nameParts[0][0] || '';
+            if (nameParts.length > 1) {
+                initials += nameParts[nameParts.length - 1][0];
+            }
+            
+            // If no image exists, insert initials
+            if (!photoDiv.querySelector('img')) {
+                photoDiv.innerHTML = `<span class="mem-initials">${initials}</span>`;
+            }
+        }
+
+        // Marigold Garland Generator using Emoji 🏵️
+        if (photoWrap) {
+            const garlandRing = document.createElement('div');
+            garlandRing.className = 'garland-ring';
+            const numFlowers = 15;
+            const radius = 45; // Pixels outward from center
+
+            for (let i = 0; i < numFlowers; i++) {
+                const angle = (i / numFlowers) * Math.PI * 2;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                const flower = document.createElement('span');
+                flower.className = 'marigold';
+                flower.textContent = '🏵️'; // Genda Phool Representation
+                flower.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random() * 360}deg)`;
+                
+                garlandRing.appendChild(flower);
+            }
+            photoWrap.appendChild(garlandRing);
+        }
+
+        // 3. Falling Rose Petals Interaction
+        const triggerPetalShower = () => {
+            let container = card.querySelector('.petal-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'petal-container';
+                card.appendChild(container);
+            }
+
+            // Scatter 5 to 7 petals
+            const petalCount = Math.floor(Math.random() * 3) + 5;
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'falling-petal';
+                // Randomize position and fall speed
+                petal.style.left = (Math.random() * 80 + 10) + '%';
+                petal.style.animationDelay = (Math.random() * 0.4) + 's';
+                petal.style.animationDuration = (Math.random() * 1 + 2) + 's';
+                container.appendChild(petal);
+
+                // Clean up petal
+                setTimeout(() => { if(petal) petal.remove(); }, 3500);
+            }
+        };
+
+        card.addEventListener('mouseenter', triggerPetalShower);
+        card.addEventListener('touchstart', triggerPetalShower, {passive: true});
+    });
 });
 </script>
 
