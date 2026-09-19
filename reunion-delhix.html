@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5th Reunion — Delhi · Indian Navy 1/97 Batch</title>
+    <meta name="description" content="5th Reunion of the Indian Navy 1/97 Batch held in New Delhi. Photos, videos, reunion book, and attendees.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
+    <meta property="og:title" content="5th Reunion — Delhi · Indian Navy 1/97 Batch">
+    <meta property="og:image" content="https://www.1of97navy.in/img/og-image.jpg">
+    <meta property="og:locale" content="en_IN">
+
+    <link href="css/all.css" rel="stylesheet">
+    <script src="js/header.js"></script>
+
+    <style>
+        /* ═══════════════════════════════
+           HERO
+        ═══════════════════════════════ */
+        .reunion-hero {
+            background: linear-gradient(135deg, #1a3a1a 0%, #2e6b2e 50%, #3d8b3d 100%);
+            position: relative;
+            padding: 3rem 0 0;
+            overflow: hidden;
+            color: #fff;
+        }
+        .hero-watermark {
+            position: absolute;
+            right: 4%;
+            top: 50%;
+            transform: translateY(-60%);
+            opacity: .10;
+            pointer-events: none;
+        }
+        .reunion-badge {
+            display: inline-block;
+            background: rgba(255,255,255,.18);
+            border: 1px solid rgba(255,255,255,.4);
+            color: #fff;
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            padding: .25rem .75rem;
+            border-radius: 20px;
+            margin-bottom: .75rem;
+        }
+        .hero-number {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: var(--gold, #c8a951);
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,.25);
+            margin-bottom: .9rem;
+        }
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .6rem 1.8rem;
+            margin-top: 1rem;
+        }
+        .hero-meta span {
+            font-size: .83rem;
+            color: rgba(255,255,255,.78);
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+        .hero-meta i { color: var(--gold, #c8a951); }
+
+        /* ═══════════════════════════════
+           TABS (attached to hero bottom)
+        ═══════════════════════════════ */
+        .reunion-tabs-wrap {
+            background: rgba(0,0,0,.25);
+            border-top: 1px solid rgba(255,255,255,.12);
+            margin-top: 1.5rem;
+        }
+        .reunion-tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            gap: 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .reunion-tabs::-webkit-scrollbar { display: none; }
+        .reunion-tabs .rtab {
+            flex-shrink: 0;
+            padding: .85rem 1.4rem;
+            font-size: .82rem;
+            font-weight: 600;
+            color: rgba(255,255,255,.6);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: color .2s, border-color .2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            user-select: none;
+        }
+        .reunion-tabs .rtab:hover { color: rgba(255,255,255,.9); }
+        .reunion-tabs .rtab.active {
+            color: #fff;
+            border-bottom-color: var(--gold, #c8a951);
+        }
+        .reunion-tabs .rtab i { font-size: .8rem; }
+
+        /* ═══════════════════════════════
+           TAB CONTENT
+        ═══════════════════════════════ */
+        .tab-content-wrap {
+            background: #f4f6f8;
+            min-height: 60vh;
+            padding: 2.5rem 0 4rem;
+        }
+        .rtab-panel { display: none; }
+        .rtab-panel.active { display: block; }
+
+        /* ═══════════════════════════════
+           SHARED COMPONENTS
+        ═══════════════════════════════ */
+        .section-label {
+            font-size: .7rem;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--gold, #c8a951);
+            margin-bottom: .2rem;
+        }
+        .section-heading {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.2rem;
+            padding-bottom: .55rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+        .card-white {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07);
+        }
+
+        /* ── Sibling nav ── */
+        .sibling-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 10px;
+            padding: .85rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,.07);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .sibling-nav a {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--primary, #0d3b70);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+        }
+        .sibling-nav a:hover { text-decoration: underline; }
+        .sibling-nav .cur { font-size: .8rem; font-weight: 700; color: #333; }
+
+        /* ═══════════════════════════════
+           TAB 1 — OVERVIEW
+        ═══════════════════════════════ */
+        .highlight-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.3rem 1.4rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07);
+            height: 100%;
+        }
+        .highlight-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            background: rgba(13,59,112,.08);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: .6rem;
+        }
+        .highlight-icon i { color: var(--primary, #0d3b70); font-size: 1.1rem; }
+        .highlight-card h5 { font-size: .92rem; font-weight: 700; color: var(--dark); margin: 0 0 .3rem; }
+        .highlight-card p  { font-size: .82rem; color: #666; margin: 0; line-height: 1.55; }
+
+        .memory-quote {
+            background: #fff;
+            border-left: 4px solid var(--gold, #c8a951);
+            border-radius: 0 12px 12px 0;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,.06);
+        }
+        .memory-quote blockquote {
+            margin: 0;
+            font-size: .93rem;
+            font-style: italic;
+            color: #444;
+            line-height: 1.65;
+        }
+        .memory-quote cite {
+            display: block;
+            margin-top: .6rem;
+            font-size: .78rem;
+            font-weight: 600;
+            color: #999;
+            font-style: normal;
+        }
+
+        .facts-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: .75rem;
+            padding: .7rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: .86rem;
+        }
+        .facts-list li:last-child { border-bottom: none; }
+        .facts-list .fi { color: var(--gold, #c8a951); width: 16px; margin-top: 2px; flex-shrink: 0; }
+        .facts-list strong { display: block; color: var(--dark); }
+        .facts-list span { color: #888; }
+
+        /* ═══════════════════════════════
+           TAB 2 — PHOTOS
+        ═══════════════════════════════ */
+        .photo-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: .75rem;
+            margin-bottom: 1.25rem;
+        }
+        .photo-filter { display: flex; gap: .5rem; flex-wrap: wrap; }
+        .photo-filter button {
+            font-size: .75rem;
+            font-weight: 600;
+            padding: .3rem .85rem;
+            border-radius: 20px;
+            border: 1.5px solid #ddd;
+            background: #fff;
+            color: #555;
+            cursor: pointer;
+            transition: all .2s;
+        }
+        .photo-filter button.active,
+        .photo-filter button:hover {
+            background: var(--primary, #0d3b70);
+            border-color: var(--primary, #0d3b70);
+            color: #fff;
+        }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: .85rem;
+        }
+        .photo-slot {
+            aspect-ratio: 4/3;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px dashed #c8dfc8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .35rem;
+            color: #aaa;
+            font-size: .72rem;
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+        .photo-slot:hover { opacity: .8; }
+        .photo-slot i { font-size: 1.5rem; color: #bbb; }
+        .photo-upload-note {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            font-size: .8rem;
+            color: #888;
+            margin-top: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+        .photo-upload-note i { color: var(--gold, #c8a951); font-size: 1rem; }
+
+        /* ═══════════════════════════════
+           TAB 3 — VIDEOS
+        ═══════════════════════════════ */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .video-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07);
+        }
+        .video-thumb {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a3a1a, #3d8b3d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+        .video-thumb .play-btn {
+            width: 52px; height: 52px;
+            background: rgba(255,255,255,.9);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,.25);
+            transition: transform .2s;
+        }
+        .video-thumb:hover .play-btn { transform: scale(1.1); }
+        .video-thumb .play-btn i { color: var(--primary, #0d3b70); font-size: 1.1rem; margin-left: 3px; }
+        .video-thumb .duration {
+            position: absolute;
+            bottom: 8px; right: 10px;
+            background: rgba(0,0,0,.65);
+            color: #fff;
+            font-size: .7rem;
+            font-weight: 600;
+            padding: .15rem .45rem;
+            border-radius: 4px;
+        }
+        .video-info { padding: .9rem 1rem; }
+        .video-info h6 { font-size: .88rem; font-weight: 700; color: var(--dark); margin: 0 0 .25rem; }
+        .video-info p  { font-size: .78rem; color: #888; margin: 0; }
+        .video-placeholder {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07);
+            color: #aaa;
+        }
+        .video-placeholder i { font-size: 2.5rem; display: block; margin-bottom: .75rem; }
+        .video-placeholder p { font-size: .85rem; margin: 0; }
+
+        /* ═══════════════════════════════
+           TAB 4 — REUNION BOOK
+        ═══════════════════════════════ */
+        .book-viewer {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,.10);
+        }
+        .book-toolbar {
+            background: #2c2c2c;
+            padding: .65rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .book-toolbar .book-title {
+            font-size: .82rem;
+            color: #ddd;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .book-toolbar .book-title i { color: var(--gold, #c8a951); }
+        .book-toolbar .btn-download {
+            font-size: .75rem;
+            font-weight: 700;
+            background: var(--gold, #c8a951);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 6px;
+            padding: .35rem .9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+        }
+        .book-placeholder {
+            aspect-ratio: 3/4;
+            max-height: 560px;
+            background: linear-gradient(160deg, #f0f4f0 0%, #e4ece4 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .75rem;
+            color: #aaa;
+        }
+        .book-placeholder i { font-size: 3.5rem; color: #ccc; }
+        .book-placeholder p { font-size: .85rem; margin: 0; text-align: center; }
+        .book-placeholder .upload-hint { font-size: .78rem; color: #bbb; }
+        .book-meta {
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .book-meta span { font-size: .8rem; color: #888; }
+        .book-meta .pages { font-weight: 700; color: var(--dark); }
+
+        /* ═══════════════════════════════
+           TAB 5 — ATTENDEES
+        ═══════════════════════════════ */
+        .attendee-toolbar {
+            display: flex;
+            gap: .75rem;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .attendee-search {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .attendee-search input {
+            width: 100%;
+            padding: .55rem 1rem .55rem 2.4rem;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: .84rem;
+            background: #fff;
+            outline: none;
+            transition: border-color .2s;
+        }
+        .attendee-search input:focus { border-color: var(--primary, #0d3b70); }
+        .attendee-search i {
+            position: absolute;
+            left: .8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: .85rem;
+        }
+        .attendee-count {
+            font-size: .8rem;
+            color: #888;
+            white-space: nowrap;
+        }
+        .attendee-table-wrap {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,.07);
+        }
+        .attendee-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .84rem;
+        }
+        .attendee-table thead th {
+            background: var(--dark, #1a1a2e);
+            color: #fff;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: .75rem 1rem;
+            text-align: left;
+        }
+        .attendee-table tbody tr {
+            border-bottom: 1px solid #f5f5f5;
+            transition: background .15s;
+        }
+        .attendee-table tbody tr:hover { background: #f9fbff; }
+        .attendee-table tbody td { padding: .7rem 1rem; color: #444; }
+        .attendee-table .rank-badge {
+            font-size: .7rem;
+            font-weight: 700;
+            background: rgba(13,59,112,.09);
+            color: var(--primary, #0d3b70);
+            padding: .18rem .55rem;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .attendee-empty {
+            padding: 2.5rem;
+            text-align: center;
+            color: #aaa;
+        }
+        .attendee-empty i { font-size: 2rem; display: block; margin-bottom: .6rem; }
+        .attendee-empty p { font-size: .84rem; margin: 0; }
+
+        /* sample rows style */
+        .attendee-table .name-cell { font-weight: 600; color: var(--dark); }
+    </style>
+</head>
+
+<body data-page="reunions">
+
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+
+<div id="nav-placeholder"></div>
+<script src="js/nav.js"></script>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<div class="reunion-hero">
+    <!-- India Gate watermark -->
+    <svg class="hero-watermark" width="320" height="260" viewBox="0 0 64 56" fill="none">
+        <path d="M16,48 L16,28 Q16,12 32,12 Q48,12 48,28 L48,48" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <rect x="23" y="8" width="18" height="5" rx="1" fill="white"/>
+        <rect x="27" y="4" width="10" height="5" rx="1" fill="white"/>
+        <path d="M24,48 L24,36 Q24,28 32,28 Q40,28 40,36 L40,48" fill="rgba(255,255,255,.1)"/>
+        <rect x="10" y="48" width="44" height="5" rx="1" fill="white"/>
+        <ellipse cx="32" cy="22" rx="2.5" ry="3.5" fill="rgba(255,200,50,.9)"/>
+    </svg>
+
+    <div class="container position-relative" style="z-index:1;">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0" style="font-size:.78rem;">
+                <li class="breadcrumb-item"><a href="index.html" class="text-white-50">Home</a></li>
+                <li class="breadcrumb-item"><a href="reunions.html" class="text-white-50">Reunions</a></li>
+                <li class="breadcrumb-item active text-white">5th Reunion · Delhi</li>
+            </ol>
+        </nav>
+
+        <div class="hero-number">5</div>
+        <div>
+            <span class="reunion-badge">Indian Navy · 1/97 Batch</span>
+        </div>
+        <h1 class="display-5 fw-bold mb-1">5th Reunion</h1>
+        <h2 class="h4 fw-normal mb-0" style="color:rgba(255,255,255,.82);">New Delhi</h2>
+
+        <div class="hero-meta">
+            <span><i class="fa fa-map-marker-alt"></i> New Delhi, India</span>
+            <span><i class="fa fa-calendar"></i> Date TBC</span>
+            <span><i class="fa fa-users"></i> Attendees TBC</span>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="reunion-tabs-wrap">
+        <div class="container">
+            <div class="reunion-tabs" role="tablist">
+                <div class="rtab active" data-tab="overview" role="tab">
+                    <i class="fa fa-info-circle"></i> Overview
+                </div>
+                <div class="rtab" data-tab="photos" role="tab">
+                    <i class="fa fa-images"></i> Photos
+                </div>
+                <div class="rtab" data-tab="videos" role="tab">
+                    <i class="fa fa-play-circle"></i> Videos
+                </div>
+                <div class="rtab" data-tab="book" role="tab">
+                    <i class="fa fa-book"></i> Reunion Book
+                </div>
+                <div class="rtab" data-tab="attendees" role="tab">
+                    <i class="fa fa-user-friends"></i> Attendees
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TAB CONTENT
+════════════════════════════════════════════ -->
+<div class="tab-content-wrap">
+    <div class="container">
+
+        <!-- Sibling nav -->
+        <div class="sibling-nav">
+            <a href="reunion-jaisalmer.html"><i class="fa fa-chevron-left"></i> 4th · Jaisalmer</a>
+            <span class="cur">5th Reunion · Delhi</span>
+            <a href="reunion-kochi.html">6th · Kochi <i class="fa fa-chevron-right"></i></a>
+        </div>
+
+        <!-- ─── OVERVIEW ─── -->
+        <div id="tab-overview" class="rtab-panel active">
+            <div class="row g-4">
+                <div class="col-lg-8">
+
+                    <div class="mb-4">
+                        <p class="section-label">About This Reunion</p>
+                        <h3 class="section-heading">Back in the Capital</h3>
+                        <p class="text-muted" style="font-size:.92rem; line-height:1.72;">
+                            The 5th reunion of the 1/97 batch brought us together in New Delhi — the heart of the nation.
+                            Old stories were retold, new ones were made, and the bond that began at INS Chilka proved
+                            it needs no uniform to stay strong.
+                        </p>
+                        <p class="text-muted" style="font-size:.92rem; line-height:1.72;">
+                            <em>Full details and memories to be added. If you were there and would like to contribute,
+                            please reach out to the batch coordinator.</em>
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="section-label">Highlights</p>
+                        <h3 class="section-heading">Moments to Remember</h3>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="highlight-card">
+                                    <div class="highlight-icon"><i class="fa fa-glass-cheers"></i></div>
+                                    <h5>Get-Together Dinner</h5>
+                                    <p>An evening of camaraderie, old stories, and laughter that carried well past midnight.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="highlight-card">
+                                    <div class="highlight-icon"><i class="fa fa-landmark"></i></div>
+                                    <h5>City Visit</h5>
+                                    <p>A trip through the capital's iconic landmarks — history both ancient and naval.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="highlight-card">
+                                    <div class="highlight-icon"><i class="fa fa-microphone"></i></div>
+                                    <h5>Felicitations</h5>
+                                    <p>Recognising achievements and milestones — the batch never stops making its mark.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="highlight-card">
+                                    <div class="highlight-icon"><i class="fa fa-camera"></i></div>
+                                    <h5>Group Photographs</h5>
+                                    <p>Group shots, candid moments — available in the Photos tab above.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="memory-quote">
+                        <blockquote>
+                            "The moment I saw them, twenty-something years melted away. We were back at Chilka — just older, wiser, and a little greyer."
+                        </blockquote>
+                        <cite>— A 1/97 Batch veteran, Delhi reunion</cite>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card-white p-4">
+                        <p class="section-label">Quick Facts</p>
+                        <h3 class="section-heading" style="font-size:1.1rem;">At a Glance</h3>
+                        <ul class="list-unstyled facts-list mb-0">
+                            <li>
+                                <i class="fa fa-hashtag fi"></i>
+                                <div><strong>Reunion No.</strong><span>5th of the 1/97 Batch</span></div>
+                            </li>
+                            <li>
+                                <i class="fa fa-map-marker-alt fi"></i>
+                                <div><strong>Location</strong><span>New Delhi, India</span></div>
+                            </li>
+                            <li>
+                                <i class="fa fa-calendar fi"></i>
+                                <div><strong>Date</strong><span>To be confirmed</span></div>
+                            </li>
+                            <li>
+                                <i class="fa fa-map fi"></i>
+                                <div><strong>Venue</strong><span>To be confirmed</span></div>
+                            </li>
+                            <li>
+                                <i class="fa fa-users fi"></i>
+                                <div><strong>Attendance</strong><span>To be confirmed</span></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── PHOTOS ─── -->
+        <div id="tab-photos" class="rtab-panel">
+            <p class="section-label">Gallery</p>
+            <h3 class="section-heading">Photos from Delhi</h3>
+
+            <div class="photo-toolbar">
+                <div class="photo-filter">
+                    <button class="active">All</button>
+                    <button>Group</button>
+                    <button>Dinner</button>
+                    <button>Sightseeing</button>
+                    <button>Candid</button>
+                </div>
+                <span class="text-muted" style="font-size:.78rem;">0 photos</span>
+            </div>
+
+            <div class="photo-grid">
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+            </div>
+
+            <div class="photo-upload-note">
+                <i class="fa fa-info-circle"></i>
+                <span>Have photos from this reunion? Share them with the batch coordinator to be featured here.</span>
+            </div>
+        </div>
+
+        <!-- ─── VIDEOS ─── -->
+        <div id="tab-videos" class="rtab-panel">
+            <p class="section-label">Video Archive</p>
+            <h3 class="section-heading">Videos from Delhi</h3>
+
+            <div class="video-grid">
+                <!-- Placeholder card 1 -->
+                <div class="video-card">
+                    <div class="video-thumb">
+                        <div class="play-btn"><i class="fa fa-play"></i></div>
+                        <span class="duration">—:——</span>
+                    </div>
+                    <div class="video-info">
+                        <h6>Dinner Evening Highlights</h6>
+                        <p>Video coming soon</p>
+                    </div>
+                </div>
+                <!-- Placeholder card 2 -->
+                <div class="video-card">
+                    <div class="video-thumb">
+                        <div class="play-btn"><i class="fa fa-play"></i></div>
+                        <span class="duration">—:——</span>
+                    </div>
+                    <div class="video-info">
+                        <h6>Group Address</h6>
+                        <p>Video coming soon</p>
+                    </div>
+                </div>
+                <!-- Placeholder card 3 -->
+                <div class="video-card">
+                    <div class="video-thumb">
+                        <div class="play-btn"><i class="fa fa-play"></i></div>
+                        <span class="duration">—:——</span>
+                    </div>
+                    <div class="video-info">
+                        <h6>Sightseeing Reel</h6>
+                        <p>Video coming soon</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="photo-upload-note mt-3">
+                <i class="fa fa-info-circle"></i>
+                <span>Videos will be embedded here (YouTube/Drive link). Share clips with the batch coordinator.</span>
+            </div>
+        </div>
+
+        <!-- ─── REUNION BOOK ─── -->
+        <div id="tab-book" class="rtab-panel">
+            <p class="section-label">Souvenir Publication</p>
+            <h3 class="section-heading">Reunion Book</h3>
+
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="book-viewer">
+                        <div class="book-toolbar">
+                            <span class="book-title">
+                                <i class="fa fa-file-pdf"></i>
+                                1-97 Batch — Delhi Reunion Book.pdf
+                            </span>
+                            <a href="#" class="btn-download">
+                                <i class="fa fa-download"></i> Download
+                            </a>
+                        </div>
+                        <div class="book-placeholder">
+                            <i class="fa fa-book-open"></i>
+                            <p>Reunion book PDF<br>will appear here</p>
+                            <span class="upload-hint">Upload a PDF to display the inline viewer</span>
+                        </div>
+                        <div class="book-meta">
+                            <span>Pages: <span class="pages">—</span></span>
+                            <span>File size: —</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card-white p-4 h-100">
+                        <p class="section-label">About the Book</p>
+                        <h4 style="font-size:1.1rem; font-weight:700; color:var(--dark); margin-bottom:1rem;">
+                            A Keepsake from Delhi
+                        </h4>
+                        <p class="text-muted" style="font-size:.88rem; line-height:1.7;">
+                            The reunion book captures the spirit of the 5th gathering — messages from shipmates,
+                            photos from the event, and a record of where life has taken each member of the 1/97 batch.
+                        </p>
+                        <p class="text-muted" style="font-size:.88rem; line-height:1.7;">
+                            <em>The PDF will be available here once uploaded. Members can view it online or
+                            download their personal copy.</em>
+                        </p>
+
+                        <div class="mt-3">
+                            <p class="section-label">What's Inside</p>
+                            <ul class="list-unstyled" style="font-size:.85rem; color:#555;">
+                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Welcome message from the batch coordinator</li>
+                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Shipmate profiles &amp; updates</li>
+                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Photo highlights from the reunion</li>
+                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Messages &amp; memories</li>
+                                <li class="py-1"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Next reunion preview</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── ATTENDEES ─── -->
+        <div id="tab-attendees" class="rtab-panel">
+            <p class="section-label">Who Was There</p>
+            <h3 class="section-heading">Attendees</h3>
+
+            <div class="attendee-toolbar">
+                <div class="attendee-search">
+                    <i class="fa fa-search"></i>
+                    <input type="text" id="attendee-search-input" placeholder="Search by name, rank or location…">
+                </div>
+                <span class="attendee-count" id="attendee-count">0 shipmates</span>
+            </div>
+
+            <div class="attendee-table-wrap">
+                <table class="attendee-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Rank</th>
+                            <th>Current Location</th>
+                            <th>Branch</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendee-tbody">
+                        <!-- Populated by JS — sample rows below as placeholder -->
+                    </tbody>
+                </table>
+                <div class="attendee-empty" id="attendee-empty">
+                    <i class="fa fa-user-friends"></i>
+                    <p>Attendee list to be added.<br>
+                    <span style="font-size:.76rem;">Contact the batch coordinator to contribute names.</span></p>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /container -->
+</div><!-- /tab-content-wrap -->
+
+<div id="footer-placeholder"></div>
+<script src="js/footer.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+/* ─── Tab switching ─── */
+document.querySelectorAll('.rtab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        var target = this.dataset.tab;
+        document.querySelectorAll('.rtab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.rtab-panel').forEach(function(p) { p.classList.remove('active'); });
+        this.classList.add('active');
+        document.getElementById('tab-' + target).classList.add('active');
+        // scroll tab into view on mobile
+        this.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    });
+});
+
+/* ─── Attendees data (populate when ready) ─── */
+var ATTENDEES = [
+    /* Example format — replace with real data:
+    { name: "John Smith", rank: "Cdr", location: "Mumbai", branch: "Executive" },
+    */
+];
+
+function renderAttendees(list) {
+    var tbody = document.getElementById('attendee-tbody');
+    var empty = document.getElementById('attendee-empty');
+    var count = document.getElementById('attendee-count');
+    tbody.innerHTML = '';
+    if (!list.length) {
+        empty.style.display = 'block';
+        count.textContent = '0 shipmates';
+        return;
+    }
+    empty.style.display = 'none';
+    count.textContent = list.length + ' shipmate' + (list.length !== 1 ? 's' : '');
+    list.forEach(function(a, i) {
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+            '<td style="color:#aaa;font-size:.78rem;">' + (i + 1) + '</td>' +
+            '<td class="name-cell">' + a.name + '</td>' +
+            '<td><span class="rank-badge">' + a.rank + '</span></td>' +
+            '<td>' + (a.location || '—') + '</td>' +
+            '<td>' + (a.branch || '—') + '</td>';
+        tbody.appendChild(tr);
+    });
+}
+renderAttendees(ATTENDEES);
+
+/* ─── Attendee search ─── */
+document.getElementById('attendee-search-input').addEventListener('input', function() {
+    var q = this.value.toLowerCase().trim();
+    var filtered = q
+        ? ATTENDEES.filter(function(a) {
+            return (a.name + a.rank + a.location + a.branch).toLowerCase().includes(q);
+          })
+        : ATTENDEES;
+    renderAttendees(filtered);
+});
+
+/* ─── Photo filter (UI only) ─── */
+document.querySelectorAll('.photo-filter button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.photo-filter button').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+    });
+});
+</script>
+
+</body>
+</html>
