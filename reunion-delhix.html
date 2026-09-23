@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5th Reunion — Delhi · Indian Navy 1/97 Batch</title>
-    <meta name="description" content="5th Reunion of the Indian Navy 1/97 Batch held in New Delhi. Photos, videos, reunion book, and attendees.">
+    <meta name="description" content="5th Reunion of the Indian Navy 1/97 Batch held in New Delhi. Photos, videos, and attendees.">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="1/97 Batch — Indian Navy Veterans">
@@ -36,19 +36,6 @@
             transform: translateY(-60%);
             opacity: .10;
             pointer-events: none;
-        }
-        .reunion-badge {
-            display: inline-block;
-            background: rgba(255,255,255,.18);
-            border: 1px solid rgba(255,255,255,.4);
-            color: #fff;
-            font-size: .7rem;
-            font-weight: 700;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            padding: .25rem .75rem;
-            border-radius: 20px;
-            margin-bottom: .75rem;
         }
         .hero-number {
             width: 52px; height: 52px;
@@ -92,6 +79,7 @@
             scrollbar-width: none;
             gap: 0;
             -webkit-overflow-scrolling: touch;
+            padding-right: 2rem; /* Buffer for the mobile scroll hint */
         }
         .reunion-tabs::-webkit-scrollbar { display: none; }
         .reunion-tabs .rtab {
@@ -115,6 +103,21 @@
             border-bottom-color: var(--gold, #c8a951);
         }
         .reunion-tabs .rtab i { font-size: .8rem; }
+        
+        /* Tab scroll hint for mobile */
+        .tab-fade-hint {
+            position: absolute;
+            right: 12px;
+            top: 0; bottom: 0;
+            width: 50px;
+            background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.6));
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: rgba(255,255,255,0.8);
+            pointer-events: none;
+        }
 
         /* ═══════════════════════════════
            TAB CONTENT
@@ -268,23 +271,99 @@
             grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
             gap: .85rem;
         }
-        .photo-slot {
+        /* photo items from Cloudinary */
+        .photo-item {
+            position: relative;
             aspect-ratio: 4/3;
             border-radius: 10px;
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border: 2px dashed #c8dfc8;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: .35rem;
-            color: #aaa;
-            font-size: .72rem;
+            overflow: hidden;
             cursor: pointer;
-            transition: opacity .2s;
+            background: #e0e0e0;
         }
-        .photo-slot:hover { opacity: .8; }
-        .photo-slot i { font-size: 1.5rem; color: #bbb; }
+        .photo-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .3s;
+        }
+        .photo-item:hover img { transform: scale(1.05); }
+        .photo-item .photo-overlay {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,.38);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity .2s;
+        }
+        .photo-item:hover .photo-overlay { opacity: 1; }
+        .photo-overlay i { color: #fff; font-size: 1.5rem; }
+
+        /* loading / error states */
+        .photo-loading {
+            grid-column: 1 / -1;
+            padding: 3rem;
+            text-align: center;
+            color: #aaa;
+            font-size: .88rem;
+        }
+        .photo-loading .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid #ddd;
+            border-top-color: var(--primary, #0d3b70);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto .75rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* lightbox */
+        .lb-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,.93);
+            flex-direction: column;
+        }
+        .lb-overlay.open { display: flex; }
+        .lb-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: .75rem 1.1rem;
+            color: #fff; flex-shrink: 0;
+        }
+        .lb-header .lb-counter { font-size: .82rem; color: rgba(255,255,255,.6); }
+        .lb-header .lb-close {
+            background: none; border: none; color: #fff;
+            font-size: 1.4rem; cursor: pointer; padding: 0 .3rem; line-height: 1;
+        }
+        .lb-body {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .lb-body img {
+            max-width: 92vw; max-height: 78vh;
+            object-fit: contain; border-radius: 4px;
+            user-select: none;
+        }
+        .lb-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,.15); border: none; color: #fff;
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1rem; transition: background .2s;
+        }
+        .lb-nav:hover { background: rgba(255,255,255,.3); }
+        .lb-nav.prev { left: .75rem; }
+        .lb-nav.next { right: .75rem; }
+        .lb-thumbs {
+            display: flex; gap: .4rem; overflow-x: auto;
+            padding: .6rem 1rem; flex-shrink: 0;
+            scrollbar-width: thin; scrollbar-color: #555 transparent;
+        }
+        .lb-thumbs img {
+            width: 56px; height: 40px; object-fit: cover;
+            border-radius: 4px; cursor: pointer; opacity: .55;
+            border: 2px solid transparent; flex-shrink: 0;
+            transition: opacity .2s, border-color .2s;
+        }
+        .lb-thumbs img.active { opacity: 1; border-color: var(--gold, #c8a951); }
+
         .photo-upload-note {
             background: #fff;
             border-radius: 10px;
@@ -356,74 +435,7 @@
         .video-placeholder p { font-size: .85rem; margin: 0; }
 
         /* ═══════════════════════════════
-           TAB 4 — REUNION BOOK
-        ═══════════════════════════════ */
-        .book-viewer {
-            background: #fff;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,.10);
-        }
-        .book-toolbar {
-            background: #2c2c2c;
-            padding: .65rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: .5rem;
-        }
-        .book-toolbar .book-title {
-            font-size: .82rem;
-            color: #ddd;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-        }
-        .book-toolbar .book-title i { color: var(--gold, #c8a951); }
-        .book-toolbar .btn-download {
-            font-size: .75rem;
-            font-weight: 700;
-            background: var(--gold, #c8a951);
-            color: #1a1a2e;
-            border: none;
-            border-radius: 6px;
-            padding: .35rem .9rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: .4rem;
-        }
-        .book-placeholder {
-            aspect-ratio: 3/4;
-            max-height: 560px;
-            background: linear-gradient(160deg, #f0f4f0 0%, #e4ece4 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: .75rem;
-            color: #aaa;
-        }
-        .book-placeholder i { font-size: 3.5rem; color: #ccc; }
-        .book-placeholder p { font-size: .85rem; margin: 0; text-align: center; }
-        .book-placeholder .upload-hint { font-size: .78rem; color: #bbb; }
-        .book-meta {
-            padding: 1rem 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid #f0f0f0;
-            flex-wrap: wrap;
-            gap: .5rem;
-        }
-        .book-meta span { font-size: .8rem; color: #888; }
-        .book-meta .pages { font-weight: 700; color: var(--dark); }
-
-        /* ═══════════════════════════════
-           TAB 5 — ATTENDEES
+           TAB 4 — ATTENDEES
         ═══════════════════════════════ */
         .attendee-toolbar {
             display: flex;
@@ -491,13 +503,15 @@
         .attendee-table-wrap {
             background: #fff;
             border-radius: 12px;
-            overflow: hidden;
+            overflow-x: auto;
             box-shadow: 0 2px 10px rgba(0,0,0,.07);
+            -webkit-overflow-scrolling: touch;
         }
         .attendee-table {
             width: 100%;
             border-collapse: collapse;
             font-size: .84rem;
+            min-width: 480px;
         }
         .attendee-table thead th {
             background: var(--dark, #1a1a2e);
@@ -532,7 +546,23 @@
         .attendee-empty i { font-size: 2rem; display: block; margin-bottom: .6rem; }
         .attendee-empty p { font-size: .84rem; margin: 0; }
 
-        /* sample rows style */
+        /* Mobile card layout — replaces table rows on small screens */
+        @media (max-width: 575px) {
+            .attendee-table-wrap { overflow: visible; box-shadow: none; background: transparent; padding-bottom: 1rem; }
+            .attendee-table { width: 100%; display: block; min-width: 0; }
+            .attendee-table thead { display: none; }
+            .attendee-table tbody { display: flex; flex-direction: column; gap: 0.75rem; }
+            .attendee-table tbody tr {
+                display: flex; flex-wrap: wrap; align-items: center;
+                background: #fff; padding: 1rem; border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,.08); border-bottom: none;
+            }
+            .attendee-table tbody td { padding: 0; display: block; border: none; }
+            .attendee-table tbody td:first-child { display: none; }
+            .attendee-table tbody td.name-cell { width: 100%; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+            .attendee-table tbody td:nth-child(3) { margin-right: 0.5rem; }
+        }
+
         .attendee-table .name-cell { font-weight: 600; color: var(--dark); }
     </style>
 </head>
@@ -551,7 +581,8 @@
 ════════════════════════════════════════════ -->
 <div class="reunion-hero">
 
-<div class="container position-relative" style="z-index:1;">
+    <div class="container position-relative" style="z-index:1;">
+        
         <h1 class="display-5 fw-bold mb-1">5th Reunion</h1>
         <h2 class="h4 fw-normal mb-0" style="color:rgba(255,255,255,.82);">New Delhi</h2>
 
@@ -564,7 +595,7 @@
 
     <!-- TABS -->
     <div class="reunion-tabs-wrap">
-        <div class="container">
+        <div class="container position-relative">
             <div class="reunion-tabs" role="tablist">
                 <div class="rtab active" data-tab="overview" role="tab">
                     <i class="fa fa-info-circle"></i> Overview
@@ -575,13 +606,12 @@
                 <div class="rtab" data-tab="videos" role="tab">
                     <i class="fa fa-play-circle"></i> Videos
                 </div>
-                <div class="rtab" data-tab="book" role="tab">
-                    <i class="fa fa-book"></i> Reunion Book
-                </div>
                 <div class="rtab" data-tab="attendees" role="tab">
                     <i class="fa fa-user-friends"></i> Attendees
                 </div>
             </div>
+            <!-- Scroll indicator for mobile -->
+            <div class="tab-fade-hint d-md-none"><i class="fa fa-chevron-right"></i></div>
         </div>
     </div>
 </div>
@@ -690,23 +720,19 @@
             <div class="photo-toolbar">
                 <div class="photo-filter">
                     <button class="active">All</button>
+                    <button>Venue</button>
                     <button>Group</button>
                     <button>Dinner</button>
-                    <button>Sightseeing</button>
-                    <button>Candid</button>
+                    <button>Parliament Visit</button>
                 </div>
                 <span class="text-muted" style="font-size:.78rem;">0 photos</span>
             </div>
 
-            <div class="photo-grid">
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
-                <div class="photo-slot"><i class="fa fa-image"></i><span>Photo coming soon</span></div>
+            <div class="photo-grid" id="photo-grid">
+                <div class="photo-loading">
+                    <div class="spinner"></div>
+                    Loading photos…
+                </div>
             </div>
 
             <div class="photo-upload-note">
@@ -762,61 +788,6 @@
             </div>
         </div>
 
-        <!-- ─── REUNION BOOK ─── -->
-        <div id="tab-book" class="rtab-panel">
-            <p class="section-label">Souvenir Publication</p>
-            <h3 class="section-heading">Reunion Book</h3>
-
-            <div class="row g-4">
-                <div class="col-lg-5">
-                    <div class="book-viewer">
-                        <div class="book-toolbar">
-                            <span class="book-title">
-                                <i class="fa fa-file-pdf"></i>
-                                1-97 Batch — Delhi Reunion Book.pdf
-                            </span>
-                            <a href="docs/Delhi-Reunion-Book.pdf" download class="btn-download">
-                                <i class="fa fa-download"></i> Download
-                            </a>
-                        </div>
-                        <iframe
-                            src="docs/Delhi-Reunion-Book.pdf"
-                            style="width:100%; height:560px; border:none; display:block;"
-                            title="Delhi Reunion Book">
-                            <div class="book-placeholder" style="height:560px;">
-                                <i class="fa fa-book-open"></i>
-                                <p>Your browser doesn't support inline PDFs.<br>
-                                <a href="docs/Delhi-Reunion-Book.pdf" style="color:var(--primary);">Click here to download</a></p>
-                            </div>
-                        </iframe>
-                    </div>
-                </div>
-
-                <div class="col-lg-7">
-                    <div class="card-white p-4 h-100">
-                        <p class="section-label">About the Book</p>
-                        <h4 style="font-size:1.1rem; font-weight:700; color:var(--dark); margin-bottom:1rem;">
-                            A Keepsake from Delhi
-                        </h4>
-                        <p class="text-muted" style="font-size:.88rem; line-height:1.7;">
-                            The reunion book captures the spirit of the 5th gathering — messages from shipmates,
-                            photos from the event, and a record of where life has taken each member of the 1/97 batch.
-                        </p>
-                        <div class="mt-3">
-                            <p class="section-label">What's Inside</p>
-                            <ul class="list-unstyled" style="font-size:.85rem; color:#555;">
-                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Welcome message from the batch coordinator</li>
-                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Shipmate profiles &amp; updates</li>
-                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Photo highlights from the reunion</li>
-                                <li class="py-1 border-bottom"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Messages &amp; memories</li>
-                                <li class="py-1"><i class="fa fa-check-circle me-2" style="color:var(--gold);"></i> Next reunion preview</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- ─── ATTENDEES ─── -->
         <div id="tab-attendees" class="rtab-panel">
             <p class="section-label">Delhi Get-Together · 04 November 2025</p>
@@ -862,6 +833,20 @@
 
     </div><!-- /container -->
 </div><!-- /tab-content-wrap -->
+
+<!-- ─── Lightbox ─── -->
+<div class="lb-overlay" id="lb-overlay" role="dialog" aria-modal="true">
+    <div class="lb-header">
+        <span class="lb-counter" id="lb-counter"></span>
+        <button class="lb-close" id="lb-close" aria-label="Close"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="lb-body">
+        <button class="lb-nav prev" id="lb-prev" aria-label="Previous"><i class="fa fa-chevron-left"></i></button>
+        <img id="lb-img" src="" alt="">
+        <button class="lb-nav next" id="lb-next" aria-label="Next"><i class="fa fa-chevron-right"></i></button>
+    </div>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+</div>
 
 <div id="footer-placeholder"></div>
 <script src="js/footer.js"></script>
@@ -1101,6 +1086,176 @@ document.querySelectorAll('.photo-filter button').forEach(function(btn) {
         this.classList.add('active');
     });
 });
+
+/* ─── Cloudinary photo gallery ─── */
+(function() {
+    var CLOUD_NAME = 'y1x8pb8j';
+
+    /* Map: filter label → Cloudinary tag. Add more entries as you upload. */
+    var TAG_MAP = {
+        'Venue':            'gtdelhivenue',
+        'Parliament Visit': 'parliamentvisit',
+        'Group':            'gtdelhigroup',
+        'Dinner':           'gtdelhidinner'
+    };
+
+    var photos     = [];   /* all photos, each has ._category */
+    var lbSet      = [];   /* photos currently in lightbox (filtered subset) */
+    var lbIdx      = 0;
+    var loaded     = false;
+
+    function thumbUrl(img) {
+        var v = img.version ? 'v' + img.version + '/' : '';
+        return 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_450,h_300,c_fill,f_auto,q_auto/' + v + img.public_id + '.' + img.format;
+    }
+    function fullUrl(img) {
+        var v = img.version ? 'v' + img.version + '/' : '';
+        return 'https://res.cloudinary.com/' + CLOUD_NAME + '/image/upload/w_1600,c_limit,f_auto,q_auto/' + v + img.public_id + '.' + img.format;
+    }
+
+    async function fetchTag(tag, category) {
+        try {
+            var res = await fetch('https://res.cloudinary.com/' + CLOUD_NAME + '/image/list/' + tag + '.json');
+            if (!res.ok) return [];
+            var data = await res.json();
+            return (data.resources || []).map(function(r) {
+                r._category = category;
+                return r;
+            });
+        } catch(e) { return []; }
+    }
+
+    async function loadPhotos() {
+        if (loaded) return;
+        loaded = true;
+        var grid = document.getElementById('photo-grid');
+        try {
+            var fetches = Object.keys(TAG_MAP).map(function(cat) {
+                return fetchTag(TAG_MAP[cat], cat);
+            });
+            var results = await Promise.all(fetches);
+            /* flatten and deduplicate by public_id */
+            var seen = {};
+            results.forEach(function(arr) {
+                arr.forEach(function(img) {
+                    if (!seen[img.public_id]) { seen[img.public_id] = true; photos.push(img); }
+                });
+            });
+            renderFiltered();
+        } catch(e) {
+            grid.innerHTML = '<div class="photo-loading" style="color:#c00;"><i class="fa fa-exclamation-circle" style="font-size:2rem;display:block;margin-bottom:.5rem;color:#c00;"></i>Could not load photos. Please try again later.</div>';
+        }
+    }
+
+    /* lightbox */
+    function openLb(subset, idx) {
+        lbSet = subset;
+        lbIdx = idx;
+        document.getElementById('lb-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        renderThumbStrip();
+        showLbPhoto();
+    }
+    function closeLb() {
+        document.getElementById('lb-overlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function showLbPhoto() {
+        var img = document.getElementById('lb-img');
+        var counter = document.getElementById('lb-counter');
+        img.src = fullUrl(lbSet[lbIdx]);
+        img.alt = 'Delhi Reunion photo ' + (lbIdx + 1);
+        counter.textContent = (lbIdx + 1) + ' / ' + lbSet.length;
+        var thumbs = document.querySelectorAll('#lb-thumbs img');
+        thumbs.forEach(function(t, i) { t.classList.toggle('active', i === lbIdx); });
+        if (thumbs[lbIdx]) thumbs[lbIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+    function renderThumbStrip() {
+        var strip = document.getElementById('lb-thumbs');
+        strip.innerHTML = '';
+        lbSet.forEach(function(img, i) {
+            var t = document.createElement('img');
+            t.src = thumbUrl(img);
+            t.alt = '';
+            t.loading = 'lazy';
+            if (i === lbIdx) t.classList.add('active');
+            t.addEventListener('click', function() { lbIdx = i; showLbPhoto(); });
+            strip.appendChild(t);
+        });
+    }
+
+    document.getElementById('lb-close').addEventListener('click', closeLb);
+    document.getElementById('lb-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeLb();
+    });
+    document.getElementById('lb-prev').addEventListener('click', function() {
+        lbIdx = (lbIdx - 1 + lbSet.length) % lbSet.length;
+        showLbPhoto();
+    });
+    document.getElementById('lb-next').addEventListener('click', function() {
+        lbIdx = (lbIdx + 1) % lbSet.length;
+        showLbPhoto();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (!document.getElementById('lb-overlay').classList.contains('open')) return;
+        if (e.key === 'ArrowLeft')  { lbIdx = (lbIdx - 1 + lbSet.length) % lbSet.length; showLbPhoto(); }
+        if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % lbSet.length; showLbPhoto(); }
+        if (e.key === 'Escape')     closeLb();
+    });
+
+    /* active filter */
+    var activeFilter = 'All';
+    document.querySelectorAll('.photo-filter button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.photo-filter button').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            activeFilter = this.textContent.trim();
+            renderFiltered();
+        });
+    });
+
+    function renderFiltered() {
+        var grid = document.getElementById('photo-grid');
+        var countEl = document.querySelector('#tab-photos .photo-toolbar .text-muted');
+        var subset = activeFilter === 'All'
+            ? photos
+            : photos.filter(function(p) { return p._category === activeFilter; });
+        if (!subset.length) {
+            grid.innerHTML = '<div class="photo-loading"><i class="fa fa-images" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>No photos in this category yet.</div>';
+            if (countEl) countEl.textContent = '0 photos';
+            return;
+        }
+        var total = photos.length;
+        if (countEl) countEl.textContent = subset.length + (activeFilter !== 'All' ? ' of ' + total : '') + ' photos';
+        grid.innerHTML = '';
+        var snapSubset = subset.slice(); /* stable ref for lightbox closure */
+        snapSubset.forEach(function(img, i) {
+            var item = document.createElement('div');
+            item.className = 'photo-item';
+            item.innerHTML = '<img src="' + thumbUrl(img) + '" alt="Delhi Reunion photo ' + (i+1) + '" loading="lazy">' +
+                             '<div class="photo-overlay"><i class="fa fa-expand"></i></div>';
+            (function(idx) {
+                item.addEventListener('click', function() { openLb(snapSubset, idx); });
+            })(i);
+            grid.appendChild(item);
+        });
+    }
+
+    /* load photos when Photos tab is first opened */
+    document.querySelectorAll('.rtab[data-tab="photos"]').forEach(function(tab) {
+        tab.addEventListener('click', loadPhotos);
+    });
+    /* also trigger if Photos tab is opened via switchTab() */
+    var _origSwitch = window.switchTab;
+    window.switchTab = function(target) {
+        _origSwitch(target);
+        if (target === 'photos') loadPhotos();
+    };
+    /* load immediately if Photos tab is already active on page load */
+    if (document.querySelector('.rtab[data-tab="photos"]').classList.contains('active')) {
+        loadPhotos();
+    }
+})();
 </script>
 
 </body>
